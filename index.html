@@ -1,0 +1,1266 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="duntk">
+<title>Tài chính Doanh nghiệp · Sổ tay Ôn tập toàn diện · by duntk</title>
+<style>
+  :root{
+    --bg:#0f1226; --bg2:#171a35; --card:#1d2142; --card2:#242a52;
+    --txt:#e8eaf6; --muted:#a4a9d4; --line:#2e3566;
+    --pri:#6c8cff; --pri2:#8a6cff; --acc:#34d3a6; --warn:#ffcf5c; --bad:#ff6b8a;
+    --good:#34d3a6; --chip:#2a3060;
+    --shadow:0 10px 30px rgba(0,0,0,.35);
+    --radius:18px;
+  }
+  [data-theme="light"]{
+    --bg:#f4f6ff; --bg2:#eaeefb; --card:#ffffff; --card2:#f3f5ff;
+    --txt:#1c2140; --muted:#5b618a; --line:#e1e6f7;
+    --pri:#4361ee; --pri2:#7b2ff7; --acc:#0fa37f; --warn:#c98a00; --bad:#e23d5e;
+    --good:#0fa37f; --chip:#eef1ff;
+    --shadow:0 10px 30px rgba(60,80,180,.12);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:'Segoe UI',system-ui,-apple-system,Roboto,Arial,sans-serif;
+    background:linear-gradient(180deg,var(--bg),var(--bg2));color:var(--txt);
+    line-height:1.7;-webkit-text-size-adjust:100%}
+  body.lock{overflow:hidden}
+  a{color:var(--pri);text-decoration:none}
+  h2,h3,h4{line-height:1.3}
+
+  /* ===== Top bar ===== */
+  header{position:sticky;top:0;z-index:60;backdrop-filter:blur(12px);
+    background:color-mix(in srgb,var(--bg) 82%,transparent);border-bottom:1px solid var(--line)}
+  .bar{max-width:1100px;margin:0 auto;padding:11px 16px;display:flex;align-items:center;gap:12px}
+  .brand{font-weight:800;font-size:1.04rem;display:flex;align-items:center;gap:10px}
+  .brand .dot{width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,var(--pri),var(--pri2));
+    display:grid;place-items:center;font-size:1rem;box-shadow:var(--shadow)}
+  .spacer{flex:1}
+  .iconbtn{cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--txt);
+    border-radius:12px;padding:8px 12px;font-size:.85rem;font-weight:600;transition:.2s;white-space:nowrap}
+  .iconbtn:hover{border-color:var(--pri);transform:translateY(-1px)}
+  .menubtn{font-size:1.15rem;padding:7px 13px}
+
+  .progress{height:3px;background:transparent}
+  .progress>i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--pri),var(--acc));transition:width .12s}
+
+  /* ===== Drawer nav ===== */
+  .overlay{position:fixed;inset:0;background:rgba(5,7,20,.55);backdrop-filter:blur(2px);
+    opacity:0;visibility:hidden;transition:.25s;z-index:70}
+  .overlay.open{opacity:1;visibility:visible}
+  .drawer{position:fixed;top:0;left:0;height:100%;width:min(330px,86vw);z-index:80;
+    background:var(--card);border-right:1px solid var(--line);box-shadow:var(--shadow);
+    transform:translateX(-105%);transition:transform .28s cubic-bezier(.4,0,.2,1);
+    display:flex;flex-direction:column}
+  .drawer.open{transform:translateX(0)}
+  .drawer .dhead{padding:16px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px;font-weight:800}
+  .drawer .dhead .x{margin-left:auto;cursor:pointer;border:1px solid var(--line);border-radius:10px;
+    width:34px;height:34px;display:grid;place-items:center;background:var(--card2)}
+  .dnav{overflow-y:auto;padding:10px 10px 30px;flex:1}
+  .dnav .grp{font-size:.72rem;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);
+    margin:14px 10px 4px;font-weight:800}
+  .dnav a{display:flex;gap:10px;align-items:center;padding:11px 12px;border-radius:11px;color:var(--txt);
+    font-size:.94rem;font-weight:600;transition:.15s}
+  .dnav a:hover{background:var(--card2)}
+  .dnav a.active{background:linear-gradient(135deg,var(--pri),var(--pri2));color:#fff}
+  .dnav a .nbadge{margin-left:auto;font-size:.72rem;color:var(--muted);font-weight:600}
+  .dnav a.active .nbadge{color:#fff;opacity:.85}
+  .dnav a .ig{width:26px;height:26px;border-radius:8px;background:var(--chip);display:grid;place-items:center;font-size:.85rem}
+  .dnav a.active .ig{background:rgba(255,255,255,.2)}
+
+  /* ===== Layout ===== */
+  .wrap{max-width:1100px;margin:0 auto;padding:0 16px}
+  .hero{padding:42px 0 14px;text-align:center}
+  .hero h1{font-size:clamp(1.6rem,5vw,2.7rem);margin:.2em 0;line-height:1.18;
+    background:linear-gradient(120deg,var(--pri),var(--pri2),var(--acc));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .hero p{color:var(--muted);max-width:720px;margin:0 auto;font-size:1.02rem}
+  .meta{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:16px}
+  .pill{background:var(--chip);border:1px solid var(--line);border-radius:999px;padding:6px 14px;font-size:.82rem;color:var(--muted)}
+
+  section{padding:30px 0;scroll-margin-top:74px}
+  .sec-head{display:flex;align-items:center;gap:12px;margin-bottom:4px}
+  .sec-head .num{flex:none;width:44px;height:44px;border-radius:13px;display:grid;place-items:center;font-weight:800;
+    color:#fff;background:linear-gradient(135deg,var(--pri),var(--pri2));box-shadow:var(--shadow);font-size:1.05rem}
+  .sec-head h2{margin:0;font-size:1.4rem}
+  .sec-sub{color:var(--muted);font-size:.92rem;margin:2px 0 16px 56px}
+  @media(max-width:560px){.sec-sub{margin-left:0}}
+  .lead{font-size:1rem;color:var(--txt);background:var(--card2);border:1px solid var(--line);
+    border-radius:14px;padding:14px 16px;margin:6px 0 4px}
+  .lead b{color:var(--acc)}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+    padding:18px;margin:14px 0;box-shadow:var(--shadow)}
+  .card h3{margin:.1em 0 .5em;font-size:1.1rem;display:flex;align-items:center;gap:8px}
+  .card h4{margin:1em 0 .3em;font-size:.98rem;color:var(--pri)}
+  .grid{display:grid;gap:14px}
+  @media(min-width:760px){.grid.two{grid-template-columns:1fr 1fr}}
+  @media(min-width:900px){.grid.three{grid-template-columns:1fr 1fr 1fr}}
+
+  ul.clean{margin:.4em 0;padding-left:1.15em}
+  ul.clean li{margin:.32em 0}
+  ol.step{margin:.4em 0;padding-left:1.3em}
+  ol.step li{margin:.4em 0}
+  .term{color:var(--acc);font-weight:700}
+  .en{color:var(--muted);font-style:italic;font-size:.92em}
+  p{margin:.55em 0}
+
+  .note{border-left:4px solid var(--pri);background:var(--card2);border-radius:10px;padding:12px 14px;margin:12px 0;font-size:.95rem}
+  .note.warn{border-color:var(--warn)} .note.tip{border-color:var(--acc)} .note.key{border-color:var(--pri2)} .note.exam{border-color:var(--bad)}
+  .note b{color:var(--txt)}
+  .note .lbl{font-weight:800;font-size:.76rem;letter-spacing:.5px;text-transform:uppercase;display:block;margin-bottom:3px;color:var(--pri)}
+  .note.warn .lbl{color:var(--warn)} .note.tip .lbl{color:var(--acc)} .note.key .lbl{color:var(--pri2)} .note.exam .lbl{color:var(--bad)}
+
+  .formula{background:linear-gradient(135deg,var(--card2),var(--card));border:1px dashed var(--line);
+    border-radius:12px;padding:14px 16px;margin:10px 0;overflow-x:auto}
+  .formula .fname{display:block;font-size:.78rem;color:var(--muted);font-weight:700;margin-bottom:6px;text-transform:uppercase;letter-spacing:.4px}
+  .eq{font-family:'Cambria Math','Times New Roman',Georgia,serif;font-size:1.18rem;color:var(--txt);white-space:nowrap}
+  .eq .frac{display:inline-flex;flex-direction:column;text-align:center;vertical-align:middle;margin:0 4px}
+  .eq .frac>span:first-child{border-bottom:2px solid var(--txt);padding:0 6px}
+  .eq .frac>span:last-child{padding:2px 6px 0}
+  sup{font-size:.7em} sub{font-size:.7em}
+  .vars{font-size:.86rem;color:var(--muted);margin-top:8px}
+
+  .work{background:var(--card2);border:1px solid var(--line);border-left:4px solid var(--acc);
+    border-radius:12px;padding:14px 16px;margin:12px 0}
+  .work .wt{font-weight:800;color:var(--acc);font-size:.82rem;text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px;display:block}
+  .work .calc{font-family:'Cambria Math',Georgia,serif;font-size:1.02rem;margin:4px 0;color:var(--txt)}
+  .work .res{font-weight:800;color:var(--good)}
+
+  .tbl{width:100%;border-collapse:collapse;font-size:.9rem;margin:8px 0}
+  .tbl th,.tbl td{padding:9px 11px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+  .tbl th{background:var(--card2);font-size:.8rem;text-transform:uppercase;letter-spacing:.3px;color:var(--muted)}
+  .tbl tr:last-child td{border-bottom:none}
+  .scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:12px}
+
+  details.acc{background:var(--card);border:1px solid var(--line);border-radius:14px;margin:10px 0;overflow:hidden}
+  details.acc>summary{cursor:pointer;padding:14px 16px;font-weight:700;list-style:none;display:flex;align-items:center;gap:10px}
+  details.acc>summary::-webkit-details-marker{display:none}
+  details.acc>summary .tw{margin-left:auto;transition:.25s;color:var(--muted)}
+  details.acc[open]>summary .tw{transform:rotate(180deg)}
+  details.acc>summary .badge{font-size:.72rem;background:var(--chip);border:1px solid var(--line);padding:3px 9px;border-radius:999px;color:var(--muted)}
+  .acc-body{padding:2px 16px 16px}
+
+  /* calculator */
+  .calcbox{display:grid;gap:10px}
+  .calcbox .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  .calcbox label{font-size:.85rem;color:var(--muted);min-width:170px}
+  .calcbox input,.calcbox select{flex:1;min-width:110px;background:var(--card2);border:1px solid var(--line);
+    color:var(--txt);border-radius:10px;padding:9px 11px;font-size:.95rem}
+  .calcbox .out{font-size:1.2rem;font-weight:800;color:var(--good)}
+
+  /* quiz */
+  .quiz-top{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:14px}
+  .selctrl{display:flex;gap:8px;flex-wrap:wrap}
+  .chip{white-space:nowrap;cursor:pointer;border:1px solid var(--line);background:var(--card2);
+    padding:7px 13px;border-radius:999px;font-size:.84rem;font-weight:600;color:var(--muted);transition:.2s}
+  .chip:hover{color:var(--txt);border-color:var(--pri)}
+  .chip.active{background:linear-gradient(135deg,var(--pri),var(--pri2));color:#fff;border-color:transparent}
+  .q{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin:12px 0}
+  .q .qhead{display:flex;gap:10px;align-items:flex-start;margin-bottom:10px}
+  .q .qno{flex:none;width:26px;height:26px;border-radius:8px;background:var(--chip);display:grid;place-items:center;font-weight:800;font-size:.8rem;color:var(--pri)}
+  .q .qtag{font-size:.72rem;color:var(--muted);border:1px solid var(--line);padding:2px 8px;border-radius:999px;margin-left:auto;white-space:nowrap}
+  .opt{display:block;width:100%;text-align:left;border:1px solid var(--line);background:var(--card2);color:var(--txt);
+    border-radius:10px;padding:11px 13px;margin:7px 0;cursor:pointer;font-size:.94rem;transition:.15s}
+  .opt:hover{border-color:var(--pri)}
+  .opt.correct{border-color:var(--good);background:color-mix(in srgb,var(--good) 16%,var(--card2))}
+  .opt.wrong{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 14%,var(--card2))}
+  .opt:disabled{cursor:default}
+  .opt .mk{float:right;font-weight:800}
+  .expl{display:none;margin-top:10px;font-size:.9rem;border-left:3px solid var(--acc);background:var(--card2);padding:10px 12px;border-radius:8px}
+  .expl.show{display:block}
+  .btn{cursor:pointer;border:none;border-radius:12px;padding:11px 18px;font-weight:700;font-size:.92rem;
+    background:linear-gradient(135deg,var(--pri),var(--pri2));color:#fff;transition:.2s}
+  .btn:hover{transform:translateY(-1px);box-shadow:var(--shadow)}
+  .btn.ghost{background:var(--card);color:var(--txt);border:1px solid var(--line)}
+  .scorebox{position:sticky;bottom:0;z-index:30;background:color-mix(in srgb,var(--bg) 92%,transparent);
+    backdrop-filter:blur(10px);border-top:1px solid var(--line);padding:12px 16px;margin-top:14px;border-radius:14px 14px 0 0}
+  .scoreline{display:flex;align-items:center;gap:14px;flex-wrap:wrap;max-width:1100px;margin:0 auto}
+  .scoreval{font-size:1.4rem;font-weight:800}
+  .track{flex:1;min-width:120px;height:10px;background:var(--chip);border-radius:999px;overflow:hidden}
+  .track>i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--bad),var(--warn),var(--good));transition:.4s}
+
+  .glossary dt{font-weight:700;color:var(--acc);margin-top:10px}
+  .glossary dd{margin:2px 0 0;color:var(--muted);font-size:.93rem}
+
+  footer{padding:40px 16px 64px;text-align:center;color:var(--muted);font-size:.86rem}
+  footer .sig{font-weight:800;color:var(--pri)}
+  .totop{position:fixed;right:16px;bottom:18px;width:46px;height:46px;border-radius:50%;border:1px solid var(--line);
+    background:var(--card);color:var(--txt);cursor:pointer;display:none;place-items:center;box-shadow:var(--shadow);z-index:45;font-size:1.1rem}
+  .totop.show{display:grid}
+  .kbd{font-family:monospace;background:var(--chip);border:1px solid var(--line);border-radius:6px;padding:1px 6px;font-size:.85em}
+  .twocol{columns:2;column-gap:24px} @media(max-width:560px){.twocol{columns:1}}
+  .tag{display:inline-block;background:var(--chip);border:1px solid var(--line);border-radius:6px;padding:1px 8px;font-size:.78rem;color:var(--muted);margin:1px}
+</style>
+</head>
+<body data-theme="dark">
+
+<div class="progress"><i id="prog"></i></div>
+<header>
+  <div class="bar">
+    <button class="iconbtn menubtn" id="openMenu" aria-label="Mục lục">☰</button>
+    <div class="brand"><span class="dot">₣</span> Tài chính Doanh nghiệp</div>
+    <div class="spacer"></div>
+    <button class="iconbtn" id="themeBtn" title="Đổi giao diện">🌙</button>
+  </div>
+</header>
+
+<!-- Drawer -->
+<div class="overlay" id="overlay"></div>
+<aside class="drawer" id="drawer">
+  <div class="dhead"><span class="dot" style="width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,var(--pri),var(--pri2));display:grid;place-items:center">₣</span> Mục lục
+    <span class="x" id="closeMenu">✕</span></div>
+  <div class="dnav" id="dnav">
+    <div class="grp">Tổng quan</div>
+    <a href="#tongquan"><span class="ig">★</span> Bản đồ môn học</a>
+    <a href="#hoc-the-nao"><span class="ig">🧭</span> Học thế nào cho hiệu quả</a>
+    <div class="grp">6 Chương</div>
+    <a href="#ch1"><span class="ig">1</span> Nhà QL tài chính & Doanh nghiệp</a>
+    <a href="#ch2"><span class="ig">2</span> Hệ thống TC & Lãi suất</a>
+    <a href="#ch3"><span class="ig">3</span> BCTC, Dòng tiền & Thuế</a>
+    <a href="#ch4"><span class="ig">4</span> Phân tích BCTC</a>
+    <a href="#ch5"><span class="ig">5</span> Giá trị thời gian của tiền</a>
+    <a href="#ch6"><span class="ig">6</span> Chiết khấu & Định giá</a>
+    <div class="grp">Công cụ</div>
+    <a href="#congthuc"><span class="ig">📐</span> Bộ công thức tra cứu</a>
+    <a href="#maytinh"><span class="ig">🧮</span> Máy tính TVM / EAR</a>
+    <a href="#thuatngu"><span class="ig">📖</span> Từ điển thuật ngữ</a>
+    <a href="#quiz"><span class="ig">📝</span> Quiz (50 câu)</a>
+  </div>
+</aside>
+
+<div class="wrap">
+
+  <div class="hero">
+    <h1>Sổ tay ôn tập Tài chính Doanh nghiệp</h1>
+    <p>Toàn bộ kiến thức 6 chương — giải thích từ con số 0, kèm ví dụ tính toán từng bước, mẹo thi và quiz.
+       Đủ để một người <b>chưa biết gì</b> cũng có thể học và đạt điểm xuất sắc.</p>
+    <div class="meta">
+      <span class="pill">6 chương đầy đủ</span>
+      <span class="pill">40+ công thức</span>
+      <span class="pill">Ví dụ giải chi tiết</span>
+      <span class="pill">Máy tính tích hợp</span>
+      <span class="pill">50 câu quiz</span>
+    </div>
+  </div>
+
+  <!-- ============ HỌC THẾ NÀO ============ -->
+  <section id="hoc-the-nao">
+    <div class="sec-head"><div class="num">🧭</div><h2>Bắt đầu từ đâu? Học thế nào cho hiệu quả</h2></div>
+    <p class="sec-sub">Đọc 3 phút này trước khi vào bài.</p>
+    <div class="card">
+      <p><b>Tài chính doanh nghiệp</b> trả lời 3 câu hỏi: (1) <b>Đầu tư</b> vào đâu? (2) Lấy <b>tiền</b> ở đâu để đầu tư? (3) Quản lý <b>dòng tiền hằng ngày</b> ra sao? Tất cả nhằm một mục tiêu: <b>làm cho doanh nghiệp đáng giá hơn</b>.</p>
+      <h4>Lộ trình gợi ý</h4>
+      <ol class="step">
+        <li><b>Chương 1–2</b>: kiến thức nền, học hiểu — ít công thức, nhiều khái niệm. Đọc lướt rồi quay lại.</li>
+        <li><b>Chương 3</b>: làm quen 4 báo cáo tài chính. Đây là "bảng chữ cái", phải nắm để học chương 4.</li>
+        <li><b>Chương 4</b>: học thuộc & hiểu ý nghĩa các chỉ số. Luyện tính bằng số liệu thật.</li>
+        <li><b>Chương 5–6</b>: phần "toán" của môn học — quan trọng nhất khi thi. <b>Luyện ví dụ đến khi tự bấm máy ra kết quả</b>.</li>
+        <li>Cuối cùng: làm <a href="#quiz">Quiz 50 câu</a> để tự chấm.</li>
+      </ol>
+      <div class="note tip"><span class="lbl">Bí quyết đạt điểm cao</span>
+        Phần lý thuyết (C1–C4) ăn điểm ở <b>hiểu khái niệm & phân biệt</b> (vd: marketability vs liquidity, FIFO vs LIFO, APR vs EAR). Phần định lượng (C5–C6) ăn điểm ở <b>bấm máy đúng & vẽ trục thời gian</b>. Ôn đều cả hai.</div>
+    </div>
+  </section>
+
+  <!-- ============ TỔNG QUAN ============ -->
+  <section id="tongquan">
+    <div class="sec-head"><div class="num">★</div><h2>Bản đồ kiến thức môn học</h2></div>
+    <p class="sec-sub">Sáu chương ghép thành một mạch logic.</p>
+    <div class="card">
+      <div class="scroll">
+      <table class="tbl">
+        <tr><th>Chương</th><th>Chủ đề</th><th>Câu hỏi cốt lõi</th><th>Loại</th></tr>
+        <tr><td><b>1</b></td><td>Nhà QL tài chính & Doanh nghiệp</td><td>Mục tiêu của DN là gì? Ai quản lý? Mâu thuẫn lợi ích?</td><td>Lý thuyết</td></tr>
+        <tr><td><b>2</b></td><td>Hệ thống TC & Lãi suất</td><td>Tiền chảy trong nền kinh tế thế nào? Lãi suất từ đâu ra?</td><td>Lý thuyết</td></tr>
+        <tr><td><b>3</b></td><td>BCTC, Dòng tiền & Thuế</td><td>Đọc "sức khỏe" DN qua 4 báo cáo</td><td>Lý thuyết + nhẹ tính</td></tr>
+        <tr><td><b>4</b></td><td>Phân tích BCTC</td><td>DN làm ăn tốt hay xấu? So với ai?</td><td>Tính toán chỉ số</td></tr>
+        <tr><td><b>5</b></td><td>Giá trị thời gian của tiền</td><td>$1 hôm nay vs $1 ngày mai đáng giá bao nhiêu?</td><td>Toán tài chính</td></tr>
+        <tr><td><b>6</b></td><td>Chiết khấu & Định giá</td><td>Định giá chuỗi dòng tiền (vay, niên kim, cổ phiếu)</td><td>Toán tài chính</td></tr>
+      </table>
+      </div>
+      <div class="note key"><span class="lbl">Tư tưởng xuyên suốt</span>
+        <b>"It's all about cash flows"</b> — mọi quyết định quy về dòng tiền với 3 đặc tính: <b>quy mô · thời điểm · rủi ro</b>. Giữ chặt câu này, cả môn học sẽ liền mạch.</div>
+    </div>
+  </section>
+
+  <!-- ============ CHƯƠNG 1 ============ -->
+  <section id="ch1">
+    <div class="sec-head"><div class="num">1</div><h2>Nhà quản lý tài chính & Doanh nghiệp</h2></div>
+    <p class="sec-sub">The Financial Manager and the Firm</p>
+    <div class="lead">Chương này trả lời: nhà quản lý tài chính làm gì, doanh nghiệp tổ chức ra sao, mục tiêu đúng là gì, và vì sao có mâu thuẫn giữa chủ – người làm thuê.</div>
+
+    <div class="card">
+      <h3><span>💵</span> 1.1 — Tất cả là về dòng tiền</h3>
+      <p>Tiền vào DN từ <b>bán hàng hóa/dịch vụ</b>, rồi chi ra: trả lương, mua vật tư, trả nợ, nộp thuế. Phần còn lại gọi là <span class="term">dòng tiền thặng dư</span> <span class="en">(residual cash flow)</span>.</p>
+      <ul class="clean">
+        <li>Thặng dư <b>dương</b> → chia cổ tức hoặc tái đầu tư → DN càng giá trị.</li>
+        <li>Thặng dư <b>âm</b> kéo dài → cạn tiền → <b>phá sản</b>.</li>
+      </ul>
+      <div class="note"><span class="lbl">Vì sao "tiền mặt" chứ không "lợi nhuận"?</span>
+        Chỉ có <b>tiền mặt</b> mới trả được hóa đơn và mua tài sản. Lợi nhuận kế toán có thể "đẹp" nhưng DN vẫn chết nếu thiếu tiền mặt.</div>
+    </div>
+
+    <div class="card">
+      <h3><span>🎯</span> 3 quyết định tài chính cốt lõi</h3>
+      <div class="grid three">
+        <div>
+          <h4>① Capital Budgeting</h4>
+          <p class="vars">Hoạch định vốn — chọn <b>tài sản dài hạn</b> nào để mua (nhà máy, máy móc, dự án). Ảnh hưởng cột <b>tài sản dài hạn</b> trên bảng CĐKT.</p>
+        </div>
+        <div>
+          <h4>② Financing</h4>
+          <p class="vars">Tài trợ — chi trả bằng cách nào: kết hợp <b>nợ ngắn hạn, nợ dài hạn, vốn cổ phần</b>. Ảnh hưởng cột <b>nguồn vốn</b> (bên phải CĐKT).</p>
+        </div>
+        <div>
+          <h4>③ Working Capital</h4>
+          <p class="vars">Vốn lưu động — quản trị <b>tài sản & nợ ngắn hạn</b> (tiền, phải thu, tồn kho, phải trả) để dòng tiền trơn tru.</p>
+        </div>
+      </div>
+      <div class="note warn"><span class="lbl">Nhớ khi thi</span>Cả 3 quyết định đều <b>tác động trực tiếp lên bảng cân đối kế toán</b>; sai bất kỳ mảng nào đều có thể dẫn tới phá sản.</div>
+    </div>
+
+    <div class="card">
+      <h3><span>🏢</span> 1.2 — Các hình thức tổ chức doanh nghiệp</h3>
+      <div class="scroll">
+      <table class="tbl">
+        <tr><th>Tiêu chí</th><th>Sole Proprietorship</th><th>Partnership</th><th>C-Corporation</th><th>S-Corp / LLC / LLP</th></tr>
+        <tr><td>Số chủ</td><td>1 người</td><td>≥2 người</td><td>Nhiều cổ đông</td><td>Nhiều</td></tr>
+        <tr><td>Trách nhiệm</td><td>Vô hạn</td><td>Vô hạn (TV chung)</td><td><b>Hữu hạn</b></td><td><b>Hữu hạn</b></td></tr>
+        <tr><td>Thuế</td><td>Flow-through</td><td>Flow-through</td><td><b>Đánh thuế 2 lần</b></td><td>Flow-through</td></tr>
+        <tr><td>Vòng đời</td><td>Hữu hạn</td><td>Linh hoạt</td><td>Vĩnh viễn</td><td>Linh hoạt</td></tr>
+        <tr><td>Huy động vốn</td><td>Rất hạn chế</td><td>Hạn chế</td><td><b>Tốt nhất</b></td><td>Khá</td></tr>
+        <tr><td>Lập / chi phí</td><td>Dễ & rẻ nhất</td><td>Tốn hơn</td><td>Khó & đắt nhất</td><td>Tốn hơn</td></tr>
+      </table>
+      </div>
+      <ul class="clean">
+        <li><b>Flow-through</b>: thu nhập "chảy thẳng" về chủ và chỉ chịu thuế <b>một lần</b> như thu nhập cá nhân.</li>
+        <li><b>Double taxation</b> (C-Corp): công ty nộp thuế TNDN → cổ đông lại nộp thuế trên cổ tức.</li>
+        <li><b>LLC / LLP</b>: kết hợp ưu điểm — <b>trách nhiệm hữu hạn</b> của corporation + <b>thuế flow-through</b> của partnership.</li>
+      </ul>
+      <div class="note exam"><span class="lbl">Bẫy thi hay gặp</span>
+        Loại hình duy nhất bị <b>đánh thuế hai lần</b> là <b>C-Corporation</b>. Đây là nhược điểm lớn nhất của nó, đổi lại được khả năng huy động vốn tốt nhất.</div>
+    </div>
+
+    <div class="card">
+      <h3><span>🗂️</span> 1.3 — Tổ chức bộ phận tài chính</h3>
+      <p><b>CEO</b> (Tổng giám đốc) đứng đầu. Quản lý tài chính cao nhất là <b>CFO</b> (Giám đốc tài chính), chịu trách nhiệm về chất lượng báo cáo tài chính gửi CEO.</p>
+      <div class="scroll">
+      <table class="tbl">
+        <tr><th>Chức danh báo cáo cho CFO</th><th>Nhiệm vụ</th></tr>
+        <tr><td><b>Treasurer</b> (Thủ quỹ/Quản lý ngân quỹ)</td><td>Quản lý tiền, huy động vốn, quan hệ ngân hàng</td></tr>
+        <tr><td><b>Risk Manager</b></td><td>Quản trị rủi ro tài chính</td></tr>
+        <tr><td><b>Controller</b> (Kiểm soát viên)</td><td>Kế toán, lập báo cáo, thuế</td></tr>
+        <tr><td><b>Internal Auditor</b></td><td>Kiểm toán nội bộ (báo cáo cả CFO & Ủy ban Kiểm toán)</td></tr>
+      </table>
+      </div>
+      <ul class="clean">
+        <li><b>External Auditor</b>: hãng kiểm toán độc lập (CPA) — SEC bắt buộc công ty đại chúng phải có. Đối tác chính phải đổi mỗi <b>5 năm</b>.</li>
+        <li><b>Audit Committee</b>: tiểu ban quyền lực của HĐQT, giám sát kế toán & điều tra gian lận.</li>
+        <li><b>Compliance & Ethics Director</b>: phụ trách tuân thủ pháp luật, chương trình đạo đức, đường dây nóng tố giác (whistleblower).</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3><span>📈</span> 1.4 — Mục tiêu của doanh nghiệp</h3>
+      <p>Mục tiêu đúng là <b>tối đa hóa giá trị (giá) cổ phiếu của doanh nghiệp</b> — không phải tối đa lợi nhuận hay thị phần.</p>
+      <div class="grid two">
+        <div class="note warn"><span class="lbl">Vì sao KHÔNG tối đa lợi nhuận?</span>
+          Lợi nhuận kế toán ≠ lợi nhuận kinh tế; lợi nhuận ghi sổ ≠ tiền mặt nhận về. Có thể "lãi" trên giấy nhưng vẫn thiếu tiền.</div>
+        <div class="note warn"><span class="lbl">Vì sao KHÔNG tối đa thị phần?</span>
+          Tặng hàng miễn phí sẽ chiếm thị phần một thời gian, nhưng DN không trả nổi hóa đơn và sẽ phá sản.</div>
+      </div>
+      <div class="note tip"><span class="lbl">Vì sao giá cổ phiếu là thước đo tốt nhất?</span>
+        Vì nó phản ánh đủ <b>3 yếu tố</b> mà lợi nhuận bỏ qua: (1) <b>quy mô</b> dòng tiền tương lai, (2) <b>thời điểm</b> dòng tiền, (3) <b>rủi ro</b> của việc phải chờ đợi dòng tiền.</div>
+    </div>
+
+    <div class="card">
+      <h3><span>⚖️</span> 1.5 — Xung đột đại diện (Agency Conflict)</h3>
+      <p>Trong công ty lớn, <b>quyền sở hữu tách rời quyền kiểm soát</b>: cổ đông <span class="term">(principal)</span> sở hữu, nhưng nhà quản lý <span class="term">(agent)</span> mới điều hành tài sản → agent có thể vun vén lợi ích riêng.</p>
+      <p><span class="term">Agency costs</span> = chi phí phát sinh từ, và để ngăn chặn, xung đột lợi ích này. Chúng làm giảm dòng tiền thặng dư, giá cổ phiếu và tài sản cổ đông.</p>
+      <h4>6 cơ chế gắn kết lợi ích quản lý ↔ cổ đông</h4>
+      <div class="twocol">
+        <ul class="clean">
+          <li><b>Hội đồng quản trị</b> giám sát CEO</li>
+          <li><b>Lương thưởng</b> gắn giá cổ phiếu (cổ phiếu/quyền chọn)</li>
+          <li><b>Thị trường lao động</b> quản lý cấp cao</li>
+          <li><b>Cạnh tranh nội bộ</b> giữa các quản lý</li>
+          <li><b>Cổ đông lớn</b> giám sát</li>
+          <li><b>Thị trường thâu tóm</b> (corporate raiders)</li>
+        </ul>
+      </div>
+      <div class="note tip"><span class="lbl">Sarbanes-Oxley Act (2002)</span>
+        Ra đời sau loạt bê bối kế toán. Mục tiêu: <b>(1) giảm agency cost, (2) khôi phục đạo đức, (3) tăng tính toàn vẹn của hệ thống báo cáo kế toán</b>. Yêu cầu chính: HĐQT độc lập hơn, kiểm soát kế toán nội bộ, chương trình tuân thủ & đạo đức, mở rộng quyền Ủy ban Kiểm toán; <b>CEO và CFO phải ký xác nhận BCTC</b> (có thể bị phạt tù nếu sai phạm).</div>
+    </div>
+
+    <details class="acc">
+      <summary>💡 1.6 — Đạo đức trong kinh doanh <span class="badge">đọc thêm</span><span class="tw">▾</span></summary>
+      <div class="acc-body">
+        <p><b>Business ethics</b> = chuẩn mực của xã hội về hành vi chấp nhận được, áp dụng cho kinh doanh & thị trường tài chính.</p>
+        <p>3 vùng vấn đề đạo đức thường gặp: <b>agency costs · conflicts of interest · informational asymmetry</b> (bất cân xứng thông tin).</p>
+        <p><b>Phép thử nhanh (WSJ test):</b> "Bạn có sẵn lòng để <i>hành động</i> của mình và mọi <i>lý do</i> được đăng trên <i>Wall Street Journal</i> không?" Nếu không → có thể đang phi đạo đức.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ CHƯƠNG 2 ============ -->
+  <section id="ch2">
+    <div class="sec-head"><div class="num">2</div><h2>Hệ thống tài chính & Mức lãi suất</h2></div>
+    <p class="sec-sub">The Financial System and the Level of Interest Rates</p>
+    <div class="lead">Chương này cho biết tiền nhàn rỗi đi từ người tiết kiệm đến người cần vốn bằng cách nào, các loại thị trường, và lãi suất hình thành ra sao.</div>
+
+    <div class="card">
+      <h3><span>🔄</span> 2.1 — Dòng vốn lưu chuyển</h3>
+      <p>Chức năng chính của hệ thống tài chính: chuyển vốn từ <span class="term">lender-savers</span> (cá nhân/DN/chính phủ <b>thừa</b> tiền) sang <span class="term">borrower-spenders</span> (bên <b>thiếu</b> tiền) theo 2 con đường:</p>
+      <div class="grid two">
+        <div class="note"><span class="lbl">Trực tiếp (Direct)</span>Qua <b>thị trường tài chính</b>: người vay bán chứng khoán (cổ phiếu, trái phiếu) thẳng cho người cho vay. Ngân hàng đầu tư hỗ trợ.</div>
+        <div class="note"><span class="lbl">Gián tiếp (Indirect)</span>Qua <b>trung gian tài chính</b> (ngân hàng…): trung gian đứng giữa, vay của người tiết kiệm rồi cho người vay vay lại. Gọi là <b>financial intermediation</b>.</div>
+      </div>
+      <p class="vars">Hệ thống cạnh tranh: gom tiền lượng nhỏ → cho vay lượng lớn; lái vốn tới cơ hội đầu tư tốt nhất; bên cho vay lời nhờ <b>spread</b> (chênh lệch lãi cho vay – đi vay).</p>
+    </div>
+
+    <div class="card">
+      <h3><span>🏦</span> 2.2 — Ngân hàng đầu tư & tài trợ trực tiếp</h3>
+      <p>Ngân hàng đầu tư giúp phát hành nợ/vốn mới qua 3 dịch vụ tuần tự:</p>
+      <ol class="step">
+        <li><b>Origination</b> — chuẩn bị đợt phát hành chứng khoán.</li>
+        <li><b>Underwriting</b> — bảo lãnh phát hành (cam kết bán giúp).</li>
+        <li><b>Distribution</b> — phân phối & bán lại cho nhà đầu tư.</li>
+      </ol>
+    </div>
+
+    <div class="card">
+      <h3><span>🏬</span> 2.3 — Các loại thị trường tài chính</h3>
+      <div class="scroll">
+      <table class="tbl">
+        <tr><th>Phân loại</th><th>Loại A</th><th>Loại B</th></tr>
+        <tr><td>Sơ cấp ↔ Thứ cấp</td><td><b>Primary</b>: phát hành <b>mới</b> lần đầu</td><td><b>Secondary</b>: mua bán <b>lại</b> chứng khoán cũ</td></tr>
+        <tr><td>Nơi giao dịch</td><td><b>Exchange</b> (sàn tập trung: NYSE)</td><td><b>OTC</b> (phi tập trung qua mạng: NASDAQ)</td></tr>
+        <tr><td>Kỳ hạn</td><td><b>Money market</b>: &lt; 1 năm (T-bill, CP)</td><td><b>Capital market</b>: &gt; 1 năm (bond, cổ phiếu)</td></tr>
+        <tr><td>Công khai ↔ riêng tư</td><td><b>Public</b>: công chúng giao dịch</td><td><b>Private</b>: giao dịch riêng (private placement)</td></tr>
+      </table>
+      </div>
+      <p><b>Phái sinh</b> (derivatives) lấy giá trị từ một tài sản cơ sở: <b>futures</b> (hợp đồng tương lai) và <b>options</b> (quyền chọn) — dùng để <b>phòng ngừa rủi ro (hedge)</b>.</p>
+      <div class="grid two">
+        <div class="note tip"><span class="lbl">Marketability vs Liquidity</span>
+          <b>Marketability</b> = mức độ <b>dễ bán</b> & đổi ra tiền (xét chi phí giao dịch, tìm kiếm).<br>
+          <b>Liquidity</b> = đổi ra tiền <b>nhanh mà KHÔNG mất giá</b>.</div>
+        <div class="note tip"><span class="lbl">Broker vs Dealer</span>
+          <b>Broker</b> = môi giới, ghép người mua–bán, ăn <b>hoa hồng</b>, không chịu rủi ro.<br>
+          <b>Dealer</b> = tạo lập thị trường, mua bán từ <b>kho của chính mình</b>, <b>chịu rủi ro</b>.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3><span>📊</span> 2.4 — Hiệu quả thị trường</h3>
+      <p>Thị trường hiệu quả = định giá chứng khoán đúng <b>giá trị nội tại</b> (intrinsic/fair value). Phụ thuộc 2 loại hiệu quả: <b>vận hành (operational)</b> và <b>thông tin (informational)</b>.</p>
+      <div class="scroll">
+      <table class="tbl">
+        <tr><th>Dạng hiệu quả</th><th>Giá phản ánh…</th><th>Hệ quả</th></tr>
+        <tr><td><b>Weak-form</b> (yếu)</td><td>Chỉ thông tin <b>lịch sử</b></td><td>Phân tích đồ thị quá khứ vô ích</td></tr>
+        <tr><td><b>Semistrong</b> (bán mạnh)</td><td>Mọi thông tin <b>công khai</b></td><td>Đọc tin tức công khai cũng không thắng được</td></tr>
+        <tr><td><b>Strong-form</b> (mạnh)</td><td>Mọi thông tin, kể cả <b>nội bộ</b></td><td>Ngay cả insider cũng không có lợi thế</td></tr>
+      </table>
+      </div>
+      <div class="note exam"><span class="lbl">Mẹo nhớ</span>Mức độ tăng dần: <b>Yếu (lịch sử) → Bán mạnh (công khai) → Mạnh (cả nội bộ)</b>. Thị trường công khai (NYSE) hiệu quả hơn thị trường riêng tư.</div>
+    </div>
+
+    <div class="card">
+      <h3><span>💹</span> 2.6 — Lãi suất: danh nghĩa, thực & Phương trình Fisher</h3>
+      <ul class="clean">
+        <li><b>Lãi suất (interest rate)</b> = phí đi vay, tính theo % khoản vay.</li>
+        <li><b>Nominal rate (i)</b> = lãi suất <b>quan sát được</b> trên thị trường.</li>
+        <li><b>Real rate (r)</b> = lãi suất <b>nếu KHÔNG có lạm phát</b>; phản ánh kỳ vọng sinh lời thực & ưu tiên tiêu dùng.</li>
+      </ul>
+      <div class="formula"><span class="fname">Phương trình Fisher (đầy đủ) · Eq 2.1</span>
+        <span class="eq">i = r + ΔP<sup>e</sup> + (r × ΔP<sup>e</sup>)</span></div>
+      <div class="formula"><span class="fname">Fisher (giản lược) · Eq 2.2</span>
+        <span class="eq">i ≈ r + ΔP<sup>e</sup></span></div>
+      <p class="vars"><b>ΔP<sup>e</sup></b> = lạm phát kỳ vọng; <b>r × ΔP<sup>e</sup></b> = phần điều chỉnh lãi suất theo lạm phát.</p>
+      <div class="work"><span class="wt">Ví dụ giải</span>
+        r = 4%, lạm phát kỳ vọng = 10%. Tính lãi suất danh nghĩa.
+        <div class="calc">Giản lược: i ≈ 0,04 + 0,10 = <span class="res">14%</span></div>
+        <div class="calc">Đầy đủ: i = 0,04 + 0,10 + (0,04×0,10) = 0,144 = <span class="res">14,4%</span></div>
+      </div>
+      <p>Lãi suất cân bằng do <b>cung – cầu vốn vay (loanable funds)</b> quyết định: lãi cao → người tiết kiệm cung nhiều hơn, người vay cầu ít hơn. Lãi suất <b>tăng khi kinh tế mở rộng, giảm khi suy thoái</b> và đồng biến với lạm phát.</p>
+    </div>
+  </section>
+
+  <!-- ============ CHƯƠNG 3 ============ -->
+  <section id="ch3">
+    <div class="sec-head"><div class="num">3</div><h2>Báo cáo tài chính, Dòng tiền & Thuế</h2></div>
+    <p class="sec-sub">Financial Statements, Cash Flows, and Taxes</p>
+    <div class="lead">Đây là "bảng chữ cái" của tài chính. Nắm 4 báo cáo tài chính ở đây, bạn mới phân tích được ở chương 4.</div>
+
+    <div class="card">
+      <h3><span>📚</span> 3.1 — GAAP & nguyên tắc kế toán</h3>
+      <p><b>Annual report</b> (báo cáo thường niên) là báo cáo quan trọng nhất gửi cổ đông, gồm <b>4 báo cáo đã kiểm toán</b>: bảng cân đối, kết quả kinh doanh, lợi nhuận giữ lại, lưu chuyển tiền tệ.</p>
+      <p><b>GAAP</b> do <b>FASB</b> ban hành, <b>SEC</b> ủy quyền — là <b>hướng dẫn, không phải luật cứng</b>, cần xét đoán nghề nghiệp. Quốc tế dùng <b>IFRS</b> (IASB).</p>
+      <h4>5 nguyên tắc nền tảng</h4>
+      <div class="scroll">
+      <table class="tbl">
+        <tr><th>Nguyên tắc</th><th>Nội dung</th></tr>
+        <tr><td><b>Arm's-length</b></td><td>Các bên giao dịch độc lập, hợp lý</td></tr>
+        <tr><td><b>Cost principle</b></td><td>Ghi tài sản theo <b>giá gốc</b> (điều chỉnh khi giảm giá)</td></tr>
+        <tr><td><b>Realization</b></td><td>Ghi doanh thu khi <b>giao dịch hoàn tất</b> (tiền có thể đến sớm/muộn)</td></tr>
+        <tr><td><b>Matching</b></td><td>Khớp doanh thu với <b>chi phí tạo ra</b> doanh thu đó</td></tr>
+        <tr><td><b>Going concern</b></td><td>Giả định DN <b>hoạt động liên tục</b> trong tương lai</td></tr>
+      </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3><span>⚖️</span> 3.2 — Bảng cân đối kế toán (Balance Sheet)</h3>
+      <p>Chụp <b>"ảnh tĩnh"</b> tình hình tài chính tại một <b>thời điểm</b>: DN có gì (tài sản) và lấy tiền từ đâu (nợ + vốn).</p>
+      <div class="formula"><span class="fname">Phương trình kế toán cơ bản · Eq 3.1</span>
+        <span class="eq">Tổng Tài sản = Tổng Nợ phải trả + Vốn chủ sở hữu</span></div>
+      <div class="formula"><span class="fname">Vốn lưu động ròng · Eq 3.2</span>
+        <span class="eq">NWC = Tài sản ngắn hạn − Nợ ngắn hạn</span></div>
+      <ul class="clean">
+        <li>Tài sản (bên trái) xếp theo <b>tính thanh khoản giảm dần</b>: tiền → phải thu → tồn kho → TSCĐ → tài sản vô hình (goodwill, bằng sáng chế).</li>
+        <li>Nguồn vốn (bên phải) xếp theo <b>thứ tự phải trả</b>: nợ ngắn hạn → nợ dài hạn → vốn cổ phần.</li>
+        <li>Vốn CSH gồm: cổ phiếu thường, vốn góp thêm (paid-in capital), <b>lợi nhuận giữ lại</b> (retained earnings), trừ <b>cổ phiếu quỹ</b> (treasury stock).</li>
+      </ul>
+      <div class="work"><span class="wt">Ví dụ — Diaz Manufacturing 2020 ($ triệu)</span>
+        TS ngắn hạn = 1.039,8 ; Nợ ngắn hạn = 377,8
+        <div class="calc">NWC = 1.039,8 − 377,8 = <span class="res">662,0 triệu $</span></div>
+        → NWC dương lớn: dư sức trả hết nợ ngắn hạn, ngân hàng đánh giá tốt.</div>
+      <div class="note"><span class="lbl">Preferred stock</span>Cổ phiếu ưu đãi = "sở hữu không kiểm soát", có đặc tính giống nợ (cổ tức cố định) — nằm giữa nợ và vốn cổ phần thường.</div>
+    </div>
+
+    <div class="card">
+      <h3><span>📦</span> Hàng tồn kho: FIFO vs LIFO <span class="tag">khi giá tăng</span></h3>
+      <div class="scroll">
+      <table class="tbl">
+        <tr><th>Khi giá tăng</th><th>FIFO (nhập trước, xuất trước)</th><th>LIFO (nhập sau, xuất trước)</th></tr>
+        <tr><td>Giả định bán…</td><td>Hàng <b>rẻ</b> (cũ) trước</td><td>Hàng <b>đắt</b> (mới) trước</td></tr>
+        <tr><td>Giá vốn COGS</td><td>Thấp hơn</td><td>Cao hơn</td></tr>
+        <tr><td>Tồn kho cuối kỳ</td><td>Cao hơn</td><td>Thấp hơn</td></tr>
+        <tr><td>Lợi nhuận & thuế</td><td>Cao hơn</td><td><b>Thấp hơn</b></td></tr>
+      </table>
+      </div>
+      <div class="note exam"><span class="lbl">Câu hỏi thi kinh điển</span>
+        Đa số DN chọn <b>LIFO</b> khi giá tăng vì COGS cao → thu nhập chịu thuế thấp → <b>nộp thuế ít nhất</b>. Mẹo: "LIFO = Lower tax".</div>
+    </div>
+
+    <details class="acc">
+      <summary>💱 3.3 — Giá trị thị trường vs giá trị sổ sách <span class="badge">khái niệm</span><span class="tw">▾</span></summary>
+      <div class="acc-body">
+        <p>Kế toán ghi tài sản theo <b>giá gốc (book value)</b>, không phải giá trị thật (market value). Quá trình ghi theo giá hiện hành gọi là <b>marking to market</b>.</p>
+        <p>Nợ ngắn hạn: book ≈ market. Nợ dài hạn: book có thể <b>khác xa</b> market. Chênh lệch giá trị thị trường của (tài sản − nợ) cho ước tính <b>tốt hơn</b> về giá trị vốn cổ đông so với book value.</p>
+        <p class="vars">VD: đội bay của Marvel Airline có book value $600 triệu, nhưng do COVID market value chỉ còn $400 triệu → bảng CĐKT theo book value "đánh lừa" nhà đầu tư.</p>
+      </div>
+    </details>
+
+    <div class="card">
+      <h3><span>💰</span> 3.4 — Báo cáo kết quả kinh doanh (Income Statement)</h3>
+      <p>Đo <b>khả năng sinh lời</b> trong một <b>khoảng thời gian</b> (quý/năm).</p>
+      <div class="formula"><span class="fname">Eq 3.3</span><span class="eq">Net Income = Doanh thu − Chi phí</span></div>
+      <h4>Đi từ trên xuống "dòng đáy" (bottom line)</h4>
+      <div class="scroll">
+      <table class="tbl">
+        <tr><th>Bước</th><th>Khoản mục</th><th>Cách tính</th></tr>
+        <tr><td>1</td><td>Net Sales (doanh thu thuần)</td><td>—</td></tr>
+        <tr><td>2</td><td><b>EBITDA</b></td><td>Doanh thu − COGS − chi phí bán hàng/quản lý</td></tr>
+        <tr><td>3</td><td><b>EBIT</b> (lợi nhuận hoạt động)</td><td>EBITDA − Khấu hao & phân bổ (D&A)</td></tr>
+        <tr><td>4</td><td><b>EBT</b> (LN trước thuế)</td><td>EBIT − Chi phí lãi vay</td></tr>
+        <tr><td>5</td><td><b>Net Income</b></td><td>EBT − Thuế</td></tr>
+      </table>
+      </div>
+      <div class="work"><span class="wt">Ví dụ — Diaz 2020 ($ triệu)</span>
+        <div class="calc">Doanh thu 1.563,7 − COGS 1.081,1 − SG&A 231,1 = EBITDA <b>251,5</b></div>
+        <div class="calc">EBITDA 251,5 − D&A 83,1 = EBIT <b>168,4</b></div>
+        <div class="calc">EBIT 168,4 − lãi vay 5,6 = EBT <b>162,8</b></div>
+        <div class="calc">EBT 162,8 − thuế 44,3 = Net Income <span class="res">118,5 triệu $</span></div>
+      </div>
+      <div class="note"><span class="lbl">Chi phí phi tiền mặt</span><b>Khấu hao (depreciation)</b> cho tài sản hữu hình & <b>phân bổ (amortization)</b> cho tài sản vô hình (goodwill, bằng sáng chế) — đều là chi phí <b>không chi tiền thật</b>.</div>
+    </div>
+
+    <div class="card">
+      <h3><span>🌊</span> 3.5 — Báo cáo lưu chuyển tiền tệ (Cash Flows)</h3>
+      <p>Theo dõi <b>tiền vào – tiền ra</b> trong kỳ, chia 3 nhóm:</p>
+      <ul class="clean">
+        <li><b>Operating</b> (kinh doanh): tiền từ bán hàng; chi nguyên liệu, lương, thuê…</li>
+        <li><b>Investing</b> (đầu tư): mua/bán TSCĐ; mua/bán chứng khoán DN khác.</li>
+        <li><b>Financing</b> (tài chính): phát hành/​trả nợ & vốn; trả lãi, cổ tức; mua cổ phiếu quỹ.</li>
+      </ul>
+      <div class="scroll">
+      <table class="tbl">
+        <tr><th></th><th>Nguồn tiền (Source) ⬆️ tiền vào</th><th>Sử dụng tiền (Use) ⬇️ tiền ra</th></tr>
+        <tr><td><b>Tài sản</b></td><td><b>Giảm</b> tài sản</td><td><b>Tăng</b> tài sản</td></tr>
+        <tr><td><b>Nợ & Vốn CSH</b></td><td><b>Tăng</b> nợ / vốn</td><td><b>Giảm</b> nợ / vốn</td></tr>
+      </table>
+      </div>
+      <div class="note exam"><span class="lbl">Mẹo nhớ nguồn/sử dụng</span>
+        Tài sản tăng = tiêu tiền (use). Nợ tăng = vay thêm tiền (source). Câu thần chú: <b>"Tài sản ↑ tốn tiền, Nợ ↑ có tiền"</b>.</div>
+    </div>
+
+    <div class="card">
+      <h3><span>🔗</span> 3.6 — Liên kết 4 báo cáo</h3>
+      <p>Bảng CĐKT = ảnh tĩnh đầu & cuối kỳ. <b>Báo cáo lưu chuyển tiền tệ NỐI</b> bảng CĐKT đầu kỳ ↔ cuối kỳ thông qua báo cáo kết quả kinh doanh; <b>báo cáo lợi nhuận giữ lại</b> giải thích thay đổi của khoản retained earnings.</p>
+      <div class="work"><span class="wt">Báo cáo LN giữ lại — Diaz 2020 ($ triệu)</span>
+        <div class="calc">Đầu kỳ (31/12/2019): −50,7</div>
+        <div class="calc">+ Net income 2020: 118,5</div>
+        <div class="calc">− Cổ tức: 0</div>
+        <div class="calc">= Cuối kỳ (31/12/2020): <span class="res">67,8 triệu $</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3><span>🧾</span> 3.8 — Thuế thu nhập doanh nghiệp</h3>
+      <ul class="clean">
+        <li>Từ 2018: C-Corp chịu thuế <b>phẳng 21%</b> (Tax Cuts and Jobs Act 2017), thay cho thuế lũy tiến cũ.</li>
+        <li><b>Thuế suất bình quân</b> = Tổng thuế ÷ Thu nhập chịu thuế.</li>
+        <li><b>Thuế suất biên</b> = thuế trên đồng <b>cuối/​kế tiếp</b> kiếm được (quan trọng cho quyết định).</li>
+      </ul>
+      <div class="note key"><span class="lbl">Hệ quả cực quan trọng (hay thi)</span>
+        Lãi vay (interest) <b>được khấu trừ thuế</b> (tax shield), còn cổ tức (dividend) thì <b>không</b> → tài trợ bằng <b>nợ có chi phí thấp hơn</b> tài trợ bằng vốn cổ phần.</div>
+    </div>
+  </section>
+
+  <!-- ============ CHƯƠNG 4 ============ -->
+  <section id="ch4">
+    <div class="sec-head"><div class="num">4</div><h2>Phân tích Báo cáo Tài chính</h2></div>
+    <p class="sec-sub">Analyzing Financial Statements</p>
+    <div class="lead">Biến các con số ở chương 3 thành <b>chỉ số</b> để trả lời: DN khỏe hay yếu, và so với đối thủ thế nào.</div>
+
+    <div class="card">
+      <h3><span>👁️</span> 4.1 — 4 góc nhìn & hướng dẫn phân tích</h3>
+      <div class="scroll">
+      <table class="tbl">
+        <tr><th>Góc nhìn</th><th>Quan tâm điều gì</th></tr>
+        <tr><td><b>Cổ đông</b></td><td>Dòng tiền ròng, rủi ro, tỷ suất sinh lời, giá cổ phiếu</td></tr>
+        <tr><td><b>Nhà quản lý</b></td><td>Sinh lời, dùng tài sản hiệu quả, kiểm soát chi phí, giữ việc</td></tr>
+        <tr><td><b>Chủ nợ</b></td><td>Khả năng trả nợ ngắn hạn & đúng hạn, tính ổn định</td></tr>
+        <tr><td><b>Bên liên quan khác</b></td><td>Nhà cung cấp, nhân viên — có quyền lợi trên dòng tiền</td></tr>
+      </table>
+      </div>
+      <p class="vars">Hướng dẫn: xác định góc nhìn → dùng BCTC <b>đã kiểm toán</b> → dùng <b>3–5 năm</b> cho phân tích xu hướng → <b>benchmark</b> với đối thủ tương đương.</p>
+    </div>
+
+    <div class="card">
+      <h3><span>📏</span> 4.2 — Báo cáo theo tỷ lệ (Common-Size)</h3>
+      <p>Chuẩn hóa mỗi khoản mục thành <b>%</b> để so sánh DN lớn–nhỏ và theo thời gian:</p>
+      <ul class="clean">
+        <li><b>Bảng CĐKT common-size</b>: mỗi khoản = % của <b>Tổng tài sản</b>.</li>
+        <li><b>BCKQKD common-size</b>: mỗi khoản = % của <b>Doanh thu thuần</b> → đọc là "chi phí để tạo ra $1 doanh thu".</li>
+      </ul>
+      <p class="vars">VD Diaz 2020: COGS = 69,1% doanh thu, Net income = 7,6% doanh thu.</p>
+    </div>
+
+    <div class="card">
+      <h3><span>🧮</span> 4.3 — Bộ chỉ số tài chính (5 nhóm)</h3>
+      <p class="vars">Số liệu ví dụ lấy từ Diaz Manufacturing 2020 ($ triệu).</p>
+
+      <details class="acc"><summary>💧 1. Thanh khoản (Liquidity) <span class="badge">cao = tốt</span><span class="tw">▾</span></summary>
+      <div class="acc-body">
+        <p>Đo khả năng trả nợ <b>ngắn hạn</b> bằng tài sản ngắn hạn.</p>
+        <div class="formula"><span class="fname">Current ratio · Eq 4.1</span>
+          <span class="eq"><span class="frac"><span>Tài sản ngắn hạn</span><span>Nợ ngắn hạn</span></span></span></div>
+        <div class="formula"><span class="fname">Quick ratio (acid-test) · Eq 4.2</span>
+          <span class="eq"><span class="frac"><span>TS ngắn hạn − Tồn kho</span><span>Nợ ngắn hạn</span></span></span></div>
+        <div class="work"><span class="wt">Tính thử</span>
+          <div class="calc">Current = 1.039,8 / 377,8 = <span class="res">2,75</span></div>
+          <div class="calc">Quick = (1.039,8 − 423,8) / 377,8 = <span class="res">1,63</span></div></div>
+        <p class="vars">Quick loại tồn kho (kém thanh khoản nhất) để khắt khe hơn.</p>
+      </div></details>
+
+      <details class="acc"><summary>⚙️ 2. Hiệu quả hoạt động (Efficiency) <span class="badge">cao = tốt*</span><span class="tw">▾</span></summary>
+      <div class="acc-body">
+        <div class="formula"><span class="fname">Vòng quay tồn kho · Eq 4.3</span>
+          <span class="eq"><span class="frac"><span>COGS</span><span>Tồn kho</span></span></span></div>
+        <div class="formula"><span class="fname">Số ngày tồn kho · Eq 4.4</span>
+          <span class="eq"><span class="frac"><span>365</span><span>Vòng quay tồn kho</span></span></span></div>
+        <div class="formula"><span class="fname">Vòng quay khoản phải thu · Eq 4.5</span>
+          <span class="eq"><span class="frac"><span>Doanh thu thuần</span><span>Khoản phải thu</span></span></span></div>
+        <div class="formula"><span class="fname">Kỳ thu tiền bình quân (DSO) · Eq 4.6</span>
+          <span class="eq"><span class="frac"><span>365</span><span>Vòng quay khoản phải thu</span></span></span></div>
+        <div class="formula"><span class="fname">Vòng quay tổng / TSCĐ · Eq 4.7–4.8</span>
+          <span class="eq"><span class="frac"><span>Doanh thu thuần</span><span>Tổng tài sản (hoặc TSCĐ ròng)</span></span></span></div>
+        <div class="work"><span class="wt">Tính thử</span>
+          <div class="calc">Vòng quay tồn kho = 1.081,1 / 423,8 = 2,55 → Số ngày tồn kho = 365/2,55 ≈ <span class="res">143 ngày</span></div>
+          <div class="calc">Vòng quay tổng TS = 1.563,7 / 1.889,2 = <span class="res">0,83</span></div></div>
+        <div class="note warn"><span class="lbl">* Ngoại lệ</span>Riêng <b>số ngày tồn kho</b> & <b>kỳ thu tiền</b>: số <b>thấp</b> mới tốt (thu tiền/bán hàng nhanh).</div>
+      </div></details>
+
+      <details class="acc"><summary>🏗️ 3. Đòn bẩy & Chi trả (Leverage & Coverage) <span class="badge">nợ cao = rủi ro ↑</span><span class="tw">▾</span></summary>
+      <div class="acc-body">
+        <div class="formula"><span class="fname">Total debt ratio · Eq 4.9</span>
+          <span class="eq"><span class="frac"><span>Tổng nợ</span><span>Tổng tài sản</span></span></span></div>
+        <div class="formula"><span class="fname">Debt-to-equity · Eq 4.10</span>
+          <span class="eq"><span class="frac"><span>Tổng nợ</span><span>Vốn chủ sở hữu</span></span></span></div>
+        <div class="formula"><span class="fname">Equity multiplier · Eq 4.11</span>
+          <span class="eq"><span class="frac"><span>Tổng tài sản</span><span>Vốn chủ sở hữu</span></span></span></div>
+        <div class="formula"><span class="fname">Times interest earned · Eq 4.12</span>
+          <span class="eq"><span class="frac"><span>EBIT</span><span>Chi phí lãi vay</span></span></span></div>
+        <div class="formula"><span class="fname">Cash coverage · Eq 4.13</span>
+          <span class="eq"><span class="frac"><span>EBIT + Khấu hao</span><span>Chi phí lãi vay</span></span></span></div>
+        <div class="work"><span class="wt">Tính thử</span>
+          <div class="calc">Total debt ratio = 951,8 / 1.889,2 = <span class="res">0,50</span></div>
+          <div class="calc">Equity multiplier = 1.889,2 / 937,4 = <span class="res">2,02</span></div>
+          <div class="calc">TIE = 168,4 / 5,6 = <span class="res">30,07 lần</span></div></div>
+      </div></details>
+
+      <details class="acc"><summary>📈 4. Sinh lời (Profitability) <span class="badge">cao = tốt</span><span class="tw">▾</span></summary>
+      <div class="acc-body">
+        <div class="formula"><span class="fname">Gross profit margin · Eq 4.14</span>
+          <span class="eq"><span class="frac"><span>Doanh thu − COGS</span><span>Doanh thu thuần</span></span></span></div>
+        <div class="formula"><span class="fname">Operating profit margin · Eq 4.15</span>
+          <span class="eq"><span class="frac"><span>EBIT</span><span>Doanh thu thuần</span></span></span></div>
+        <div class="formula"><span class="fname">Net profit margin · Eq 4.16</span>
+          <span class="eq"><span class="frac"><span>Net income</span><span>Doanh thu thuần</span></span></span></div>
+        <div class="formula"><span class="fname">ROA · Eq 4.18</span>
+          <span class="eq"><span class="frac"><span>Net income</span><span>Tổng tài sản</span></span></span></div>
+        <div class="formula"><span class="fname">ROE · Eq 4.19</span>
+          <span class="eq"><span class="frac"><span>Net income</span><span>Vốn chủ sở hữu</span></span></span></div>
+        <div class="work"><span class="wt">Tính thử</span>
+          <div class="calc">Gross margin = (1.563,7 − 1.081,1)/1.563,7 = <span class="res">30,86%</span></div>
+          <div class="calc">Net margin = 118,5/1.563,7 = <span class="res">7,58%</span></div>
+          <div class="calc">ROA = 118,5/1.889,2 = 6,27% &nbsp;·&nbsp; ROE = 118,5/937,4 = <span class="res">12,64%</span></div></div>
+      </div></details>
+
+      <details class="acc"><summary>💵 5. Chỉ số thị trường (Market-Value) <span class="badge">cao = giàu cổ đông</span><span class="tw">▾</span></summary>
+      <div class="acc-body">
+        <div class="formula"><span class="fname">EPS · Eq 4.20</span>
+          <span class="eq"><span class="frac"><span>Net income</span><span>Số cổ phần lưu hành</span></span></span></div>
+        <div class="formula"><span class="fname">P/E ratio · Eq 4.21</span>
+          <span class="eq"><span class="frac"><span>Giá mỗi cổ phần</span><span>EPS</span></span></span></div>
+        <div class="formula"><span class="fname">Market-to-Book · Eq 4.22</span>
+          <span class="eq"><span class="frac"><span>Giá thị trường mỗi cổ phần</span><span>Giá trị sổ sách mỗi cổ phần</span></span></span></div>
+        <p class="vars">Diaz 2020: EPS = $2,17; P/E = 22,40; M/B = 2,83. P/E cao = thị trường kỳ vọng tăng trưởng.</p>
+      </div></details>
+    </div>
+
+    <div class="card">
+      <h3><span>🧬</span> 4.4 — Hệ thống DuPont</h3>
+      <p>"Mổ xẻ" ROE thành các thành phần để biết <b>điểm mạnh/yếu nằm ở đâu</b>.</p>
+      <div class="formula"><span class="fname">ROA · Eq 4.23</span><span class="eq">ROA = Net profit margin × Vòng quay tổng tài sản</span></div>
+      <div class="formula"><span class="fname">ROE · Eq 4.24</span><span class="eq">ROE = ROA × Equity multiplier</span></div>
+      <div class="formula"><span class="fname">DuPont mở rộng (3 yếu tố) · Eq 4.25–4.26</span>
+        <span class="eq">ROE = Net margin × Vòng quay TTS × Equity multiplier</span></div>
+      <div class="work"><span class="wt">Diaz 2020</span>
+        <div class="calc">ROE = 7,58% × 0,83 × 2,02 ≈ <span class="res">12,64%</span></div>
+        <div class="calc">= (sinh lời) × (hiệu quả tài sản) × (đòn bẩy)</div></div>
+      <div class="note warn"><span class="lbl">Hạn chế của ROE (hay hỏi)</span>
+        Tối đa hóa ROE <b>KHÔNG tương đương</b> tối đa giá cổ phiếu, vì ROE: (1) dựa trên earnings <b>không phải cash flow</b>, (2) <b>bỏ qua rủi ro</b>, (3) bỏ qua <b>quy mô</b> vốn đầu tư & quy mô dòng tiền.</div>
+      <div class="note tip"><span class="lbl">2 chiến lược tăng ROA</b></span>Tập trung <b>biên lợi nhuận cao</b> (Tiffany, Burberry) HOẶC <b>vòng quay cao</b> (Walmart, Whole Foods).</div>
+    </div>
+
+    <div class="card">
+      <h3><span>🎯</span> 4.5–4.6 — Chọn chuẩn so sánh & hạn chế</h3>
+      <p>Một chỉ số chỉ có ý nghĩa khi so với <b>benchmark</b>. 3 cách:</p>
+      <ul class="clean">
+        <li><b>Trend analysis</b> — so với lịch sử của chính DN (3–5 năm).</li>
+        <li><b>Industry analysis</b> — so với trung bình ngành (mã <b>SIC / NAICS</b>).</li>
+        <li><b>Peer group analysis</b> — so với nhóm DN tương đương.</li>
+      </ul>
+      <div class="note exam"><span class="lbl">Hạn chế của phân tích BCTC</span>
+        Không phải khoa học chính xác; dựa trên <b>số liệu kế toán & giá gốc lịch sử</b>; <b>thiếu chuẩn rõ ràng</b> để nói chỉ số "cao" hay "thấp" là tốt hay xấu.</div>
+    </div>
+  </section>
+
+  <!-- ============ CHƯƠNG 5 ============ -->
+  <section id="ch5">
+    <div class="sec-head"><div class="num">5</div><h2>Giá trị thời gian của tiền</h2></div>
+    <p class="sec-sub">The Time Value of Money (TVM)</p>
+    <div class="lead">Phần "toán" cốt lõi nhất của môn. Nắm chắc 2 công thức FV & PV, bạn giải được phần lớn bài tập.</div>
+
+    <div class="note key"><span class="lbl">Nguyên lý vàng</span>
+      <b>$1 hôm nay đáng giá hơn $1 trong tương lai</b>, vì $1 hôm nay đem đầu tư sẽ sinh lãi. Lãi suất chính là "tỷ giá" giữa tiêu hôm nay và tiêu ngày mai.</div>
+
+    <div class="card">
+      <h3><span>🧭</span> Trục thời gian (Time line) — vẽ trước khi tính</h3>
+      <p>Luôn vẽ trục thời gian để xác định <b>quy mô & thời điểm</b> dòng tiền: dòng <b>vào</b> là (+), dòng <b>ra</b> là (−). Đây là bước giúp tránh sai sót nhất.</p>
+      <pre style="font-family:monospace;color:var(--muted);font-size:.85rem;overflow-x:auto">  0 ─────1─────2─────3─────4─────5   (năm), i = 5%
+−10.000                          → FV?</pre>
+    </div>
+
+    <div class="card">
+      <h3><span>⏩</span> 5.2 — Giá trị tương lai (FV) & Ghép lãi</h3>
+      <p><b>Compounding</b> (ghép lãi) = "lãi mẹ đẻ lãi con": lãi kiếm được lại tiếp tục sinh lãi.</p>
+      <div class="formula"><span class="fname">FV cơ bản · Eq 5.1</span><span class="eq">FV<sub>n</sub> = PV × (1 + i)<sup>n</sup></span></div>
+      <div class="formula"><span class="fname">Ghép lãi m lần/năm · Eq 5.2</span><span class="eq">FV<sub>n</sub> = PV × (1 + i/m)<sup>m×n</sup></span></div>
+      <div class="formula"><span class="fname">Ghép lãi liên tục · Eq 5.3</span><span class="eq">FV<sub>∞</sub> = PV × e<sup>i×n</sup></span> &nbsp;<span class="vars">(e ≈ 2,71828)</span></div>
+      <p class="vars"><b>(1+i)<sup>n</sup></b> = thừa số giá trị tương lai (FV factor); <b>n</b> = số kỳ (năm, quý, tháng…).</p>
+
+      <div class="work"><span class="wt">Ví dụ 1 — cơ bản</span>
+        Gửi $100, lãi 10%/năm ghép hằng năm, 5 năm. Cuối kỳ bao nhiêu?
+        <div class="calc">FV = 100 × (1,10)<sup>5</sup> = 100 × 1,6105 = <span class="res">$161,05</span></div></div>
+      <div class="work"><span class="wt">Ví dụ 2 — sức mạnh ghép lãi</span>
+        $5.000, lãi 15%/năm, 10 năm.
+        <div class="calc">FV = 5.000 × (1,15)<sup>10</sup> = 5.000 × 4,0456 = <span class="res">$20.227,79</span></div></div>
+      <div class="work"><span class="wt">Ví dụ 3 — ghép nửa năm (semi-annual)</span>
+        $100, lãi danh nghĩa 5%/năm, ghép <b>nửa năm</b>, 2 năm → m=2, n=2.
+        <div class="calc">FV = 100 × (1 + 0,05/2)<sup>2×2</sup> = 100 × (1,025)<sup>4</sup> = <span class="res">$110,38</span></div></div>
+      <div class="work"><span class="wt">Ví dụ 4 — ghép liên tục</span>
+        $10.000, 5%/năm ghép liên tục, 5 năm.
+        <div class="calc">FV = 10.000 × e<sup>0,05×5</sup> = 10.000 × 1,28403 = <span class="res">$12.840,25</span></div></div>
+      <div class="note tip"><span class="lbl">Ghi nhớ</span>Ghép lãi càng <b>nhiều lần/năm</b> → FV càng <b>lớn</b>. Cực đại là ghép liên tục. Phần "interest on interest" tăng dần mỗi kỳ → tăng trưởng <b>hàm mũ</b>, không tuyến tính.</div>
+    </div>
+
+    <div class="card">
+      <h3><span>⏪</span> 5.3 — Giá trị hiện tại (PV) & Chiết khấu</h3>
+      <p><b>Discounting</b> (chiết khấu) = ngược của ghép lãi: quy dòng tiền tương lai về hôm nay. Lãi suất khi đó gọi là <b>discount rate</b>.</p>
+      <div class="formula"><span class="fname">PV cơ bản · Eq 5.4</span>
+        <span class="eq">PV = <span class="frac"><span>FV<sub>n</sub></span><span>(1 + i)<sup>n</sup></span></span></span></div>
+      <p class="vars">Thừa số PV = <b>nghịch đảo</b> của thừa số FV. FV và PV là <b>cùng một công thức</b>, chỉ sắp xếp khác.</p>
+      <div class="work"><span class="wt">Ví dụ — gửi bao nhiêu hôm nay?</span>
+        Muốn có $40.000 sau 1 năm, lãi 5%.
+        <div class="calc">PV = 40.000 / (1,05)<sup>1</sup> = <span class="res">$38.095,24</span></div>
+        Nếu lãi 15%: PV = 40.000/1,15 = <span class="res">$34.782,61</span> (lãi cao hơn → PV nhỏ hơn).</div>
+      <div class="note"><span class="lbl">2 quy luật PV</span>
+        ⏳ Thời gian càng <b>dài</b> → PV càng <b>nhỏ</b>. &nbsp; 📈 Lãi suất chiết khấu càng <b>cao</b> → PV càng <b>nhỏ</b>.</div>
+    </div>
+
+    <div class="card">
+      <h3><span>🔑</span> 5.4 — Tìm lãi suất, số kỳ & tăng trưởng</h3>
+      <div class="formula"><span class="fname">Quy tắc 72 — thời gian để gấp đôi · Eq 5.5</span>
+        <span class="eq">TDM ≈ <span class="frac"><span>72</span><span>i (%)</span></span></span></div>
+      <p class="vars">Khá chính xác với lãi suất 5%–20%.</p>
+      <div class="formula"><span class="fname">Tốc độ tăng trưởng kép · Eq 5.6</span><span class="eq">FV<sub>n</sub> = PV × (1 + g)<sup>n</sup></span></div>
+      <div class="work"><span class="wt">Ví dụ Rule of 72</span>
+        Lãi 8%/năm → gấp đôi sau ≈ 72/8 = <span class="res">9 năm</span>.</div>
+      <div class="work"><span class="wt">Ví dụ tăng trưởng</span>
+        Doanh thu từ $20 triệu lên $35 triệu trong 3 năm. Tốc độ tăng bình quân?
+        <div class="calc">35 = 20 × (1+g)<sup>3</sup> → (1+g)<sup>3</sup> = 1,75 → 1+g = 1,75<sup>1/3</sup> = 1,2051</div>
+        <div class="calc">g = <span class="res">20,5%/năm</span></div></div>
+      <div class="note tip"><span class="lbl">Compounding không chỉ dành cho tiền</span>Công thức (1+g)<sup>n</sup> dùng được cho tăng trưởng doanh thu, dân số, lượng người dùng…</div>
+    </div>
+  </section>
+
+  <!-- ============ CHƯƠNG 6 ============ -->
+  <section id="ch6">
+    <div class="sec-head"><div class="num">6</div><h2>Dòng tiền chiết khấu & Định giá</h2></div>
+    <p class="sec-sub">Discounted Cash Flows and Valuation</p>
+    <div class="lead">Mở rộng chương 5 cho <b>chuỗi nhiều dòng tiền</b>: vay trả góp, niên kim, cổ phiếu — và cách quy đổi lãi suất cho đúng.</div>
+
+    <div class="card">
+      <h3><span>➕</span> 6.1 — Nhiều dòng tiền (Multiple Cash Flows)</h3>
+      <p>Quy tắc 3 bước (cho cả FV và PV):</p>
+      <ol class="step">
+        <li>Vẽ <b>trục thời gian</b> xác định mỗi dòng tiền cách hiện tại bao nhiêu kỳ.</li>
+        <li>Tính FV (hoặc PV) của <b>từng</b> dòng tiền bằng công thức chương 5.</li>
+        <li><b>Cộng</b> tất cả lại.</li>
+      </ol>
+      <p class="vars">VD: vay 3 năm, mỗi năm trả $1.000 cuối kỳ, lãi 7% → PV khoản vay = $2.624,32 (cộng PV của 3 dòng tiền).</p>
+    </div>
+
+    <div class="card">
+      <h3><span>💠</span> 6.2 — Niên kim (Annuity)</h3>
+      <p>Chuỗi dòng tiền <b>đều, cách đều</b> nhau trong số kỳ <b>hữu hạn</b>.</p>
+      <div class="scroll">
+      <table class="tbl">
+        <tr><th>Loại</th><th>Dòng tiền xảy ra</th><th>Ví dụ thực tế</th></tr>
+        <tr><td><b>Ordinary Annuity</b></td><td><b>Cuối kỳ</b></td><td>Trả góp vay, lãi trái phiếu</td></tr>
+        <tr><td><b>Annuity Due</b></td><td><b>Đầu kỳ</b></td><td>Tiền thuê nhà, bảo hiểm xe</td></tr>
+      </table>
+      </div>
+      <div class="formula"><span class="fname">PV niên kim thường · Eq 6.1</span>
+        <span class="eq">PVA<sub>n</sub> = CF × <span class="frac"><span>1 − 1/(1+i)<sup>n</sup></span><span>i</span></span></span></div>
+      <div class="formula"><span class="fname">FV niên kim thường · Eq 6.2</span>
+        <span class="eq">FVA<sub>n</sub> = CF × <span class="frac"><span>(1+i)<sup>n</sup> − 1</span><span>i</span></span></span></div>
+      <div class="formula"><span class="fname">Chuyển đổi niên kim đầu kỳ · Eq 6.4</span>
+        <span class="eq">Giá trị Annuity Due = Giá trị Ordinary Annuity × (1 + i)</span></div>
+
+      <div class="work"><span class="wt">Ví dụ PV — định giá hợp đồng</span>
+        Hợp đồng trả $2.000 cuối mỗi năm trong 3 năm, lãi chiết khấu 8%. Giá hợp lý?
+        <div class="calc">PV factor = [1 − 1/(1,08)<sup>3</sup>] / 0,08 = 2,5771</div>
+        <div class="calc">PVA = 2.000 × 2,5771 = <span class="res">$5.154,19</span></div></div>
+      <div class="work"><span class="wt">Ví dụ FV — tiết kiệm mua xe đạp Colnago</span>
+        Gửi $1.000 cuối mỗi năm, lãi 8%, 4 năm. Đủ mua xe $4.500 không?
+        <div class="calc">FV factor = [(1,08)<sup>4</sup> − 1]/0,08 = 4,5061</div>
+        <div class="calc">FVA = 1.000 × 4,5061 = <span class="res">$4.506,11</span></div>
+        → Vừa đủ mua xe $4.500. ✅</div>
+      <div class="note exam"><span class="lbl">Quy tắc nhớ</span>
+        Niên kim <b>đầu kỳ (due) LUÔN lớn hơn</b> niên kim thường, vì dòng tiền dịch sớm 1 kỳ → chiết khấu ít hơn (PV) / sinh lãi thêm 1 kỳ (FV). VD: PV due $3.577 &gt; PV ordinary $3.312.</div>
+    </div>
+
+    <div class="card">
+      <h3><span>📅</span> Trả góp khoản vay (Loan Amortization)</h3>
+      <p>Mỗi kỳ trả gồm <b>lãi + gốc</b>. Qua thời gian: phần <b>lãi giảm</b>, phần <b>gốc tăng</b>; kỳ cuối trả sạch.</p>
+      <div class="formula"><span class="fname">Tìm khoản trả định kỳ</span>
+        <span class="eq">CF = PVA<sub>n</sub> ÷ (PV annuity factor)</span></div>
+      <p class="vars">Lãi mỗi kỳ = số dư gốc đầu kỳ × lãi suất kỳ. Gốc trả = khoản trả − lãi.</p>
+      <div class="work"><span class="wt">Ví dụ — vay $10.000, 5 năm, lãi 5%, trả $2.309,75/năm</span>
+        <div class="calc">Năm 1: Lãi = 10.000×5% = 500 → Gốc = 2.309,75 − 500 = 1.809,75 → Dư = 8.190,25</div>
+        <div class="calc">Năm 2: Lãi = 8.190,25×5% = 409,51 → Gốc = 1.900,24 → Dư = 6.290,02</div>
+        <div class="calc">… Năm 5: Dư cuối = <span class="res">$0,00</span></div></div>
+      <div class="work"><span class="wt">Ví dụ — trả góp nhà</span>
+        Vay $400.000, 30 năm, 6,125%/năm ghép tháng → lãi tháng 0,51042%, 360 kỳ.
+        <div class="calc">PV annuity factor = 164,578 → CF = 400.000/164,578 = <span class="res">$2.430,45/tháng</span></div></div>
+    </div>
+
+    <div class="card">
+      <h3><span>♾️</span> 6.3–6.4 — Perpetuity & dòng tiền tăng trưởng</h3>
+      <div class="formula"><span class="fname">PV perpetuity (đều, vĩnh viễn) · Eq 6.3</span>
+        <span class="eq">PV = <span class="frac"><span>CF</span><span>i</span></span></span></div>
+      <div class="formula"><span class="fname">PV niên kim tăng trưởng · Eq 6.5</span>
+        <span class="eq">PVA = <span class="frac"><span>CF</span><span>i − g</span></span> × [ 1 − (<span class="frac" style="font-size:.85em"><span>1+g</span><span>1+i</span></span>)<sup>n</sup> ]</span></div>
+      <div class="formula"><span class="fname">PV perpetuity tăng trưởng · Eq 6.6</span>
+        <span class="eq">PV = <span class="frac"><span>CF</span><span>i − g</span></span></span></div>
+      <div class="work"><span class="wt">Ví dụ Perpetuity — học bổng vĩnh viễn</span>
+        Muốn cấp $100.000/năm mãi mãi, quỹ sinh lời 8%. Cần góp bao nhiêu?
+        <div class="calc">PV = 100.000 / 0,08 = <span class="res">$1.250.000</span></div></div>
+      <div class="work"><span class="wt">Ví dụ Perpetuity tăng trưởng — định giá DN</span>
+        Dòng tiền năm rồi $450.000, tăng 5%/năm mãi mãi, chiết khấu 18%.
+        <div class="calc">CF kỳ tới = 450.000 × 1,05 = 472.500</div>
+        <div class="calc">PV = 472.500 / (0,18 − 0,05) = <span class="res">$3.634.615</span></div></div>
+      <div class="note warn"><span class="lbl">Điều kiện bắt buộc</span>Công thức tăng trưởng chỉ đúng khi <b>g &lt; i</b> (nếu không mẫu âm/bằng 0, vô nghĩa). Ứng dụng: cổ phiếu ưu đãi = perpetuity; cổ phiếu thường tăng cổ tức = growing perpetuity.</div>
+    </div>
+
+    <div class="card">
+      <h3><span>🎯</span> 6.5 — Lãi suất hiệu quả năm (EAR) vs APR</h3>
+      <div class="formula"><span class="fname">APR — lãi suất danh nghĩa năm</span><span class="eq">APR = (lãi suất theo kỳ) × m</span></div>
+      <div class="formula"><span class="fname">EAR — lãi suất hiệu quả năm · Eq 6.7</span>
+        <span class="eq">EAR = (1 + <span class="frac" style="font-size:.9em"><span>APR</span><span>m</span></span>)<sup>m</sup> − 1</span></div>
+      <ul class="clean">
+        <li><b>APR</b> (luật Truth-in-Lending bắt buộc công bố) — dùng lãi đơn, <b>bỏ qua</b> ghép lãi → không chính xác.</li>
+        <li><b>EAR</b> — có tính ghép lãi → <b>phản ánh đúng</b> chi phí vay/lợi suất thật.</li>
+      </ul>
+      <div class="work"><span class="wt">Ví dụ — thẻ tín dụng</span>
+        APR 12%/năm, ghép tháng (1%/tháng), m=12.
+        <div class="calc">EAR = (1 + 0,12/12)<sup>12</sup> − 1 = (1,01)<sup>12</sup> − 1 = <span class="res">12,68%</span></div></div>
+      <div class="work"><span class="wt">Ví dụ — so sánh 3 ngân hàng (đều là APR)</span>
+        <div class="calc">A: 10,40% ghép tháng → EAR = 10,91%</div>
+        <div class="calc">B: 10,90% ghép năm → EAR = 10,90%</div>
+        <div class="calc">C: 10,50% ghép quý → EAR = 10,92%</div>
+        → Rẻ nhất là <span class="res">Ngân hàng B</span> (EAR thấp nhất), dù APR không phải thấp nhất!</div>
+      <div class="note key"><span class="lbl">Quy tắc vàng khi tính PV/FV</span>
+        Luôn dùng <b>lãi suất theo kỳ (APR/m)</b> HOẶC <b>EAR</b> làm lãi suất — cả hai đều phản ánh đúng tác động ghép lãi. Ghép càng dày → EAR càng vượt APR.</div>
+    </div>
+  </section>
+
+  <!-- ============ BỘ CÔNG THỨC ============ -->
+  <section id="congthuc">
+    <div class="sec-head"><div class="num">📐</div><h2>Bộ công thức tra cứu nhanh</h2></div>
+    <p class="sec-sub">In ra hoặc lưu lại để ôn cấp tốc trước khi thi.</p>
+    <div class="grid two">
+      <div class="card"><h3>⏱️ TVM (C5)</h3>
+        <table class="tbl">
+          <tr><th>Khái niệm</th><th>Công thức</th></tr>
+          <tr><td>FV cơ bản</td><td>PV(1+i)<sup>n</sup></td></tr>
+          <tr><td>FV ghép m lần</td><td>PV(1+i/m)<sup>mn</sup></td></tr>
+          <tr><td>FV liên tục</td><td>PV·e<sup>in</sup></td></tr>
+          <tr><td>PV</td><td>FV/(1+i)<sup>n</sup></td></tr>
+          <tr><td>Quy tắc 72</td><td>72/i(%)</td></tr>
+          <tr><td>Tăng trưởng</td><td>FV=PV(1+g)<sup>n</sup></td></tr>
+        </table></div>
+      <div class="card"><h3>💠 Niên kim & Định giá (C6)</h3>
+        <table class="tbl">
+          <tr><th>Khái niệm</th><th>Công thức</th></tr>
+          <tr><td>PV annuity</td><td>CF·[1−(1+i)<sup>−n</sup>]/i</td></tr>
+          <tr><td>FV annuity</td><td>CF·[(1+i)<sup>n</sup>−1]/i</td></tr>
+          <tr><td>Annuity due</td><td>Ordinary×(1+i)</td></tr>
+          <tr><td>Perpetuity</td><td>CF/i</td></tr>
+          <tr><td>Growing perp.</td><td>CF/(i−g), g&lt;i</td></tr>
+          <tr><td>APR</td><td>lãi suất kỳ × m</td></tr>
+          <tr><td>EAR</td><td>(1+APR/m)<sup>m</sup>−1</td></tr>
+        </table></div>
+      <div class="card"><h3>🧮 Chỉ số tài chính (C4)</h3>
+        <table class="tbl">
+          <tr><th>Chỉ số</th><th>Công thức</th></tr>
+          <tr><td>Current ratio</td><td>TSNH/Nợ NH</td></tr>
+          <tr><td>Quick ratio</td><td>(TSNH−Tồn kho)/Nợ NH</td></tr>
+          <tr><td>Vòng quay tồn kho</td><td>COGS/Tồn kho</td></tr>
+          <tr><td>Vòng quay TTS</td><td>Doanh thu/Tổng TS</td></tr>
+          <tr><td>Total debt ratio</td><td>Tổng nợ/Tổng TS</td></tr>
+          <tr><td>Equity multiplier</td><td>Tổng TS/Vốn CSH</td></tr>
+          <tr><td>TIE</td><td>EBIT/Lãi vay</td></tr>
+          <tr><td>Net margin</td><td>NI/Doanh thu</td></tr>
+          <tr><td>ROA</td><td>NI/Tổng TS</td></tr>
+          <tr><td>ROE</td><td>NI/Vốn CSH</td></tr>
+          <tr><td>EPS</td><td>NI/Số cổ phần</td></tr>
+          <tr><td>P/E</td><td>Giá CP/EPS</td></tr>
+        </table></div>
+      <div class="card"><h3>🧬 DuPont · BCTC · Lãi suất</h3>
+        <table class="tbl">
+          <tr><th>Khái niệm</th><th>Công thức</th></tr>
+          <tr><td>ROA DuPont</td><td>Net margin × Vòng quay TTS</td></tr>
+          <tr><td>ROE DuPont</td><td>ROA × Equity multiplier</td></tr>
+          <tr><td>ROE 3 yếu tố</td><td>Margin×Turnover×EM</td></tr>
+          <tr><td>PT kế toán</td><td>TS = Nợ + Vốn CSH</td></tr>
+          <tr><td>NWC</td><td>TSNH − Nợ NH</td></tr>
+          <tr><td>Net income</td><td>Doanh thu − Chi phí</td></tr>
+          <tr><td>Thuế bình quân</td><td>Tổng thuế/TN chịu thuế</td></tr>
+          <tr><td>Fisher đầy đủ</td><td>i = r+ΔP<sup>e</sup>+r·ΔP<sup>e</sup></td></tr>
+          <tr><td>Fisher gần đúng</td><td>i ≈ r+ΔP<sup>e</sup></td></tr>
+        </table></div>
+    </div>
+  </section>
+
+  <!-- ============ MÁY TÍNH ============ -->
+  <section id="maytinh">
+    <div class="sec-head"><div class="num">🧮</div><h2>Máy tính tài chính tích hợp</h2></div>
+    <p class="sec-sub">Nhập số để tự kiểm tra bài tập. Tính ngay trên trình duyệt, không cần mạng.</p>
+
+    <div class="grid two">
+      <div class="card">
+        <h3>⏩ FV / PV (lãi kép)</h3>
+        <div class="calcbox">
+          <div class="row"><label>Giá trị hiện tại PV ($)</label><input id="c_pv" type="number" value="10000"></div>
+          <div class="row"><label>Lãi suất/năm i (%)</label><input id="c_i" type="number" value="8"></div>
+          <div class="row"><label>Số năm n</label><input id="c_n" type="number" value="5"></div>
+          <div class="row"><label>Ghép lãi m lần/năm</label><input id="c_m" type="number" value="1"></div>
+          <div class="row"><button class="btn" onclick="calcFV()">Tính FV</button><span class="out" id="c_fvOut">—</span></div>
+          <div class="row"><button class="btn ghost" onclick="calcPV()">Ngược: coi ô PV là FV → tính PV</button><span class="out" id="c_pvOut">—</span></div>
+        </div>
+        <p class="vars">FV = PV(1+i/m)<sup>mn</sup>. Đặt m=1 cho ghép năm.</p>
+      </div>
+
+      <div class="card">
+        <h3>💠 Niên kim (Annuity) & EAR</h3>
+        <div class="calcbox">
+          <div class="row"><label>Dòng tiền đều CF ($)</label><input id="a_cf" type="number" value="1000"></div>
+          <div class="row"><label>Lãi suất/kỳ i (%)</label><input id="a_i" type="number" value="8"></div>
+          <div class="row"><label>Số kỳ n</label><input id="a_n" type="number" value="4"></div>
+          <div class="row"><button class="btn" onclick="calcAnn()">Tính PV & FV niên kim</button></div>
+          <div class="row"><span class="out" id="a_pvOut">PV: —</span></div>
+          <div class="row"><span class="out" id="a_fvOut">FV: —</span></div>
+          <hr style="border-color:var(--line);width:100%">
+          <div class="row"><label>APR (%) & m lần ghép</label><input id="e_apr" type="number" value="12"><input id="e_m" type="number" value="12"></div>
+          <div class="row"><button class="btn ghost" onclick="calcEAR()">Tính EAR</button><span class="out" id="e_out">—</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="note warn"><span class="lbl">Lưu ý</span>Máy tính dùng lãi suất <b>theo kỳ</b> cho niên kim (vd 8%/năm với CF hằng năm). Kết quả làm tròn 2 chữ số thập phân.</div>
+  </section>
+
+  <!-- ============ THUẬT NGỮ ============ -->
+  <section id="thuatngu">
+    <div class="sec-head"><div class="num">📖</div><h2>Từ điển thuật ngữ Anh – Việt</h2></div>
+    <p class="sec-sub">Tra nhanh các thuật ngữ hay gặp trong đề thi.</p>
+    <div class="card">
+      <dl class="glossary">
+        <dt>Residual cash flow</dt><dd>Dòng tiền thặng dư còn lại sau khi DN trả mọi chi phí.</dd>
+        <dt>Capital budgeting</dt><dd>Hoạch định vốn — quyết định đầu tư tài sản dài hạn.</dd>
+        <dt>Working capital</dt><dd>Vốn lưu động — quản trị tài sản & nợ ngắn hạn.</dd>
+        <dt>Agency cost</dt><dd>Chi phí phát sinh từ xung đột lợi ích chủ – người quản lý.</dd>
+        <dt>Double taxation</dt><dd>Đánh thuế hai lần (đặc trưng của C-Corporation).</dd>
+        <dt>Flow-through</dt><dd>Thu nhập "chảy thẳng" về chủ, chỉ chịu thuế một lần.</dd>
+        <dt>Lender-saver / Borrower-spender</dt><dd>Người tiết kiệm cho vay / Người vay chi tiêu.</dd>
+        <dt>Underwriting</dt><dd>Bảo lãnh phát hành chứng khoán.</dd>
+        <dt>Marketability</dt><dd>Mức độ dễ bán một chứng khoán.</dd>
+        <dt>Liquidity</dt><dd>Đổi ra tiền nhanh mà không mất giá.</dd>
+        <dt>Broker / Dealer</dt><dd>Môi giới (ăn hoa hồng) / Nhà tạo lập (mua bán từ kho, chịu rủi ro).</dd>
+        <dt>Intrinsic value</dt><dd>Giá trị nội tại (giá trị thật) của chứng khoán.</dd>
+        <dt>Nominal / Real rate</dt><dd>Lãi suất danh nghĩa (quan sát) / lãi suất thực (loại lạm phát).</dd>
+        <dt>GAAP / IFRS</dt><dd>Chuẩn mực kế toán Mỹ / chuẩn mực kế toán quốc tế.</dd>
+        <dt>Going concern</dt><dd>Giả định DN hoạt động liên tục.</dd>
+        <dt>NWC (Net Working Capital)</dt><dd>Vốn lưu động ròng = TSNH − Nợ NH.</dd>
+        <dt>FIFO / LIFO</dt><dd>Nhập trước xuất trước / Nhập sau xuất trước (phương pháp tính tồn kho).</dd>
+        <dt>EBITDA / EBIT / EBT</dt><dd>LN trước lãi-thuế-khấu hao / trước lãi-thuế / trước thuế.</dd>
+        <dt>Depreciation / Amortization</dt><dd>Khấu hao TS hữu hình / phân bổ TS vô hình (chi phí phi tiền mặt).</dd>
+        <dt>Common-size statement</dt><dd>Báo cáo theo tỷ lệ phần trăm.</dd>
+        <dt>DuPont system</dt><dd>Hệ thống phân tách ROE thành các thành phần.</dd>
+        <dt>Equity multiplier</dt><dd>Hệ số nhân vốn CSH = Tổng TS / Vốn CSH (đo đòn bẩy).</dd>
+        <dt>Benchmark</dt><dd>Chuẩn so sánh (trend, industry, peer group).</dd>
+        <dt>Compounding / Discounting</dt><dd>Ghép lãi (về tương lai) / Chiết khấu (về hiện tại).</dd>
+        <dt>Annuity / Perpetuity</dt><dd>Niên kim (hữu hạn) / niên kim vĩnh viễn.</dd>
+        <dt>Ordinary annuity / Annuity due</dt><dd>Niên kim cuối kỳ / đầu kỳ.</dd>
+        <dt>Amortization (loan)</dt><dd>Lịch trả góp gốc + lãi của khoản vay.</dd>
+        <dt>APR / EAR</dt><dd>Lãi suất danh nghĩa năm / lãi suất hiệu quả năm (có ghép lãi).</dd>
+      </dl>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section id="quiz">
+    <div class="sec-head"><div class="num">📝</div><h2>Quiz tự kiểm tra — 50 câu</h2></div>
+    <p class="sec-sub">Lọc theo chương, bấm chọn đáp án, xem giải thích ngay. Có chấm điểm tự động.</p>
+    <div class="card">
+      <div class="quiz-top"><div class="selctrl" id="filterBtns"></div></div>
+      <div class="quiz-top">
+        <button class="btn ghost" id="shuffleBtn">🔀 Xáo trộn</button>
+        <button class="btn ghost" id="resetBtn">↺ Làm lại</button>
+        <span class="pill" id="counter">0 câu</span>
+      </div>
+    </div>
+    <div id="quizArea"></div>
+    <div class="scorebox"><div class="scoreline">
+      <span class="scoreval" id="scoreVal">0 / 0</span>
+      <div class="track"><i id="scoreBar"></i></div>
+      <span class="pill" id="scoreMsg">Bắt đầu làm bài nhé!</span>
+    </div></div>
+  </section>
+
+</div>
+
+<footer>
+  <p><b>Sổ tay ôn tập Tài chính Doanh nghiệp</b> — nội dung tổng hợp từ giáo trình <i>Fundamentals of Corporate Finance</i>, 5th Ed. (Parrino, Kidwell, Bates, Gillan).</p>
+  <p>Thiết kế &amp; phát triển web bởi <span class="sig">duntk</span> · Chạy hoàn toàn offline · © 2026</p>
+  <p style="opacity:.7">Mẹo: bấm ☰ để mở mục lục · bấm thẻ <span class="kbd">▾</span> để mở rộng công thức.</p>
+</footer>
+
+<button class="totop" id="totop" title="Lên đầu trang">↑</button>
+
+<script>
+/* ===== Theme ===== */
+const themeBtn=document.getElementById('themeBtn');
+function setTheme(t){document.body.dataset.theme=t;themeBtn.textContent=t==='dark'?'🌙':'☀️';try{localStorage.setItem('cf-theme',t)}catch(e){}}
+themeBtn.onclick=()=>setTheme(document.body.dataset.theme==='dark'?'light':'dark');
+try{const s=localStorage.getItem('cf-theme');if(s)setTheme(s)}catch(e){}
+
+/* ===== Drawer ===== */
+const drawer=document.getElementById('drawer'),overlay=document.getElementById('overlay');
+function openD(){drawer.classList.add('open');overlay.classList.add('open');document.body.classList.add('lock')}
+function closeD(){drawer.classList.remove('open');overlay.classList.remove('open');document.body.classList.remove('lock')}
+document.getElementById('openMenu').onclick=openD;
+document.getElementById('closeMenu').onclick=closeD;
+overlay.onclick=closeD;
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeD()});
+const dlinks=[...document.querySelectorAll('#dnav a')];
+dlinks.forEach(a=>a.addEventListener('click',()=>setTimeout(closeD,120)));
+
+/* ===== Progress + active section ===== */
+const prog=document.getElementById('prog'),totop=document.getElementById('totop');
+const secs=[...document.querySelectorAll('section')];
+function onScroll(){
+  const h=document.documentElement;
+  prog.style.width=(h.scrollTop/(h.scrollHeight-h.clientHeight)*100)+'%';
+  totop.classList.toggle('show',h.scrollTop>500);
+  let cur=secs[0]?.id;
+  for(const s of secs){if(s.getBoundingClientRect().top<=90)cur=s.id;}
+  dlinks.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+cur));
+}
+document.addEventListener('scroll',onScroll,{passive:true});onScroll();
+totop.onclick=()=>scrollTo({top:0,behavior:'smooth'});
+
+/* ===== Calculators ===== */
+const f2=x=>x.toLocaleString('vi-VN',{minimumFractionDigits:2,maximumFractionDigits:2});
+function calcFV(){
+  const pv=+c_pv.value,i=+c_i.value/100,n=+c_n.value,m=Math.max(1,+c_m.value);
+  const fv=pv*Math.pow(1+i/m,m*n);
+  c_fvOut.textContent='FV = $'+f2(fv);
+}
+function calcPV(){
+  const fv=+c_pv.value,i=+c_i.value/100,n=+c_n.value,m=Math.max(1,+c_m.value);
+  const pv=fv/Math.pow(1+i/m,m*n);
+  c_pvOut.textContent='PV = $'+f2(pv);
+}
+function calcAnn(){
+  const cf=+a_cf.value,i=+a_i.value/100,n=+a_n.value;
+  let pv,fv;
+  if(i===0){pv=cf*n;fv=cf*n;}
+  else{pv=cf*(1-Math.pow(1+i,-n))/i;fv=cf*(Math.pow(1+i,n)-1)/i;}
+  a_pvOut.textContent='PV niên kim: $'+f2(pv);
+  a_fvOut.textContent='FV niên kim: $'+f2(fv);
+}
+function calcEAR(){
+  const apr=+e_apr.value/100,m=Math.max(1,+e_m.value);
+  const ear=Math.pow(1+apr/m,m)-1;
+  e_out.textContent='EAR = '+(ear*100).toFixed(2)+'%';
+}
+
+/* ===== QUIZ DATA (50) ===== */
+const QUESTIONS=[
+ {ch:'C1',q:'Mục tiêu phù hợp nhất của quản lý tài chính là?',o:['Tối đa hóa lợi nhuận kế toán','Tối đa hóa thị phần','Tối đa hóa giá trị cổ phiếu','Tối thiểu hóa chi phí'],a:2,e:'Giá cổ phiếu phản ánh quy mô, thời điểm và rủi ro của dòng tiền tương lai.'},
+ {ch:'C1',q:'Ba quyết định tài chính cốt lõi KHÔNG gồm:',o:['Capital Budgeting','Financing','Working Capital','Stock Pricing'],a:3,e:'Ba quyết định: Capital Budgeting, Financing, Working Capital. Định giá cổ phiếu là kết quả.'},
+ {ch:'C1',q:'Loại hình nào bị đánh thuế hai lần?',o:['Sole proprietorship','C-Corporation','S-Corporation','LLC'],a:1,e:'C-Corp nộp thuế TNDN rồi cổ đông nộp thuế cổ tức. Còn lại dùng flow-through.'},
+ {ch:'C1',q:'Xung đột đại diện phát sinh chủ yếu do:',o:['Lạm phát','Tách rời sở hữu và kiểm soát','Thiếu vốn lưu động','Thuế biên cao'],a:1,e:'Cổ đông (principal) sở hữu nhưng quản lý (agent) kiểm soát tài sản.'},
+ {ch:'C1',q:'Sarbanes-Oxley (2002) yêu cầu:',o:['Giảm thuế còn 21%','CEO & CFO ký xác nhận BCTC','Bỏ ủy ban kiểm toán','Cấm trả cổ tức'],a:1,e:'SOX buộc CEO/CFO ký xác nhận BCTC, tăng độc lập HĐQT, kiểm soát nội bộ.'},
+ {ch:'C1',q:'LLC/LLP kết hợp ưu điểm nào?',o:['Trách nhiệm vô hạn + thuế kép','Trách nhiệm hữu hạn + thuế flow-through','Thuế kép + huy động vốn kém','Vòng đời hữu hạn + vô hạn'],a:1,e:'LLC/LLP: trách nhiệm hữu hạn (như corp) + thuế flow-through (như partnership).'},
+ {ch:'C1',q:'Chức danh nào KHÔNG báo cáo trực tiếp cho CFO?',o:['Treasurer','Controller','CEO','Risk Manager'],a:2,e:'CFO báo cáo CHO CEO. Treasurer, Controller, Risk Manager, Internal Auditor báo cáo cho CFO.'},
+ {ch:'C1',q:'Vì sao KHÔNG nên tối đa hóa thị phần?',o:['Thị phần không đo được','Tặng hàng miễn phí tăng thị phần nhưng không trả nổi hóa đơn','Thị phần luôn giảm','Khách hàng không thích'],a:1,e:'Cho hàng free chiếm thị phần tạm thời nhưng DN sẽ phá sản vì không có tiền.'},
+
+ {ch:'C2',q:'Hệ thống tài chính chuyển vốn từ ai sang ai?',o:['Borrower → Lender','Lender-savers → Borrower-spenders','Chính phủ → Ngân hàng','Cổ đông → Chủ nợ'],a:1,e:'Từ người tiết kiệm (thừa tiền) sang người vay chi tiêu (thiếu tiền).'},
+ {ch:'C2',q:'Thị trường tiền tệ (money market) có kỳ hạn:',o:['Dưới 1 năm','Trên 1 năm','Trên 5 năm','Vĩnh viễn'],a:0,e:'Money market < 1 năm (T-bill, CP). Capital market > 1 năm.'},
+ {ch:'C2',q:'Liquidity khác marketability ở chỗ:',o:['Không khác','Liquidity = đổi ra tiền nhanh KHÔNG mất giá','Marketability chỉ cho trái phiếu','Liquidity chỉ cho BĐS'],a:1,e:'Liquidity nhấn mạnh nhanh + không mất giá; marketability nhấn mạnh dễ bán.'},
+ {ch:'C2',q:'Thị trường hiệu quả dạng semistrong, giá phản ánh:',o:['Chỉ thông tin lịch sử','Mọi thông tin công khai','Cả thông tin nội bộ','Không gì cả'],a:1,e:'Semistrong: mọi thông tin công khai, KHÔNG gồm nội bộ.'},
+ {ch:'C2',q:'Fisher giản lược: r=3%, lạm phát kỳ vọng=7% → i ≈',o:['4%','10%','21%','7%'],a:1,e:'i ≈ r + ΔPe = 3% + 7% = 10%.'},
+ {ch:'C2',q:'Chuỗi dịch vụ của ngân hàng đầu tư:',o:['Origination → Underwriting → Distribution','Audit → Tax → Report','Buy → Hold → Sell','Lend → Save → Spend'],a:0,e:'Chuẩn bị → bảo lãnh phát hành → phân phối.'},
+ {ch:'C2',q:'Dealer khác broker ở chỗ:',o:['Dealer chỉ ăn hoa hồng','Dealer mua bán từ kho của mình và chịu rủi ro','Dealer không giao dịch','Broker tạo lập thị trường'],a:1,e:'Dealer tạo lập thị trường, giao dịch từ kho riêng, chịu rủi ro. Broker chỉ môi giới ăn hoa hồng.'},
+ {ch:'C2',q:'Lãi suất có xu hướng thế nào theo chu kỳ kinh tế?',o:['Tăng khi suy thoái','Tăng khi kinh tế mở rộng','Luôn cố định','Ngược chiều lạm phát'],a:1,e:'Lãi suất tăng khi kinh tế mở rộng, giảm khi suy thoái, đồng biến lạm phát.'},
+ {ch:'C2',q:'Tài trợ gián tiếp (indirect) đặc trưng bởi:',o:['Người vay bán trái phiếu thẳng cho người cho vay','Có trung gian tài chính đứng giữa','Không có ngân hàng','Chỉ dùng cổ phiếu'],a:1,e:'Indirect = có trung gian (ngân hàng) đứng giữa người tiết kiệm và người vay.'},
+
+ {ch:'C3',q:'Phương trình kế toán cơ bản:',o:['TS = Doanh thu − Chi phí','TS = Nợ + Vốn CSH','Vốn CSH = TS + Nợ','TS = Nợ − Vốn CSH'],a:1,e:'Eq 3.1: Tổng TS = Tổng nợ + Vốn CSH.'},
+ {ch:'C3',q:'NWC được tính bằng:',o:['Tổng TS − Tổng nợ','TSNH − Nợ NH','Doanh thu − Giá vốn','EBIT − Thuế'],a:1,e:'NWC = Tài sản ngắn hạn − Nợ ngắn hạn.'},
+ {ch:'C3',q:'Khi giá tăng, LIFO dẫn tới:',o:['Thuế cao hơn','COGS thấp hơn','Thu nhập chịu thuế thấp hơn → thuế ít hơn','Tồn kho cao hơn'],a:2,e:'LIFO bán hàng đắt trước → COGS cao → thuế thấp. Vì vậy đa số chọn LIFO khi giá tăng.'},
+ {ch:'C3',q:'Thứ tự đúng tới dòng đáy:',o:['EBIT→EBITDA→EBT→NI','EBITDA→EBIT→EBT→NI','EBT→EBIT→EBITDA→NI','NI→EBT→EBIT→EBITDA'],a:1,e:'EBITDA −(D&A)→ EBIT −(lãi)→ EBT −(thuế)→ Net income.'},
+ {ch:'C3',q:'Khoản nào là chi phí PHI tiền mặt?',o:['Lương','Khấu hao','Thuế đã nộp','Mua nguyên liệu'],a:1,e:'Khấu hao & phân bổ là chi phí phi tiền mặt.'},
+ {ch:'C3',q:'Vì sao nợ rẻ hơn vốn cổ phần?',o:['Cổ tức được khấu trừ thuế','Lãi vay được khấu trừ thuế, cổ tức thì không','Nợ không phải trả','Lãi suất = 0'],a:1,e:'Lãi vay tạo tax shield (giảm thuế); cổ tức thì không.'},
+ {ch:'C3',q:'Trong báo cáo lưu chuyển tiền tệ, đâu là NGUỒN tiền?',o:['Tăng tài sản','Giảm nợ','Tăng nợ phải trả','Mua cổ phiếu quỹ'],a:2,e:'Nguồn: giảm TS hoặc tăng nợ/vốn. "Nợ ↑ có tiền".'},
+ {ch:'C3',q:'GAAP do tổ chức nào ban hành?',o:['IASB','FASB (SEC ủy quyền)','IMF','WTO'],a:1,e:'GAAP do FASB ban hành, SEC ủy quyền. IFRS do IASB.'},
+ {ch:'C3',q:'Nguyên tắc Matching nghĩa là:',o:['Ghi TS theo giá gốc','Khớp doanh thu với chi phí tạo ra nó','DN hoạt động liên tục','Giao dịch độc lập'],a:1,e:'Matching: doanh thu được khớp với chi phí đã chi để tạo ra doanh thu đó.'},
+ {ch:'C3',q:'Thuế suất biên (marginal) là:',o:['Tổng thuế/TN chịu thuế','Thuế trên đồng cuối/kế tiếp kiếm được','Thuế cố định 21%','Thuế trên cổ tức'],a:1,e:'Marginal = thuế trên đồng kế tiếp; average = tổng thuế/thu nhập chịu thuế.'},
+
+ {ch:'C4',q:'Quick ratio bằng:',o:['TSNH/Nợ NH','(TSNH − Tồn kho)/Nợ NH','Tồn kho/Nợ NH','Tiền/Tổng nợ'],a:1,e:'Quick loại bỏ tồn kho khỏi tử số.'},
+ {ch:'C4',q:'Common-size bảng CĐKT dùng tham chiếu:',o:['Doanh thu thuần','Tổng tài sản','Vốn CSH','Net income'],a:1,e:'CĐKT: % tổng tài sản. BCKQKD: % doanh thu thuần.'},
+ {ch:'C4',q:'DuPont mở rộng ROE gồm 3 yếu tố:',o:['Net margin × Vòng quay TTS × Equity multiplier','Current × Quick × ROA','Giá × EPS × P/E','DT × CP × Thuế'],a:0,e:'ROE = sinh lời × hiệu quả tài sản × đòn bẩy.'},
+ {ch:'C4',q:'Equity multiplier =',o:['Tổng nợ/Vốn CSH','Tổng TS/Vốn CSH','Vốn CSH/Tổng TS','EBIT/Lãi vay'],a:1,e:'Equity multiplier = Tổng tài sản / Vốn CSH (đo đòn bẩy).'},
+ {ch:'C4',q:'Hạn chế lớn của tối đa hóa ROE:',o:['Khó tính','Không xét dòng tiền, rủi ro, quy mô đầu tư','Luôn âm','Chỉ dùng cho ngân hàng'],a:1,e:'ROE dựa trên earnings, bỏ qua cash flow, rủi ro và quy mô.'},
+ {ch:'C4',q:'Times interest earned =',o:['EBIT/Lãi vay','Lãi vay/EBIT','NI/Lãi vay','Tổng nợ/EBIT'],a:0,e:'TIE = EBIT/Chi phí lãi vay; cao = ít rủi ro phá sản.'},
+ {ch:'C4',q:'Chỉ số nào THẤP mới là tốt?',o:['Current ratio','Số ngày tồn kho','ROE','Gross margin'],a:1,e:'Số ngày tồn kho & kỳ thu tiền thấp = bán hàng/thu tiền nhanh = tốt.'},
+ {ch:'C4',q:'Diaz: NI=118,5; Tổng TS=1.889,2 → ROA ≈',o:['6,27%','12,64%','2,75%','30,86%'],a:0,e:'ROA = 118,5/1.889,2 = 6,27%.'},
+ {ch:'C4',q:'2 chiến lược tăng ROA:',o:['Tăng nợ và giảm vốn','Biên LN cao HOẶC vòng quay cao','Giảm doanh thu','Tăng tồn kho'],a:1,e:'Hoặc biên LN cao (Tiffany) hoặc vòng quay cao (Walmart).'},
+ {ch:'C4',q:'Mã ngành để phân tích industry là:',o:['ISBN','SIC / NAICS','VIN','IBAN'],a:1,e:'Standard Industrial Classification / North American Industry Classification System.'},
+
+ {ch:'C5',q:'Vì sao $1 hôm nay > $1 tương lai?',o:['Lạm phát=0','$ hôm nay đem đầu tư sinh lãi','Tiền giấy hỏng','Ngân hàng thu phí'],a:1,e:'Bản chất giá trị thời gian của tiền.'},
+ {ch:'C5',q:'Công thức FV cơ bản:',o:['PV/(1+i)^n','PV×(1+i)^n','PV×i×n','PV+i^n'],a:1,e:'Eq 5.1: FV = PV(1+i)^n.'},
+ {ch:'C5',q:'Tăng số lần ghép lãi m thì FV:',o:['Giảm','Không đổi','Tăng','Bằng 0'],a:2,e:'Ghép càng dày FV càng lớn; cực đại là ghép liên tục PV·e^(in).'},
+ {ch:'C5',q:'Rule of 72 với i=9% → gấp đôi sau:',o:['6 năm','8 năm','9 năm','12 năm'],a:1,e:'72/9 = 8 năm.'},
+ {ch:'C5',q:'Yếu tố nào làm PV GIẢM?',o:['Thời gian ngắn lại','Lãi suất chiết khấu tăng','Dòng tiền tăng','Lạm phát giảm'],a:1,e:'Lãi chiết khấu cao hơn (hoặc thời gian dài hơn) → PV nhỏ hơn.'},
+ {ch:'C5',q:'$5.000 lãi 15% trong 10 năm → FV ≈',o:['$10.000','$20.227','$7.500','$50.000'],a:1,e:'5.000×(1,15)^10 = 5.000×4,0456 = $20.227,79.'},
+ {ch:'C5',q:'Thừa số PV là gì của thừa số FV?',o:['Bình phương','Nghịch đảo','Gấp đôi','Bằng nhau'],a:1,e:'PV factor = 1/(1+i)^n = nghịch đảo của FV factor.'},
+ {ch:'C5',q:'Ghép liên tục dùng hằng số:',o:['π ≈ 3,14','e ≈ 2,71828','φ ≈ 1,618','√2'],a:1,e:'FV = PV·e^(in), e ≈ 2,71828 (số Euler).'},
+
+ {ch:'C6',q:'Annuity due so với ordinary annuity:',o:['Luôn nhỏ hơn','Bằng nhau','Luôn lớn hơn','Không so được'],a:2,e:'Due dịch sớm 1 kỳ → chiết khấu ít/sinh lãi thêm → lớn hơn. Due = Ordinary×(1+i).'},
+ {ch:'C6',q:'PV của perpetuity (CF đều vĩnh viễn):',o:['CF×i','CF/i','CF×(1+i)','CF/(1+i)^n'],a:1,e:'Eq 6.3: PV = CF/i. VD: cổ phiếu ưu đãi.'},
+ {ch:'C6',q:'Công thức growing perpetuity CF/(i−g) đúng khi:',o:['g>i','g=i','g<i','g=0'],a:2,e:'Bắt buộc g<i, nếu không mẫu âm/0, vô nghĩa.'},
+ {ch:'C6',q:'Khác biệt cốt lõi APR vs EAR:',o:['APR có ghép lãi, EAR không','EAR có ghép lãi, APR không','Giống nhau','APR luôn > EAR'],a:1,e:'EAR tính ghép lãi (chính xác); APR dùng lãi đơn.'},
+ {ch:'C6',q:'Trong lịch trả góp, theo thời gian:',o:['Lãi tăng, gốc giảm','Lãi giảm, gốc tăng','Lãi=gốc cố định','Chỉ trả lãi'],a:1,e:'Số dư gốc giảm → lãi giảm dần, phần gốc trả tăng dần.'},
+ {ch:'C6',q:'APR 12%/năm ghép tháng → EAR ≈',o:['12,00%','12,68%','11,40%','24,00%'],a:1,e:'(1+0,12/12)^12 − 1 = (1,01)^12 − 1 ≈ 12,68%.'},
+ {ch:'C6',q:'3 ngân hàng cùng APR ~10,5%, chọn rẻ nhất dựa vào:',o:['APR thấp nhất','EAR thấp nhất','Ghép dày nhất','Kỳ hạn dài nhất'],a:1,e:'So bằng EAR; EAR thấp nhất = chi phí thật rẻ nhất.'},
+ {ch:'C6',q:'Học bổng $100.000/năm mãi mãi, quỹ sinh lời 8% → cần:',o:['$800.000','$1.250.000','$8.000.000','$100.000'],a:1,e:'PV = 100.000/0,08 = $1.250.000.'},
+ {ch:'C6',q:'Để định giá nhiều dòng tiền, bước đầu tiên nên:',o:['Cộng hết lại ngay','Vẽ trục thời gian','Chia cho i','Nhân với n'],a:1,e:'Vẽ trục thời gian để xác định thời điểm từng dòng tiền trước khi tính.'},
+];
+
+/* ===== Quiz engine ===== */
+const area=document.getElementById('quizArea'),counter=document.getElementById('counter');
+const scoreVal=document.getElementById('scoreVal'),scoreBar=document.getElementById('scoreBar'),scoreMsg=document.getElementById('scoreMsg');
+const filterBtns=document.getElementById('filterBtns');
+let filter='ALL',order=[...QUESTIONS.keys()],answered={},correctCount=0,totalAnswered=0;
+const chList=['ALL','C1','C2','C3','C4','C5','C6'];
+const chLabel={ALL:'Tất cả',C1:'C1',C2:'C2',C3:'C3',C4:'C4',C5:'C5',C6:'C6'};
+chList.forEach(c=>{const b=document.createElement('button');b.className='chip'+(c==='ALL'?' active':'');
+  b.textContent=chLabel[c];b.onclick=()=>{filter=c;[...filterBtns.children].forEach(x=>x.classList.remove('active'));b.classList.add('active');render();};
+  filterBtns.appendChild(b);});
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function render(){
+  area.innerHTML='';
+  const idxs=order.filter(i=>filter==='ALL'||QUESTIONS[i].ch===filter);
+  counter.textContent=idxs.length+' câu';
+  idxs.forEach((qi,pos)=>{
+    const Q=QUESTIONS[qi];const card=document.createElement('div');card.className='q';
+    const head=document.createElement('div');head.className='qhead';
+    head.innerHTML=`<div class="qno">${pos+1}</div><div style="flex:1">${Q.q}</div><span class="qtag">${Q.ch}</span>`;
+    card.appendChild(head);
+    Q.o.forEach((opt,oi)=>{
+      const btn=document.createElement('button');btn.className='opt';btn.innerHTML=opt;
+      if(answered[qi]!==undefined){btn.disabled=true;
+        if(oi===Q.a){btn.classList.add('correct');btn.innerHTML=opt+'<span class="mk">✓</span>';}
+        else if(oi===answered[qi]){btn.classList.add('wrong');btn.innerHTML=opt+'<span class="mk">✕</span>';}}
+      btn.onclick=()=>pick(qi,oi);card.appendChild(btn);
+    });
+    const ex=document.createElement('div');ex.className='expl'+(answered[qi]!==undefined?' show':'');
+    ex.innerHTML='<b>Giải thích:</b> '+Q.e;card.appendChild(ex);area.appendChild(card);
+  });
+  updateScore();
+}
+function pick(qi,oi){if(answered[qi]!==undefined)return;answered[qi]=oi;totalAnswered++;if(oi===QUESTIONS[qi].a)correctCount++;render();}
+function updateScore(){
+  scoreVal.textContent=correctCount+' / '+totalAnswered;
+  scoreBar.style.width=(totalAnswered?correctCount/totalAnswered*100:0)+'%';
+  let msg;
+  if(totalAnswered===0)msg='Bắt đầu làm bài nhé!';
+  else{const r=correctCount/totalAnswered;
+    if(r===1)msg='🏆 Tuyệt đối!';else if(r>=.8)msg='🔥 Rất tốt';
+    else if(r>=.6)msg='👍 Khá ổn';else if(r>=.4)msg='📖 Ôn thêm';else msg='💪 Xem lại lý thuyết';}
+  scoreMsg.textContent=msg+(totalAnswered?` · ${totalAnswered}/${QUESTIONS.length} câu`:'');
+}
+document.getElementById('shuffleBtn').onclick=()=>{order=shuffle([...QUESTIONS.keys()]);render();};
+document.getElementById('resetBtn').onclick=()=>{answered={};correctCount=0;totalAnswered=0;order=[...QUESTIONS.keys()];render();};
+render();
+</script>
+</body>
+</html>
