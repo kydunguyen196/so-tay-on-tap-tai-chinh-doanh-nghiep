@@ -21,6 +21,16 @@
     --good:#0fa37f; --chip:#eef1ff;
     --shadow:0 10px 30px rgba(60,80,180,.12);
   }
+  [data-theme="pink"]{
+    --bg:#fff1f7; --bg2:#ffe0ee; --card:#ffffff; --card2:#fff4f9;
+    --txt:#46172f; --muted:#a45f80; --line:#ffd3e6;
+    --pri:#ec4c89; --pri2:#c63d8f; --acc:#d6336c; --warn:#d98217; --bad:#e23d5e;
+    --good:#13a07a; --chip:#ffe3f0;
+    --shadow:0 10px 30px rgba(236,76,137,.18);
+  }
+  /* language toggle visibility */
+  body[data-lang="vi"] .len{display:none!important}
+  body[data-lang="en"] .lvi{display:none!important}
   *{box-sizing:border-box}
   html{scroll-behavior:smooth}
   body{margin:0;font-family:'Segoe UI',system-ui,-apple-system,Roboto,Arial,sans-serif;
@@ -73,6 +83,8 @@
   /* ===== Layout ===== */
   .wrap{max-width:1100px;margin:0 auto;padding:0 16px}
   .hero{padding:42px 0 14px;text-align:center}
+  .flowerband{font-size:1.6rem;letter-spacing:6px;margin-bottom:6px;animation:sway 4s ease-in-out infinite}
+  @keyframes sway{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
   .hero h1{font-size:clamp(1.6rem,5vw,2.7rem);margin:.2em 0;line-height:1.18;
     background:linear-gradient(120deg,var(--pri),var(--pri2),var(--acc));-webkit-background-clip:text;background-clip:text;color:transparent}
   .hero p{color:var(--muted);max-width:720px;margin:0 auto;font-size:1.02rem}
@@ -192,85 +204,143 @@
   .kbd{font-family:monospace;background:var(--chip);border:1px solid var(--line);border-radius:6px;padding:1px 6px;font-size:.85em}
   .twocol{columns:2;column-gap:24px} @media(max-width:560px){.twocol{columns:1}}
   .tag{display:inline-block;background:var(--chip);border:1px solid var(--line);border-radius:6px;padding:1px 8px;font-size:.78rem;color:var(--muted);margin:1px}
+
+  /* ===== Flower loading screen ===== */
+  #loader{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;overflow:hidden;
+    background:radial-gradient(1200px 600px at 50% -10%,color-mix(in srgb,var(--pri) 22%,var(--bg)),var(--bg) 60%),linear-gradient(180deg,var(--bg),var(--bg2));
+    transition:opacity .7s ease,visibility .7s ease}
+  #loader.hide{opacity:0;visibility:hidden}
+  body.loading{overflow:hidden}
+  .loader-inner{position:relative;text-align:center;z-index:2;padding:0 20px}
+  .bouquet{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;max-width:340px;margin:0 auto 22px;font-size:2.3rem;line-height:1}
+  .bouquet span{display:inline-block;filter:drop-shadow(0 6px 14px rgba(0,0,0,.25));
+    animation:bloom 1.6s cubic-bezier(.5,0,.4,1) infinite;transform-origin:center bottom}
+  .bouquet span:nth-child(1){animation-delay:0s}    .bouquet span:nth-child(2){animation-delay:.1s}
+  .bouquet span:nth-child(3){animation-delay:.2s}   .bouquet span:nth-child(4){animation-delay:.3s}
+  .bouquet span:nth-child(5){animation-delay:.4s}   .bouquet span:nth-child(6){animation-delay:.5s}
+  .bouquet span:nth-child(7){animation-delay:.6s}   .bouquet span:nth-child(8){animation-delay:.7s}
+  .bouquet span:nth-child(9){animation-delay:.8s}   .bouquet span:nth-child(10){animation-delay:.9s}
+  .bouquet span:nth-child(11){animation-delay:1s}   .bouquet span:nth-child(12){animation-delay:1.1s}
+  @keyframes bloom{0%,100%{transform:scale(.55) rotate(-16deg);opacity:.35}
+    50%{transform:scale(1.2) rotate(16deg);opacity:1}}
+  .loader-title{font-weight:800;font-size:1.15rem;letter-spacing:.4px;
+    background:linear-gradient(120deg,var(--pri),var(--pri2),var(--acc));-webkit-background-clip:text;background-clip:text;color:transparent;margin-bottom:4px}
+  .loader-sub{color:var(--muted);font-size:.86rem;margin-bottom:18px}
+  .loader-bar{width:210px;height:7px;margin:0 auto;border-radius:999px;overflow:hidden;
+    background:color-mix(in srgb,var(--muted) 24%,transparent)}
+  .loader-bar>i{display:block;height:100%;width:40%;border-radius:999px;
+    background:linear-gradient(90deg,var(--pri),var(--pri2),var(--acc));animation:slidebar 1.3s ease-in-out infinite}
+  @keyframes slidebar{0%{transform:translateX(-120%)}100%{transform:translateX(320%)}}
+  /* floating petals in the background */
+  .petal{position:absolute;top:-8%;font-size:1.6rem;opacity:.9;z-index:1;
+    animation:fall linear infinite;will-change:transform}
+  @keyframes fall{0%{transform:translateY(-10vh) rotate(0deg)}100%{transform:translateY(112vh) rotate(360deg)}}
+  @media(prefers-reduced-motion:reduce){.bouquet span,.loader-bar>i,.petal{animation:none}}
 </style>
 </head>
-<body data-theme="dark">
+<body data-theme="pink" data-lang="vi" class="loading">
+
+<!-- ===== Flower loading screen ===== -->
+<div id="loader" aria-hidden="true">
+  <div class="loader-inner">
+    <div class="bouquet">
+      <span>🌸</span><span>🌺</span><span>🌷</span><span>🌻</span><span>🌹</span><span>💐</span>
+      <span>🏵️</span><span>🌼</span><span>🌸</span><span>🌺</span><span>🌷</span><span>🌻</span>
+    </div>
+    <div class="loader-title"><span class="lvi">Tài chính Doanh nghiệp</span><span class="len">Corporate Finance</span></div>
+    <div class="loader-sub"><span class="lvi">Đang nở những bông hoa kiến thức…</span><span class="len">Blooming your study guide…</span></div>
+    <div class="loader-bar"><i></i></div>
+  </div>
+</div>
 
 <div class="progress"><i id="prog"></i></div>
 <header>
   <div class="bar">
-    <button class="iconbtn menubtn" id="openMenu" aria-label="Mục lục">☰</button>
-    <div class="brand"><span class="dot">₣</span> Tài chính Doanh nghiệp</div>
+    <button class="iconbtn menubtn" id="openMenu" aria-label="Menu">☰</button>
+    <div class="brand"><span class="dot">🌸</span> <span class="lvi">Tài chính Doanh nghiệp</span><span class="len">Corporate Finance</span></div>
     <div class="spacer"></div>
-    <button class="iconbtn" id="themeBtn" title="Đổi giao diện">🌙</button>
+    <button class="iconbtn" id="langBtn" title="Việt / English">🌐 EN</button>
+    <button class="iconbtn" id="themeBtn" title="Đổi giao diện / Theme">🌸</button>
   </div>
 </header>
 
 <!-- Drawer -->
 <div class="overlay" id="overlay"></div>
 <aside class="drawer" id="drawer">
-  <div class="dhead"><span class="dot" style="width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,var(--pri),var(--pri2));display:grid;place-items:center">₣</span> Mục lục
+  <div class="dhead"><span class="dot" style="width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,var(--pri),var(--pri2));display:grid;place-items:center">🌸</span> <span class="lvi">Mục lục</span><span class="len">Contents</span>
     <span class="x" id="closeMenu">✕</span></div>
   <div class="dnav" id="dnav">
-    <div class="grp">Tổng quan</div>
-    <a href="#tongquan"><span class="ig">★</span> Bản đồ môn học</a>
-    <a href="#hoc-the-nao"><span class="ig">🧭</span> Học thế nào cho hiệu quả</a>
-    <div class="grp">6 Chương</div>
-    <a href="#ch1"><span class="ig">1</span> Nhà QL tài chính & Doanh nghiệp</a>
-    <a href="#ch2"><span class="ig">2</span> Hệ thống TC & Lãi suất</a>
-    <a href="#ch3"><span class="ig">3</span> BCTC, Dòng tiền & Thuế</a>
-    <a href="#ch4"><span class="ig">4</span> Phân tích BCTC</a>
-    <a href="#ch5"><span class="ig">5</span> Giá trị thời gian của tiền</a>
-    <a href="#ch6"><span class="ig">6</span> Chiết khấu & Định giá</a>
-    <div class="grp">Công cụ</div>
-    <a href="#congthuc"><span class="ig">📐</span> Bộ công thức tra cứu</a>
-    <a href="#maytinh"><span class="ig">🧮</span> Máy tính TVM / EAR</a>
-    <a href="#thuatngu"><span class="ig">📖</span> Từ điển thuật ngữ</a>
-    <a href="#quiz"><span class="ig">📝</span> Quiz (50 câu)</a>
+    <div class="grp"><span class="lvi">Tổng quan</span><span class="len">Overview</span></div>
+    <a href="#tongquan"><span class="ig">★</span> <span class="lvi">Bản đồ môn học</span><span class="len">Course map</span></a>
+    <a href="#hoc-the-nao"><span class="ig">🧭</span> <span class="lvi">Học thế nào cho hiệu quả</span><span class="len">How to study</span></a>
+    <div class="grp"><span class="lvi">6 Chương</span><span class="len">6 Chapters</span></div>
+    <a href="#ch1"><span class="ig">1</span> <span class="lvi">Nhà QL tài chính & Doanh nghiệp</span><span class="len">Financial Manager & the Firm</span></a>
+    <a href="#ch2"><span class="ig">2</span> <span class="lvi">Hệ thống TC & Lãi suất</span><span class="len">Financial System & Interest Rates</span></a>
+    <a href="#ch3"><span class="ig">3</span> <span class="lvi">BCTC, Dòng tiền & Thuế</span><span class="len">Statements, Cash Flows & Taxes</span></a>
+    <a href="#ch4"><span class="ig">4</span> <span class="lvi">Phân tích BCTC</span><span class="len">Analyzing Statements</span></a>
+    <a href="#ch5"><span class="ig">5</span> <span class="lvi">Giá trị thời gian của tiền</span><span class="len">Time Value of Money</span></a>
+    <a href="#ch6"><span class="ig">6</span> <span class="lvi">Chiết khấu & Định giá</span><span class="len">Discounting & Valuation</span></a>
+    <div class="grp"><span class="lvi">Công cụ</span><span class="len">Tools</span></div>
+    <a href="#congthuc"><span class="ig">📐</span> <span class="lvi">Bộ công thức tra cứu</span><span class="len">Formula sheet</span></a>
+    <a href="#maytinh"><span class="ig">🧮</span> <span class="lvi">Máy tính TVM / EAR</span><span class="len">TVM / EAR calculator</span></a>
+    <a href="#thuatngu"><span class="ig">📖</span> <span class="lvi">Từ điển thuật ngữ</span><span class="len">Glossary</span></a>
+    <a href="#quiz"><span class="ig">📝</span> <span class="lvi">Quiz (50 câu)</span><span class="len">Quiz (50 Q)</span></a>
   </div>
 </aside>
 
 <div class="wrap">
 
   <div class="hero">
-    <h1>Sổ tay ôn tập Tài chính Doanh nghiệp</h1>
-    <p>Toàn bộ kiến thức 6 chương — giải thích từ con số 0, kèm ví dụ tính toán từng bước, mẹo thi và quiz.
-       Đủ để một người <b>chưa biết gì</b> cũng có thể học và đạt điểm xuất sắc.</p>
+    <div class="flowerband">🌷 🌸 🌺 🌸 🌷</div>
+    <h1><span class="lvi">Sổ tay ôn tập Tài chính Doanh nghiệp</span><span class="len">Corporate Finance Study Guide</span></h1>
+    <p class="lvi">Toàn bộ kiến thức 6 chương — giải thích từ con số 0, kèm ví dụ tính toán từng bước, mẹo thi và quiz.
+       <b>Chúc em học tập tốt!</b></p>
+    <p class="len">All six chapters — explained from scratch, with step-by-step worked examples, exam tips and quizzes.
+       <b>Happy studying!</b></p>
     <div class="meta">
-      <span class="pill">6 chương đầy đủ</span>
-      <span class="pill">40+ công thức</span>
-      <span class="pill">Ví dụ giải chi tiết</span>
-      <span class="pill">Máy tính tích hợp</span>
-      <span class="pill">50 câu quiz</span>
+      <span class="pill"><span class="lvi">6 chương đầy đủ</span><span class="len">All 6 chapters</span></span>
+      <span class="pill"><span class="lvi">40+ công thức</span><span class="len">40+ formulas</span></span>
+      <span class="pill"><span class="lvi">Ví dụ giải chi tiết</span><span class="len">Worked examples</span></span>
+      <span class="pill"><span class="lvi">Máy tính tích hợp</span><span class="len">Built-in calculator</span></span>
+      <span class="pill"><span class="lvi">50 câu quiz</span><span class="len">50 quiz questions</span></span>
     </div>
   </div>
 
   <!-- ============ HỌC THẾ NÀO ============ -->
   <section id="hoc-the-nao">
-    <div class="sec-head"><div class="num">🧭</div><h2>Bắt đầu từ đâu? Học thế nào cho hiệu quả</h2></div>
-    <p class="sec-sub">Đọc 3 phút này trước khi vào bài.</p>
+    <div class="sec-head"><div class="num">🧭</div><h2><span class="lvi">Bắt đầu từ đâu? Học thế nào cho hiệu quả</span><span class="len">Where to start? How to study effectively</span></h2></div>
+    <p class="sec-sub lvi">Đọc 3 phút này trước khi vào bài.</p>
+    <p class="sec-sub len">A 3-minute read before you dive in.</p>
     <div class="card">
-      <p><b>Tài chính doanh nghiệp</b> trả lời 3 câu hỏi: (1) <b>Đầu tư</b> vào đâu? (2) Lấy <b>tiền</b> ở đâu để đầu tư? (3) Quản lý <b>dòng tiền hằng ngày</b> ra sao? Tất cả nhằm một mục tiêu: <b>làm cho doanh nghiệp đáng giá hơn</b>.</p>
-      <h4>Lộ trình gợi ý</h4>
+      <p class="lvi"><b>Tài chính doanh nghiệp</b> trả lời 3 câu hỏi: (1) <b>Đầu tư</b> vào đâu? (2) Lấy <b>tiền</b> ở đâu để đầu tư? (3) Quản lý <b>dòng tiền hằng ngày</b> ra sao? Tất cả nhằm một mục tiêu: <b>làm cho doanh nghiệp đáng giá hơn</b>.</p>
+      <p class="len"><b>Corporate finance</b> answers 3 questions: (1) What to <b>invest</b> in? (2) Where to get the <b>money</b> to invest? (3) How to manage <b>day-to-day cash flow</b>? All toward one goal: <b>making the firm more valuable</b>.</p>
+      <h4><span class="lvi">Lộ trình gợi ý</span><span class="len">Suggested roadmap</span></h4>
       <ol class="step">
-        <li><b>Chương 1–2</b>: kiến thức nền, học hiểu — ít công thức, nhiều khái niệm. Đọc lướt rồi quay lại.</li>
-        <li><b>Chương 3</b>: làm quen 4 báo cáo tài chính. Đây là "bảng chữ cái", phải nắm để học chương 4.</li>
-        <li><b>Chương 4</b>: học thuộc & hiểu ý nghĩa các chỉ số. Luyện tính bằng số liệu thật.</li>
-        <li><b>Chương 5–6</b>: phần "toán" của môn học — quan trọng nhất khi thi. <b>Luyện ví dụ đến khi tự bấm máy ra kết quả</b>.</li>
-        <li>Cuối cùng: làm <a href="#quiz">Quiz 50 câu</a> để tự chấm.</li>
+        <li class="lvi"><b>Chương 1–2</b>: kiến thức nền, học hiểu — ít công thức, nhiều khái niệm. Đọc lướt rồi quay lại.</li>
+        <li class="len"><b>Chapters 1–2</b>: foundations — few formulas, many concepts. Skim first, then revisit.</li>
+        <li class="lvi"><b>Chương 3</b>: làm quen 4 báo cáo tài chính. Đây là "bảng chữ cái", phải nắm để học chương 4.</li>
+        <li class="len"><b>Chapter 3</b>: get familiar with the 4 financial statements. This is the "alphabet" — needed for Chapter 4.</li>
+        <li class="lvi"><b>Chương 4</b>: học thuộc & hiểu ý nghĩa các chỉ số. Luyện tính bằng số liệu thật.</li>
+        <li class="len"><b>Chapter 4</b>: memorize & understand the ratios. Practice with real figures.</li>
+        <li class="lvi"><b>Chương 5–6</b>: phần "toán" của môn học — quan trọng nhất khi thi. <b>Luyện ví dụ đến khi tự bấm máy ra kết quả</b>.</li>
+        <li class="len"><b>Chapters 5–6</b>: the "math" of the course — most important on exams. <b>Practice examples until you can crunch them yourself</b>.</li>
+        <li class="lvi">Cuối cùng: làm <a href="#quiz">Quiz 50 câu</a> để tự chấm.</li>
+        <li class="len">Finally: take the <a href="#quiz">50-question Quiz</a> to self-test.</li>
       </ol>
-      <div class="note tip"><span class="lbl">Bí quyết đạt điểm cao</span>
-        Phần lý thuyết (C1–C4) ăn điểm ở <b>hiểu khái niệm & phân biệt</b> (vd: marketability vs liquidity, FIFO vs LIFO, APR vs EAR). Phần định lượng (C5–C6) ăn điểm ở <b>bấm máy đúng & vẽ trục thời gian</b>. Ôn đều cả hai.</div>
+      <div class="note tip"><span class="lbl"><span class="lvi">Bí quyết đạt điểm cao</span><span class="len">Tip for a high score</span></span>
+        <span class="lvi">Phần lý thuyết (C1–C4) ăn điểm ở <b>hiểu khái niệm & phân biệt</b> (vd: marketability vs liquidity, FIFO vs LIFO, APR vs EAR). Phần định lượng (C5–C6) ăn điểm ở <b>bấm máy đúng & vẽ trục thời gian</b>. Ôn đều cả hai.</span>
+        <span class="len">Theory chapters (C1–C4) reward <b>understanding & distinguishing concepts</b> (e.g. marketability vs liquidity, FIFO vs LIFO, APR vs EAR). Quantitative chapters (C5–C6) reward <b>correct calculation & drawing time lines</b>. Review both evenly.</span></div>
     </div>
   </section>
 
   <!-- ============ TỔNG QUAN ============ -->
   <section id="tongquan">
-    <div class="sec-head"><div class="num">★</div><h2>Bản đồ kiến thức môn học</h2></div>
-    <p class="sec-sub">Sáu chương ghép thành một mạch logic.</p>
+    <div class="sec-head"><div class="num">★</div><h2><span class="lvi">Bản đồ kiến thức môn học</span><span class="len">Course knowledge map</span></h2></div>
+    <p class="sec-sub lvi">Sáu chương ghép thành một mạch logic.</p>
+    <p class="sec-sub len">Six chapters forming one logical thread.</p>
     <div class="card">
       <div class="scroll">
-      <table class="tbl">
+      <table class="tbl lvi">
         <tr><th>Chương</th><th>Chủ đề</th><th>Câu hỏi cốt lõi</th><th>Loại</th></tr>
         <tr><td><b>1</b></td><td>Nhà QL tài chính & Doanh nghiệp</td><td>Mục tiêu của DN là gì? Ai quản lý? Mâu thuẫn lợi ích?</td><td>Lý thuyết</td></tr>
         <tr><td><b>2</b></td><td>Hệ thống TC & Lãi suất</td><td>Tiền chảy trong nền kinh tế thế nào? Lãi suất từ đâu ra?</td><td>Lý thuyết</td></tr>
@@ -279,52 +349,70 @@
         <tr><td><b>5</b></td><td>Giá trị thời gian của tiền</td><td>$1 hôm nay vs $1 ngày mai đáng giá bao nhiêu?</td><td>Toán tài chính</td></tr>
         <tr><td><b>6</b></td><td>Chiết khấu & Định giá</td><td>Định giá chuỗi dòng tiền (vay, niên kim, cổ phiếu)</td><td>Toán tài chính</td></tr>
       </table>
+      <table class="tbl len">
+        <tr><th>Chapter</th><th>Topic</th><th>Core question</th><th>Type</th></tr>
+        <tr><td><b>1</b></td><td>Financial Manager & the Firm</td><td>What is the firm's goal? Who manages it? Conflicts of interest?</td><td>Theory</td></tr>
+        <tr><td><b>2</b></td><td>Financial System & Interest Rates</td><td>How does money flow in the economy? Where do rates come from?</td><td>Theory</td></tr>
+        <tr><td><b>3</b></td><td>Statements, Cash Flows & Taxes</td><td>Reading a firm's "health" via 4 statements</td><td>Theory + light math</td></tr>
+        <tr><td><b>4</b></td><td>Analyzing Statements</td><td>Is the firm doing well or poorly? Versus whom?</td><td>Ratio computation</td></tr>
+        <tr><td><b>5</b></td><td>Time Value of Money</td><td>$1 today vs $1 tomorrow — what is each worth?</td><td>Financial math</td></tr>
+        <tr><td><b>6</b></td><td>Discounting & Valuation</td><td>Valuing cash-flow streams (loans, annuities, stocks)</td><td>Financial math</td></tr>
+      </table>
       </div>
-      <div class="note key"><span class="lbl">Tư tưởng xuyên suốt</span>
-        <b>"It's all about cash flows"</b> — mọi quyết định quy về dòng tiền với 3 đặc tính: <b>quy mô · thời điểm · rủi ro</b>. Giữ chặt câu này, cả môn học sẽ liền mạch.</div>
+      <div class="note key"><span class="lbl"><span class="lvi">Tư tưởng xuyên suốt</span><span class="len">The guiding idea</span></span>
+        <span class="lvi"><b>"It's all about cash flows"</b> — mọi quyết định quy về dòng tiền với 3 đặc tính: <b>quy mô · thời điểm · rủi ro</b>. Giữ chặt câu này, cả môn học sẽ liền mạch.</span>
+        <span class="len"><b>"It's all about cash flows"</b> — every decision comes down to cash flow with 3 traits: <b>size · timing · risk</b>. Hold onto this and the whole course connects.</span></div>
     </div>
   </section>
 
   <!-- ============ CHƯƠNG 1 ============ -->
   <section id="ch1">
-    <div class="sec-head"><div class="num">1</div><h2>Nhà quản lý tài chính & Doanh nghiệp</h2></div>
+    <div class="sec-head"><div class="num">1</div><h2><span class="lvi">Nhà quản lý tài chính & Doanh nghiệp</span><span class="len">The Financial Manager and the Firm</span></h2></div>
     <p class="sec-sub">The Financial Manager and the Firm</p>
-    <div class="lead">Chương này trả lời: nhà quản lý tài chính làm gì, doanh nghiệp tổ chức ra sao, mục tiêu đúng là gì, và vì sao có mâu thuẫn giữa chủ – người làm thuê.</div>
+    <div class="lead lvi">Chương này trả lời: nhà quản lý tài chính làm gì, doanh nghiệp tổ chức ra sao, mục tiêu đúng là gì, và vì sao có mâu thuẫn giữa chủ – người làm thuê.</div>
+    <div class="lead len">This chapter answers: what financial managers do, how firms are organized, what the right goal is, and why conflicts arise between owners and hired managers.</div>
 
     <div class="card">
-      <h3><span>💵</span> 1.1 — Tất cả là về dòng tiền</h3>
-      <p>Tiền vào DN từ <b>bán hàng hóa/dịch vụ</b>, rồi chi ra: trả lương, mua vật tư, trả nợ, nộp thuế. Phần còn lại gọi là <span class="term">dòng tiền thặng dư</span> <span class="en">(residual cash flow)</span>.</p>
+      <h3><span>💵</span> <span class="lvi">1.1 — Tất cả là về dòng tiền</span><span class="len">1.1 — It's all about cash flows</span></h3>
+      <p class="lvi">Tiền vào DN từ <b>bán hàng hóa/dịch vụ</b>, rồi chi ra: trả lương, mua vật tư, trả nợ, nộp thuế. Phần còn lại gọi là <span class="term">dòng tiền thặng dư</span> <span class="en">(residual cash flow)</span>.</p>
+      <p class="len">Cash flows into the firm from <b>selling goods/services</b>, then flows out: wages, supplies, repaying creditors, taxes. What is left is the <span class="term">residual cash flow</span>.</p>
       <ul class="clean">
-        <li>Thặng dư <b>dương</b> → chia cổ tức hoặc tái đầu tư → DN càng giá trị.</li>
-        <li>Thặng dư <b>âm</b> kéo dài → cạn tiền → <b>phá sản</b>.</li>
+        <li class="lvi">Thặng dư <b>dương</b> → chia cổ tức hoặc tái đầu tư → DN càng giá trị.</li>
+        <li class="len"><b>Positive</b> residual → dividends or reinvestment → the firm grows more valuable.</li>
+        <li class="lvi">Thặng dư <b>âm</b> kéo dài → cạn tiền → <b>phá sản</b>.</li>
+        <li class="len"><b>Negative</b> residual over the long run → runs out of cash → <b>bankruptcy</b>.</li>
       </ul>
-      <div class="note"><span class="lbl">Vì sao "tiền mặt" chứ không "lợi nhuận"?</span>
-        Chỉ có <b>tiền mặt</b> mới trả được hóa đơn và mua tài sản. Lợi nhuận kế toán có thể "đẹp" nhưng DN vẫn chết nếu thiếu tiền mặt.</div>
+      <div class="note"><span class="lbl"><span class="lvi">Vì sao "tiền mặt" chứ không "lợi nhuận"?</span><span class="len">Why "cash" and not "profit"?</span></span>
+        <span class="lvi">Chỉ có <b>tiền mặt</b> mới trả được hóa đơn và mua tài sản. Lợi nhuận kế toán có thể "đẹp" nhưng DN vẫn chết nếu thiếu tiền mặt.</span>
+        <span class="len">Only <b>cash</b> can pay bills and buy assets. Accounting profit may look good, but a firm still dies without cash.</span></div>
     </div>
 
     <div class="card">
-      <h3><span>🎯</span> 3 quyết định tài chính cốt lõi</h3>
+      <h3><span>🎯</span> <span class="lvi">3 quyết định tài chính cốt lõi</span><span class="len">3 core financial decisions</span></h3>
       <div class="grid three">
         <div>
           <h4>① Capital Budgeting</h4>
-          <p class="vars">Hoạch định vốn — chọn <b>tài sản dài hạn</b> nào để mua (nhà máy, máy móc, dự án). Ảnh hưởng cột <b>tài sản dài hạn</b> trên bảng CĐKT.</p>
+          <p class="vars lvi">Hoạch định vốn — chọn <b>tài sản dài hạn</b> nào để mua (nhà máy, máy móc, dự án). Ảnh hưởng cột <b>tài sản dài hạn</b> trên bảng CĐKT.</p>
+          <p class="vars len">Choosing which <b>long-term assets</b> to acquire (plant, equipment, projects). Affects the <b>long-term assets</b> side of the balance sheet.</p>
         </div>
         <div>
           <h4>② Financing</h4>
-          <p class="vars">Tài trợ — chi trả bằng cách nào: kết hợp <b>nợ ngắn hạn, nợ dài hạn, vốn cổ phần</b>. Ảnh hưởng cột <b>nguồn vốn</b> (bên phải CĐKT).</p>
+          <p class="vars lvi">Tài trợ — chi trả bằng cách nào: kết hợp <b>nợ ngắn hạn, nợ dài hạn, vốn cổ phần</b>. Ảnh hưởng cột <b>nguồn vốn</b> (bên phải CĐKT).</p>
+          <p class="vars len">How to pay for assets: the mix of <b>short-term debt, long-term debt, and equity</b>. Affects the <b>funding</b> side (right of the balance sheet).</p>
         </div>
         <div>
           <h4>③ Working Capital</h4>
-          <p class="vars">Vốn lưu động — quản trị <b>tài sản & nợ ngắn hạn</b> (tiền, phải thu, tồn kho, phải trả) để dòng tiền trơn tru.</p>
+          <p class="vars lvi">Vốn lưu động — quản trị <b>tài sản & nợ ngắn hạn</b> (tiền, phải thu, tồn kho, phải trả) để dòng tiền trơn tru.</p>
+          <p class="vars len">Managing <b>short-term assets & liabilities</b> (cash, receivables, inventory, payables) to keep cash flow smooth.</p>
         </div>
       </div>
-      <div class="note warn"><span class="lbl">Nhớ khi thi</span>Cả 3 quyết định đều <b>tác động trực tiếp lên bảng cân đối kế toán</b>; sai bất kỳ mảng nào đều có thể dẫn tới phá sản.</div>
+      <div class="note warn"><span class="lbl"><span class="lvi">Nhớ khi thi</span><span class="len">Exam note</span></span><span class="lvi">Cả 3 quyết định đều <b>tác động trực tiếp lên bảng cân đối kế toán</b>; sai bất kỳ mảng nào đều có thể dẫn tới phá sản.</span><span class="len">All 3 decisions <b>directly affect the balance sheet</b>; a poor choice in any one can lead to bankruptcy.</span></div>
     </div>
 
     <div class="card">
-      <h3><span>🏢</span> 1.2 — Các hình thức tổ chức doanh nghiệp</h3>
+      <h3><span>🏢</span> <span class="lvi">1.2 — Các hình thức tổ chức doanh nghiệp</span><span class="len">1.2 — Forms of business organization</span></h3>
       <div class="scroll">
-      <table class="tbl">
+      <table class="tbl lvi">
         <tr><th>Tiêu chí</th><th>Sole Proprietorship</th><th>Partnership</th><th>C-Corporation</th><th>S-Corp / LLC / LLP</th></tr>
         <tr><td>Số chủ</td><td>1 người</td><td>≥2 người</td><td>Nhiều cổ đông</td><td>Nhiều</td></tr>
         <tr><td>Trách nhiệm</td><td>Vô hạn</td><td>Vô hạn (TV chung)</td><td><b>Hữu hạn</b></td><td><b>Hữu hạn</b></td></tr>
@@ -333,55 +421,85 @@
         <tr><td>Huy động vốn</td><td>Rất hạn chế</td><td>Hạn chế</td><td><b>Tốt nhất</b></td><td>Khá</td></tr>
         <tr><td>Lập / chi phí</td><td>Dễ & rẻ nhất</td><td>Tốn hơn</td><td>Khó & đắt nhất</td><td>Tốn hơn</td></tr>
       </table>
+      <table class="tbl len">
+        <tr><th>Criterion</th><th>Sole Proprietorship</th><th>Partnership</th><th>C-Corporation</th><th>S-Corp / LLC / LLP</th></tr>
+        <tr><td>Owners</td><td>1 person</td><td>≥2 people</td><td>Many shareholders</td><td>Many</td></tr>
+        <tr><td>Liability</td><td>Unlimited</td><td>Unlimited (general)</td><td><b>Limited</b></td><td><b>Limited</b></td></tr>
+        <tr><td>Taxation</td><td>Flow-through</td><td>Flow-through</td><td><b>Double taxation</b></td><td>Flow-through</td></tr>
+        <tr><td>Life of entity</td><td>Limited</td><td>Flexible</td><td>Indefinite</td><td>Flexible</td></tr>
+        <tr><td>Access to capital</td><td>Very limited</td><td>Limited</td><td><b>Best</b></td><td>Moderate</td></tr>
+        <tr><td>Cost to establish</td><td>Easiest & cheapest</td><td>More costly</td><td>Hardest & priciest</td><td>More costly</td></tr>
+      </table>
       </div>
       <ul class="clean">
-        <li><b>Flow-through</b>: thu nhập "chảy thẳng" về chủ và chỉ chịu thuế <b>một lần</b> như thu nhập cá nhân.</li>
-        <li><b>Double taxation</b> (C-Corp): công ty nộp thuế TNDN → cổ đông lại nộp thuế trên cổ tức.</li>
-        <li><b>LLC / LLP</b>: kết hợp ưu điểm — <b>trách nhiệm hữu hạn</b> của corporation + <b>thuế flow-through</b> của partnership.</li>
+        <li class="lvi"><b>Flow-through</b>: thu nhập "chảy thẳng" về chủ và chỉ chịu thuế <b>một lần</b> như thu nhập cá nhân.</li>
+        <li class="len"><b>Flow-through</b>: income passes straight to owners and is taxed <b>once</b>, as personal income.</li>
+        <li class="lvi"><b>Double taxation</b> (C-Corp): công ty nộp thuế TNDN → cổ đông lại nộp thuế trên cổ tức.</li>
+        <li class="len"><b>Double taxation</b> (C-Corp): the company pays corporate tax → shareholders then pay tax on dividends.</li>
+        <li class="lvi"><b>LLC / LLP</b>: kết hợp ưu điểm — <b>trách nhiệm hữu hạn</b> của corporation + <b>thuế flow-through</b> của partnership.</li>
+        <li class="len"><b>LLC / LLP</b>: combines the best of both — <b>limited liability</b> of a corporation + <b>flow-through tax</b> of a partnership.</li>
       </ul>
-      <div class="note exam"><span class="lbl">Bẫy thi hay gặp</span>
-        Loại hình duy nhất bị <b>đánh thuế hai lần</b> là <b>C-Corporation</b>. Đây là nhược điểm lớn nhất của nó, đổi lại được khả năng huy động vốn tốt nhất.</div>
+      <div class="note exam"><span class="lbl"><span class="lvi">Bẫy thi hay gặp</span><span class="len">Common exam trap</span></span>
+        <span class="lvi">Loại hình duy nhất bị <b>đánh thuế hai lần</b> là <b>C-Corporation</b>. Đây là nhược điểm lớn nhất của nó, đổi lại được khả năng huy động vốn tốt nhất.</span>
+        <span class="len">The only form subject to <b>double taxation</b> is the <b>C-Corporation</b>. That is its biggest drawback, traded off for the best access to capital.</span></div>
     </div>
 
     <div class="card">
-      <h3><span>🗂️</span> 1.3 — Tổ chức bộ phận tài chính</h3>
-      <p><b>CEO</b> (Tổng giám đốc) đứng đầu. Quản lý tài chính cao nhất là <b>CFO</b> (Giám đốc tài chính), chịu trách nhiệm về chất lượng báo cáo tài chính gửi CEO.</p>
+      <h3><span>🗂️</span> <span class="lvi">1.3 — Tổ chức bộ phận tài chính</span><span class="len">1.3 — Managing the finance function</span></h3>
+      <p class="lvi"><b>CEO</b> (Tổng giám đốc) đứng đầu. Quản lý tài chính cao nhất là <b>CFO</b> (Giám đốc tài chính), chịu trách nhiệm về chất lượng báo cáo tài chính gửi CEO.</p>
+      <p class="len">The <b>CEO</b> is at the top. The senior financial manager is the <b>CFO</b>, responsible for the quality of the financial reports given to the CEO.</p>
       <div class="scroll">
-      <table class="tbl">
+      <table class="tbl lvi">
         <tr><th>Chức danh báo cáo cho CFO</th><th>Nhiệm vụ</th></tr>
         <tr><td><b>Treasurer</b> (Thủ quỹ/Quản lý ngân quỹ)</td><td>Quản lý tiền, huy động vốn, quan hệ ngân hàng</td></tr>
         <tr><td><b>Risk Manager</b></td><td>Quản trị rủi ro tài chính</td></tr>
         <tr><td><b>Controller</b> (Kiểm soát viên)</td><td>Kế toán, lập báo cáo, thuế</td></tr>
         <tr><td><b>Internal Auditor</b></td><td>Kiểm toán nội bộ (báo cáo cả CFO & Ủy ban Kiểm toán)</td></tr>
       </table>
+      <table class="tbl len">
+        <tr><th>Reports to the CFO</th><th>Duties</th></tr>
+        <tr><td><b>Treasurer</b></td><td>Manages cash, raises capital, bank relations</td></tr>
+        <tr><td><b>Risk Manager</b></td><td>Manages financial risk</td></tr>
+        <tr><td><b>Controller</b></td><td>Accounting, reporting, taxes</td></tr>
+        <tr><td><b>Internal Auditor</b></td><td>Internal audit (reports to CFO & Audit Committee)</td></tr>
+      </table>
       </div>
       <ul class="clean">
-        <li><b>External Auditor</b>: hãng kiểm toán độc lập (CPA) — SEC bắt buộc công ty đại chúng phải có. Đối tác chính phải đổi mỗi <b>5 năm</b>.</li>
-        <li><b>Audit Committee</b>: tiểu ban quyền lực của HĐQT, giám sát kế toán & điều tra gian lận.</li>
-        <li><b>Compliance & Ethics Director</b>: phụ trách tuân thủ pháp luật, chương trình đạo đức, đường dây nóng tố giác (whistleblower).</li>
+        <li class="lvi"><b>External Auditor</b>: hãng kiểm toán độc lập (CPA) — SEC bắt buộc công ty đại chúng phải có. Đối tác chính phải đổi mỗi <b>5 năm</b>.</li>
+        <li class="len"><b>External Auditor</b>: an independent CPA firm — required by the SEC for public companies. The lead partner must rotate every <b>5 years</b>.</li>
+        <li class="lvi"><b>Audit Committee</b>: tiểu ban quyền lực của HĐQT, giám sát kế toán & điều tra gian lận.</li>
+        <li class="len"><b>Audit Committee</b>: a powerful subcommittee of the board, overseeing accounting & investigating fraud.</li>
+        <li class="lvi"><b>Compliance & Ethics Director</b>: phụ trách tuân thủ pháp luật, chương trình đạo đức, đường dây nóng tố giác (whistleblower).</li>
+        <li class="len"><b>Compliance & Ethics Director</b>: oversees legal compliance, the ethics program, and a whistleblower hotline.</li>
       </ul>
     </div>
 
     <div class="card">
-      <h3><span>📈</span> 1.4 — Mục tiêu của doanh nghiệp</h3>
-      <p>Mục tiêu đúng là <b>tối đa hóa giá trị (giá) cổ phiếu của doanh nghiệp</b> — không phải tối đa lợi nhuận hay thị phần.</p>
+      <h3><span>📈</span> <span class="lvi">1.4 — Mục tiêu của doanh nghiệp</span><span class="len">1.4 — The goal of the firm</span></h3>
+      <p class="lvi">Mục tiêu đúng là <b>tối đa hóa giá trị (giá) cổ phiếu của doanh nghiệp</b> — không phải tối đa lợi nhuận hay thị phần.</p>
+      <p class="len">The right goal is to <b>maximize the value (price) of the firm's stock</b> — not to maximize profit or market share.</p>
       <div class="grid two">
-        <div class="note warn"><span class="lbl">Vì sao KHÔNG tối đa lợi nhuận?</span>
-          Lợi nhuận kế toán ≠ lợi nhuận kinh tế; lợi nhuận ghi sổ ≠ tiền mặt nhận về. Có thể "lãi" trên giấy nhưng vẫn thiếu tiền.</div>
-        <div class="note warn"><span class="lbl">Vì sao KHÔNG tối đa thị phần?</span>
-          Tặng hàng miễn phí sẽ chiếm thị phần một thời gian, nhưng DN không trả nổi hóa đơn và sẽ phá sản.</div>
+        <div class="note warn"><span class="lbl"><span class="lvi">Vì sao KHÔNG tối đa lợi nhuận?</span><span class="len">Why NOT maximize profit?</span></span>
+          <span class="lvi">Lợi nhuận kế toán ≠ lợi nhuận kinh tế; lợi nhuận ghi sổ ≠ tiền mặt nhận về. Có thể "lãi" trên giấy nhưng vẫn thiếu tiền.</span>
+          <span class="len">Accounting profit ≠ economic profit; reported profit ≠ cash received. You can be "profitable" on paper yet short on cash.</span></div>
+        <div class="note warn"><span class="lbl"><span class="lvi">Vì sao KHÔNG tối đa thị phần?</span><span class="len">Why NOT maximize market share?</span></span>
+          <span class="lvi">Tặng hàng miễn phí sẽ chiếm thị phần một thời gian, nhưng DN không trả nổi hóa đơn và sẽ phá sản.</span>
+          <span class="len">Giving goods away free grabs market share for a while, but the firm can't pay its bills and goes bankrupt.</span></div>
       </div>
-      <div class="note tip"><span class="lbl">Vì sao giá cổ phiếu là thước đo tốt nhất?</span>
-        Vì nó phản ánh đủ <b>3 yếu tố</b> mà lợi nhuận bỏ qua: (1) <b>quy mô</b> dòng tiền tương lai, (2) <b>thời điểm</b> dòng tiền, (3) <b>rủi ro</b> của việc phải chờ đợi dòng tiền.</div>
+      <div class="note tip"><span class="lbl"><span class="lvi">Vì sao giá cổ phiếu là thước đo tốt nhất?</span><span class="len">Why is stock price the best measure?</span></span>
+        <span class="lvi">Vì nó phản ánh đủ <b>3 yếu tố</b> mà lợi nhuận bỏ qua: (1) <b>quy mô</b> dòng tiền tương lai, (2) <b>thời điểm</b> dòng tiền, (3) <b>rủi ro</b> của việc phải chờ đợi dòng tiền.</span>
+        <span class="len">It reflects the <b>3 factors</b> profit ignores: (1) the <b>size</b> of future cash flows, (2) their <b>timing</b>, (3) the <b>risk</b> of waiting for them.</span></div>
     </div>
 
     <div class="card">
-      <h3><span>⚖️</span> 1.5 — Xung đột đại diện (Agency Conflict)</h3>
-      <p>Trong công ty lớn, <b>quyền sở hữu tách rời quyền kiểm soát</b>: cổ đông <span class="term">(principal)</span> sở hữu, nhưng nhà quản lý <span class="term">(agent)</span> mới điều hành tài sản → agent có thể vun vén lợi ích riêng.</p>
-      <p><span class="term">Agency costs</span> = chi phí phát sinh từ, và để ngăn chặn, xung đột lợi ích này. Chúng làm giảm dòng tiền thặng dư, giá cổ phiếu và tài sản cổ đông.</p>
-      <h4>6 cơ chế gắn kết lợi ích quản lý ↔ cổ đông</h4>
+      <h3><span>⚖️</span> <span class="lvi">1.5 — Xung đột đại diện (Agency Conflict)</span><span class="len">1.5 — Agency conflict</span></h3>
+      <p class="lvi">Trong công ty lớn, <b>quyền sở hữu tách rời quyền kiểm soát</b>: cổ đông <span class="term">(principal)</span> sở hữu, nhưng nhà quản lý <span class="term">(agent)</span> mới điều hành tài sản → agent có thể vun vén lợi ích riêng.</p>
+      <p class="len">In large firms, <b>ownership is separated from control</b>: shareholders <span class="term">(principals)</span> own, but managers <span class="term">(agents)</span> run the assets → agents may pursue their own interests.</p>
+      <p class="lvi"><span class="term">Agency costs</span> = chi phí phát sinh từ, và để ngăn chặn, xung đột lợi ích này. Chúng làm giảm dòng tiền thặng dư, giá cổ phiếu và tài sản cổ đông.</p>
+      <p class="len"><span class="term">Agency costs</span> = costs arising from, and incurred to prevent, this conflict of interest. They reduce residual cash flow, stock price, and shareholder wealth.</p>
+      <h4><span class="lvi">6 cơ chế gắn kết lợi ích quản lý ↔ cổ đông</span><span class="len">6 mechanisms aligning managers ↔ shareholders</span></h4>
       <div class="twocol">
-        <ul class="clean">
+        <ul class="clean lvi">
           <li><b>Hội đồng quản trị</b> giám sát CEO</li>
           <li><b>Lương thưởng</b> gắn giá cổ phiếu (cổ phiếu/quyền chọn)</li>
           <li><b>Thị trường lao động</b> quản lý cấp cao</li>
@@ -389,117 +507,163 @@
           <li><b>Cổ đông lớn</b> giám sát</li>
           <li><b>Thị trường thâu tóm</b> (corporate raiders)</li>
         </ul>
+        <ul class="clean len">
+          <li><b>Board of directors</b> oversees the CEO</li>
+          <li><b>Compensation</b> tied to stock price (shares/options)</li>
+          <li><b>Managerial labor market</b></li>
+          <li><b>Internal competition</b> among managers</li>
+          <li><b>Large shareholders</b> monitor</li>
+          <li><b>Takeover market</b> (corporate raiders)</li>
+        </ul>
       </div>
       <div class="note tip"><span class="lbl">Sarbanes-Oxley Act (2002)</span>
-        Ra đời sau loạt bê bối kế toán. Mục tiêu: <b>(1) giảm agency cost, (2) khôi phục đạo đức, (3) tăng tính toàn vẹn của hệ thống báo cáo kế toán</b>. Yêu cầu chính: HĐQT độc lập hơn, kiểm soát kế toán nội bộ, chương trình tuân thủ & đạo đức, mở rộng quyền Ủy ban Kiểm toán; <b>CEO và CFO phải ký xác nhận BCTC</b> (có thể bị phạt tù nếu sai phạm).</div>
+        <span class="lvi">Ra đời sau loạt bê bối kế toán. Mục tiêu: <b>(1) giảm agency cost, (2) khôi phục đạo đức, (3) tăng tính toàn vẹn của hệ thống báo cáo kế toán</b>. Yêu cầu chính: HĐQT độc lập hơn, kiểm soát kế toán nội bộ, chương trình tuân thủ & đạo đức, mở rộng quyền Ủy ban Kiểm toán; <b>CEO và CFO phải ký xác nhận BCTC</b> (có thể bị phạt tù nếu sai phạm).</span>
+        <span class="len">Passed after a wave of accounting scandals. Goals: <b>(1) reduce agency costs, (2) restore ethics, (3) improve the integrity of accounting reporting</b>. Key requirements: greater board independence, internal accounting controls, compliance & ethics programs, expanded Audit Committee powers; <b>the CEO and CFO must certify the financial statements</b> (with possible jail time for violations).</span></div>
     </div>
 
     <details class="acc">
-      <summary>💡 1.6 — Đạo đức trong kinh doanh <span class="badge">đọc thêm</span><span class="tw">▾</span></summary>
+      <summary>💡 <span class="lvi">1.6 — Đạo đức trong kinh doanh</span><span class="len">1.6 — Business ethics</span> <span class="badge"><span class="lvi">đọc thêm</span><span class="len">extra</span></span><span class="tw">▾</span></summary>
       <div class="acc-body">
-        <p><b>Business ethics</b> = chuẩn mực của xã hội về hành vi chấp nhận được, áp dụng cho kinh doanh & thị trường tài chính.</p>
-        <p>3 vùng vấn đề đạo đức thường gặp: <b>agency costs · conflicts of interest · informational asymmetry</b> (bất cân xứng thông tin).</p>
-        <p><b>Phép thử nhanh (WSJ test):</b> "Bạn có sẵn lòng để <i>hành động</i> của mình và mọi <i>lý do</i> được đăng trên <i>Wall Street Journal</i> không?" Nếu không → có thể đang phi đạo đức.</p>
+        <p class="lvi"><b>Business ethics</b> = chuẩn mực của xã hội về hành vi chấp nhận được, áp dụng cho kinh doanh & thị trường tài chính.</p>
+        <p class="len"><b>Business ethics</b> = society's standards of acceptable behavior, applied to business & financial markets.</p>
+        <p class="lvi">3 vùng vấn đề đạo đức thường gặp: <b>agency costs · conflicts of interest · informational asymmetry</b> (bất cân xứng thông tin).</p>
+        <p class="len">3 common areas of ethical problems: <b>agency costs · conflicts of interest · informational asymmetry</b>.</p>
+        <p class="lvi"><b>Phép thử nhanh (WSJ test):</b> "Bạn có sẵn lòng để <i>hành động</i> của mình và mọi <i>lý do</i> được đăng trên <i>Wall Street Journal</i> không?" Nếu không → có thể đang phi đạo đức.</p>
+        <p class="len"><b>Quick test (WSJ test):</b> "Would you be willing to have your <i>action</i> and all your <i>reasons</i> reported in the <i>Wall Street Journal</i>?" If not → it may be unethical.</p>
       </div>
     </details>
   </section>
 
   <!-- ============ CHƯƠNG 2 ============ -->
   <section id="ch2">
-    <div class="sec-head"><div class="num">2</div><h2>Hệ thống tài chính & Mức lãi suất</h2></div>
+    <div class="sec-head"><div class="num">2</div><h2><span class="lvi">Hệ thống tài chính & Mức lãi suất</span><span class="len">The Financial System & Interest Rates</span></h2></div>
     <p class="sec-sub">The Financial System and the Level of Interest Rates</p>
-    <div class="lead">Chương này cho biết tiền nhàn rỗi đi từ người tiết kiệm đến người cần vốn bằng cách nào, các loại thị trường, và lãi suất hình thành ra sao.</div>
+    <div class="lead lvi">Chương này cho biết tiền nhàn rỗi đi từ người tiết kiệm đến người cần vốn bằng cách nào, các loại thị trường, và lãi suất hình thành ra sao.</div>
+    <div class="lead len">This chapter shows how idle money flows from savers to those who need capital, the types of markets, and how interest rates are formed.</div>
 
     <div class="card">
-      <h3><span>🔄</span> 2.1 — Dòng vốn lưu chuyển</h3>
-      <p>Chức năng chính của hệ thống tài chính: chuyển vốn từ <span class="term">lender-savers</span> (cá nhân/DN/chính phủ <b>thừa</b> tiền) sang <span class="term">borrower-spenders</span> (bên <b>thiếu</b> tiền) theo 2 con đường:</p>
+      <h3><span>🔄</span> <span class="lvi">2.1 — Dòng vốn lưu chuyển</span><span class="len">2.1 — How funds flow</span></h3>
+      <p class="lvi">Chức năng chính của hệ thống tài chính: chuyển vốn từ <span class="term">lender-savers</span> (cá nhân/DN/chính phủ <b>thừa</b> tiền) sang <span class="term">borrower-spenders</span> (bên <b>thiếu</b> tiền) theo 2 con đường:</p>
+      <p class="len">The main function of the financial system: move funds from <span class="term">lender-savers</span> (those with <b>surplus</b> money) to <span class="term">borrower-spenders</span> (those who <b>need</b> money), in 2 ways:</p>
       <div class="grid two">
-        <div class="note"><span class="lbl">Trực tiếp (Direct)</span>Qua <b>thị trường tài chính</b>: người vay bán chứng khoán (cổ phiếu, trái phiếu) thẳng cho người cho vay. Ngân hàng đầu tư hỗ trợ.</div>
-        <div class="note"><span class="lbl">Gián tiếp (Indirect)</span>Qua <b>trung gian tài chính</b> (ngân hàng…): trung gian đứng giữa, vay của người tiết kiệm rồi cho người vay vay lại. Gọi là <b>financial intermediation</b>.</div>
+        <div class="note"><span class="lbl">Direct</span><span class="lvi">Qua <b>thị trường tài chính</b>: người vay bán chứng khoán (cổ phiếu, trái phiếu) thẳng cho người cho vay. Ngân hàng đầu tư hỗ trợ.</span><span class="len">Through <b>financial markets</b>: borrowers sell securities (stocks, bonds) straight to lenders. Investment banks assist.</span></div>
+        <div class="note"><span class="lbl">Indirect</span><span class="lvi">Qua <b>trung gian tài chính</b> (ngân hàng…): trung gian đứng giữa, vay của người tiết kiệm rồi cho người vay vay lại. Gọi là <b>financial intermediation</b>.</span><span class="len">Through <b>financial intermediaries</b> (banks…): the intermediary stands in the middle, borrowing from savers and lending to borrowers. Called <b>financial intermediation</b>.</span></div>
       </div>
-      <p class="vars">Hệ thống cạnh tranh: gom tiền lượng nhỏ → cho vay lượng lớn; lái vốn tới cơ hội đầu tư tốt nhất; bên cho vay lời nhờ <b>spread</b> (chênh lệch lãi cho vay – đi vay).</p>
+      <p class="vars lvi">Hệ thống cạnh tranh: gom tiền lượng nhỏ → cho vay lượng lớn; lái vốn tới cơ hội đầu tư tốt nhất; bên cho vay lời nhờ <b>spread</b> (chênh lệch lãi cho vay – đi vay).</p>
+      <p class="vars len">A competitive system: gathers small amounts → lends large amounts; directs funds to the best investment opportunities; lenders profit from the <b>spread</b> (lending rate − borrowing rate).</p>
     </div>
 
     <div class="card">
-      <h3><span>🏦</span> 2.2 — Ngân hàng đầu tư & tài trợ trực tiếp</h3>
-      <p>Ngân hàng đầu tư giúp phát hành nợ/vốn mới qua 3 dịch vụ tuần tự:</p>
+      <h3><span>🏦</span> <span class="lvi">2.2 — Ngân hàng đầu tư & tài trợ trực tiếp</span><span class="len">2.2 — Investment banks & direct financing</span></h3>
+      <p class="lvi">Ngân hàng đầu tư giúp phát hành nợ/vốn mới qua 3 dịch vụ tuần tự:</p>
+      <p class="len">Investment banks help issue new debt/equity through 3 sequential services:</p>
       <ol class="step">
-        <li><b>Origination</b> — chuẩn bị đợt phát hành chứng khoán.</li>
-        <li><b>Underwriting</b> — bảo lãnh phát hành (cam kết bán giúp).</li>
-        <li><b>Distribution</b> — phân phối & bán lại cho nhà đầu tư.</li>
+        <li class="lvi"><b>Origination</b> — chuẩn bị đợt phát hành chứng khoán.</li>
+        <li class="len"><b>Origination</b> — preparing the security issue for sale.</li>
+        <li class="lvi"><b>Underwriting</b> — bảo lãnh phát hành (cam kết bán giúp).</li>
+        <li class="len"><b>Underwriting</b> — guaranteeing the sale of the securities.</li>
+        <li class="lvi"><b>Distribution</b> — phân phối & bán lại cho nhà đầu tư.</li>
+        <li class="len"><b>Distribution</b> — marketing & reselling to investors.</li>
       </ol>
     </div>
 
     <div class="card">
-      <h3><span>🏬</span> 2.3 — Các loại thị trường tài chính</h3>
+      <h3><span>🏬</span> <span class="lvi">2.3 — Các loại thị trường tài chính</span><span class="len">2.3 — Types of financial markets</span></h3>
       <div class="scroll">
-      <table class="tbl">
+      <table class="tbl lvi">
         <tr><th>Phân loại</th><th>Loại A</th><th>Loại B</th></tr>
         <tr><td>Sơ cấp ↔ Thứ cấp</td><td><b>Primary</b>: phát hành <b>mới</b> lần đầu</td><td><b>Secondary</b>: mua bán <b>lại</b> chứng khoán cũ</td></tr>
         <tr><td>Nơi giao dịch</td><td><b>Exchange</b> (sàn tập trung: NYSE)</td><td><b>OTC</b> (phi tập trung qua mạng: NASDAQ)</td></tr>
         <tr><td>Kỳ hạn</td><td><b>Money market</b>: &lt; 1 năm (T-bill, CP)</td><td><b>Capital market</b>: &gt; 1 năm (bond, cổ phiếu)</td></tr>
         <tr><td>Công khai ↔ riêng tư</td><td><b>Public</b>: công chúng giao dịch</td><td><b>Private</b>: giao dịch riêng (private placement)</td></tr>
       </table>
+      <table class="tbl len">
+        <tr><th>Classification</th><th>Type A</th><th>Type B</th></tr>
+        <tr><td>Primary ↔ Secondary</td><td><b>Primary</b>: <b>new</b> first-time issue</td><td><b>Secondary</b>: <b>resale</b> of existing securities</td></tr>
+        <tr><td>Trading venue</td><td><b>Exchange</b> (central floor: NYSE)</td><td><b>OTC</b> (decentralized, electronic: NASDAQ)</td></tr>
+        <tr><td>Maturity</td><td><b>Money market</b>: &lt; 1 year (T-bill, CP)</td><td><b>Capital market</b>: &gt; 1 year (bonds, stocks)</td></tr>
+        <tr><td>Public ↔ Private</td><td><b>Public</b>: traded by the public</td><td><b>Private</b>: private placement</td></tr>
+      </table>
       </div>
-      <p><b>Phái sinh</b> (derivatives) lấy giá trị từ một tài sản cơ sở: <b>futures</b> (hợp đồng tương lai) và <b>options</b> (quyền chọn) — dùng để <b>phòng ngừa rủi ro (hedge)</b>.</p>
+      <p class="lvi"><b>Phái sinh</b> (derivatives) lấy giá trị từ một tài sản cơ sở: <b>futures</b> (hợp đồng tương lai) và <b>options</b> (quyền chọn) — dùng để <b>phòng ngừa rủi ro (hedge)</b>.</p>
+      <p class="len"><b>Derivatives</b> derive their value from an underlying asset: <b>futures</b> and <b>options</b> — used to <b>hedge risk</b>.</p>
       <div class="grid two">
         <div class="note tip"><span class="lbl">Marketability vs Liquidity</span>
-          <b>Marketability</b> = mức độ <b>dễ bán</b> & đổi ra tiền (xét chi phí giao dịch, tìm kiếm).<br>
-          <b>Liquidity</b> = đổi ra tiền <b>nhanh mà KHÔNG mất giá</b>.</div>
+          <span class="lvi"><b>Marketability</b> = mức độ <b>dễ bán</b> & đổi ra tiền (xét chi phí giao dịch, tìm kiếm).<br>
+          <b>Liquidity</b> = đổi ra tiền <b>nhanh mà KHÔNG mất giá</b>.</span>
+          <span class="len"><b>Marketability</b> = how <b>easily</b> a security can be sold for cash (considering transaction & search costs).<br>
+          <b>Liquidity</b> = converting to cash <b>quickly WITHOUT losing value</b>.</span></div>
         <div class="note tip"><span class="lbl">Broker vs Dealer</span>
-          <b>Broker</b> = môi giới, ghép người mua–bán, ăn <b>hoa hồng</b>, không chịu rủi ro.<br>
-          <b>Dealer</b> = tạo lập thị trường, mua bán từ <b>kho của chính mình</b>, <b>chịu rủi ro</b>.</div>
+          <span class="lvi"><b>Broker</b> = môi giới, ghép người mua–bán, ăn <b>hoa hồng</b>, không chịu rủi ro.<br>
+          <b>Dealer</b> = tạo lập thị trường, mua bán từ <b>kho của chính mình</b>, <b>chịu rủi ro</b>.</span>
+          <span class="len"><b>Broker</b> = matches buyers & sellers, earns a <b>commission</b>, bears no risk.<br>
+          <b>Dealer</b> = makes a market, trades from <b>own inventory</b>, <b>bears risk</b>.</span></div>
       </div>
     </div>
 
     <div class="card">
-      <h3><span>📊</span> 2.4 — Hiệu quả thị trường</h3>
-      <p>Thị trường hiệu quả = định giá chứng khoán đúng <b>giá trị nội tại</b> (intrinsic/fair value). Phụ thuộc 2 loại hiệu quả: <b>vận hành (operational)</b> và <b>thông tin (informational)</b>.</p>
+      <h3><span>📊</span> <span class="lvi">2.4 — Hiệu quả thị trường</span><span class="len">2.4 — Market efficiency</span></h3>
+      <p class="lvi">Thị trường hiệu quả = định giá chứng khoán đúng <b>giá trị nội tại</b> (intrinsic/fair value). Phụ thuộc 2 loại hiệu quả: <b>vận hành (operational)</b> và <b>thông tin (informational)</b>.</p>
+      <p class="len">An efficient market prices securities at their <b>intrinsic (fair) value</b>. It depends on two kinds of efficiency: <b>operational</b> and <b>informational</b>.</p>
       <div class="scroll">
-      <table class="tbl">
+      <table class="tbl lvi">
         <tr><th>Dạng hiệu quả</th><th>Giá phản ánh…</th><th>Hệ quả</th></tr>
         <tr><td><b>Weak-form</b> (yếu)</td><td>Chỉ thông tin <b>lịch sử</b></td><td>Phân tích đồ thị quá khứ vô ích</td></tr>
         <tr><td><b>Semistrong</b> (bán mạnh)</td><td>Mọi thông tin <b>công khai</b></td><td>Đọc tin tức công khai cũng không thắng được</td></tr>
         <tr><td><b>Strong-form</b> (mạnh)</td><td>Mọi thông tin, kể cả <b>nội bộ</b></td><td>Ngay cả insider cũng không có lợi thế</td></tr>
       </table>
+      <table class="tbl len">
+        <tr><th>Form of efficiency</th><th>Prices reflect…</th><th>Implication</th></tr>
+        <tr><td><b>Weak-form</b></td><td>Only <b>historical</b> info</td><td>Chart/past-price analysis is useless</td></tr>
+        <tr><td><b>Semistrong</b></td><td>All <b>public</b> info</td><td>Reading public news won't beat the market</td></tr>
+        <tr><td><b>Strong-form</b></td><td>All info, even <b>insider</b></td><td>Even insiders have no edge</td></tr>
+      </table>
       </div>
-      <div class="note exam"><span class="lbl">Mẹo nhớ</span>Mức độ tăng dần: <b>Yếu (lịch sử) → Bán mạnh (công khai) → Mạnh (cả nội bộ)</b>. Thị trường công khai (NYSE) hiệu quả hơn thị trường riêng tư.</div>
+      <div class="note exam"><span class="lbl"><span class="lvi">Mẹo nhớ</span><span class="len">Memory tip</span></span><span class="lvi">Mức độ tăng dần: <b>Yếu (lịch sử) → Bán mạnh (công khai) → Mạnh (cả nội bộ)</b>. Thị trường công khai (NYSE) hiệu quả hơn thị trường riêng tư.</span><span class="len">Increasing order: <b>Weak (historical) → Semistrong (public) → Strong (incl. insider)</b>. Public markets (NYSE) are more efficient than private markets.</span></div>
     </div>
 
     <div class="card">
-      <h3><span>💹</span> 2.6 — Lãi suất: danh nghĩa, thực & Phương trình Fisher</h3>
+      <h3><span>💹</span> <span class="lvi">2.6 — Lãi suất: danh nghĩa, thực & Phương trình Fisher</span><span class="len">2.6 — Interest rates: nominal, real & the Fisher equation</span></h3>
       <ul class="clean">
-        <li><b>Lãi suất (interest rate)</b> = phí đi vay, tính theo % khoản vay.</li>
-        <li><b>Nominal rate (i)</b> = lãi suất <b>quan sát được</b> trên thị trường.</li>
-        <li><b>Real rate (r)</b> = lãi suất <b>nếu KHÔNG có lạm phát</b>; phản ánh kỳ vọng sinh lời thực & ưu tiên tiêu dùng.</li>
+        <li class="lvi"><b>Lãi suất (interest rate)</b> = phí đi vay, tính theo % khoản vay.</li>
+        <li class="len"><b>Interest rate</b> = the fee for borrowing money, as a % of the loan.</li>
+        <li class="lvi"><b>Nominal rate (i)</b> = lãi suất <b>quan sát được</b> trên thị trường.</li>
+        <li class="len"><b>Nominal rate (i)</b> = the rate <b>observed</b> in the market.</li>
+        <li class="lvi"><b>Real rate (r)</b> = lãi suất <b>nếu KHÔNG có lạm phát</b>; phản ánh kỳ vọng sinh lời thực & ưu tiên tiêu dùng.</li>
+        <li class="len"><b>Real rate (r)</b> = the rate that would exist <b>with NO inflation</b>; reflects real expected return & time preference for consumption.</li>
       </ul>
-      <div class="formula"><span class="fname">Phương trình Fisher (đầy đủ) · Eq 2.1</span>
+      <div class="formula"><span class="fname"><span class="lvi">Phương trình Fisher (đầy đủ) · Eq 2.1</span><span class="len">Fisher equation (full) · Eq 2.1</span></span>
         <span class="eq">i = r + ΔP<sup>e</sup> + (r × ΔP<sup>e</sup>)</span></div>
-      <div class="formula"><span class="fname">Fisher (giản lược) · Eq 2.2</span>
+      <div class="formula"><span class="fname"><span class="lvi">Fisher (giản lược) · Eq 2.2</span><span class="len">Fisher (simplified) · Eq 2.2</span></span>
         <span class="eq">i ≈ r + ΔP<sup>e</sup></span></div>
-      <p class="vars"><b>ΔP<sup>e</sup></b> = lạm phát kỳ vọng; <b>r × ΔP<sup>e</sup></b> = phần điều chỉnh lãi suất theo lạm phát.</p>
-      <div class="work"><span class="wt">Ví dụ giải</span>
-        r = 4%, lạm phát kỳ vọng = 10%. Tính lãi suất danh nghĩa.
-        <div class="calc">Giản lược: i ≈ 0,04 + 0,10 = <span class="res">14%</span></div>
-        <div class="calc">Đầy đủ: i = 0,04 + 0,10 + (0,04×0,10) = 0,144 = <span class="res">14,4%</span></div>
+      <p class="vars lvi"><b>ΔP<sup>e</sup></b> = lạm phát kỳ vọng; <b>r × ΔP<sup>e</sup></b> = phần điều chỉnh lãi suất theo lạm phát.</p>
+      <p class="vars len"><b>ΔP<sup>e</sup></b> = expected inflation; <b>r × ΔP<sup>e</sup></b> = the adjustment of the rate for inflation.</p>
+      <div class="work"><span class="wt"><span class="lvi">Ví dụ giải</span><span class="len">Worked example</span></span>
+        <span class="lvi">r = 4%, lạm phát kỳ vọng = 10%. Tính lãi suất danh nghĩa.</span><span class="len">r = 4%, expected inflation = 10%. Find the nominal rate.</span>
+        <div class="calc"><span class="lvi">Giản lược:</span><span class="len">Simplified:</span> i ≈ 0.04 + 0.10 = <span class="res">14%</span></div>
+        <div class="calc"><span class="lvi">Đầy đủ:</span><span class="len">Full:</span> i = 0.04 + 0.10 + (0.04×0.10) = 0.144 = <span class="res">14.4%</span></div>
       </div>
-      <p>Lãi suất cân bằng do <b>cung – cầu vốn vay (loanable funds)</b> quyết định: lãi cao → người tiết kiệm cung nhiều hơn, người vay cầu ít hơn. Lãi suất <b>tăng khi kinh tế mở rộng, giảm khi suy thoái</b> và đồng biến với lạm phát.</p>
+      <p class="lvi">Lãi suất cân bằng do <b>cung – cầu vốn vay (loanable funds)</b> quyết định: lãi cao → người tiết kiệm cung nhiều hơn, người vay cầu ít hơn. Lãi suất <b>tăng khi kinh tế mở rộng, giảm khi suy thoái</b> và đồng biến với lạm phát.</p>
+      <p class="len">The equilibrium rate is set by <b>supply & demand for loanable funds</b>: higher rates → savers supply more, borrowers demand less. Rates <b>rise in expansions, fall in recessions</b> and move with inflation.</p>
     </div>
   </section>
 
   <!-- ============ CHƯƠNG 3 ============ -->
   <section id="ch3">
-    <div class="sec-head"><div class="num">3</div><h2>Báo cáo tài chính, Dòng tiền & Thuế</h2></div>
+    <div class="sec-head"><div class="num">3</div><h2><span class="lvi">Báo cáo tài chính, Dòng tiền & Thuế</span><span class="len">Statements, Cash Flows & Taxes</span></h2></div>
     <p class="sec-sub">Financial Statements, Cash Flows, and Taxes</p>
-    <div class="lead">Đây là "bảng chữ cái" của tài chính. Nắm 4 báo cáo tài chính ở đây, bạn mới phân tích được ở chương 4.</div>
+    <div class="lead lvi">Đây là "bảng chữ cái" của tài chính. Nắm 4 báo cáo tài chính ở đây, bạn mới phân tích được ở chương 4.</div>
+    <div class="lead len">This is the "alphabet" of finance. Master the 4 financial statements here before analyzing them in Chapter 4.</div>
 
     <div class="card">
-      <h3><span>📚</span> 3.1 — GAAP & nguyên tắc kế toán</h3>
-      <p><b>Annual report</b> (báo cáo thường niên) là báo cáo quan trọng nhất gửi cổ đông, gồm <b>4 báo cáo đã kiểm toán</b>: bảng cân đối, kết quả kinh doanh, lợi nhuận giữ lại, lưu chuyển tiền tệ.</p>
-      <p><b>GAAP</b> do <b>FASB</b> ban hành, <b>SEC</b> ủy quyền — là <b>hướng dẫn, không phải luật cứng</b>, cần xét đoán nghề nghiệp. Quốc tế dùng <b>IFRS</b> (IASB).</p>
-      <h4>5 nguyên tắc nền tảng</h4>
+      <h3><span>📚</span> <span class="lvi">3.1 — GAAP & nguyên tắc kế toán</span><span class="len">3.1 — GAAP & accounting principles</span></h3>
+      <p class="lvi"><b>Annual report</b> (báo cáo thường niên) là báo cáo quan trọng nhất gửi cổ đông, gồm <b>4 báo cáo đã kiểm toán</b>: bảng cân đối, kết quả kinh doanh, lợi nhuận giữ lại, lưu chuyển tiền tệ.</p>
+      <p class="len">The <b>annual report</b> is the most important report sent to shareholders, containing <b>4 audited statements</b>: balance sheet, income statement, retained earnings, and cash flows.</p>
+      <p class="lvi"><b>GAAP</b> do <b>FASB</b> ban hành, <b>SEC</b> ủy quyền — là <b>hướng dẫn, không phải luật cứng</b>, cần xét đoán nghề nghiệp. Quốc tế dùng <b>IFRS</b> (IASB).</p>
+      <p class="len"><b>GAAP</b> is set by the <b>FASB</b>, authorized by the <b>SEC</b> — they are <b>guidelines, not rigid rules</b>, requiring professional judgment. Internationally, <b>IFRS</b> (IASB) is used.</p>
+      <h4><span class="lvi">5 nguyên tắc nền tảng</span><span class="len">5 fundamental principles</span></h4>
       <div class="scroll">
-      <table class="tbl">
+      <table class="tbl lvi">
         <tr><th>Nguyên tắc</th><th>Nội dung</th></tr>
         <tr><td><b>Arm's-length</b></td><td>Các bên giao dịch độc lập, hợp lý</td></tr>
         <tr><td><b>Cost principle</b></td><td>Ghi tài sản theo <b>giá gốc</b> (điều chỉnh khi giảm giá)</td></tr>
@@ -507,59 +671,83 @@
         <tr><td><b>Matching</b></td><td>Khớp doanh thu với <b>chi phí tạo ra</b> doanh thu đó</td></tr>
         <tr><td><b>Going concern</b></td><td>Giả định DN <b>hoạt động liên tục</b> trong tương lai</td></tr>
       </table>
+      <table class="tbl len">
+        <tr><th>Principle</th><th>Meaning</th></tr>
+        <tr><td><b>Arm's-length</b></td><td>Parties transact independently and rationally</td></tr>
+        <tr><td><b>Cost principle</b></td><td>Record assets at <b>historical cost</b> (adjust if value falls)</td></tr>
+        <tr><td><b>Realization</b></td><td>Recognize revenue when the <b>transaction is complete</b> (cash may come earlier/later)</td></tr>
+        <tr><td><b>Matching</b></td><td>Match revenue with the <b>expenses incurred</b> to generate it</td></tr>
+        <tr><td><b>Going concern</b></td><td>Assume the firm <b>operates continuously</b> into the future</td></tr>
+      </table>
       </div>
     </div>
 
     <div class="card">
-      <h3><span>⚖️</span> 3.2 — Bảng cân đối kế toán (Balance Sheet)</h3>
-      <p>Chụp <b>"ảnh tĩnh"</b> tình hình tài chính tại một <b>thời điểm</b>: DN có gì (tài sản) và lấy tiền từ đâu (nợ + vốn).</p>
-      <div class="formula"><span class="fname">Phương trình kế toán cơ bản · Eq 3.1</span>
-        <span class="eq">Tổng Tài sản = Tổng Nợ phải trả + Vốn chủ sở hữu</span></div>
-      <div class="formula"><span class="fname">Vốn lưu động ròng · Eq 3.2</span>
-        <span class="eq">NWC = Tài sản ngắn hạn − Nợ ngắn hạn</span></div>
+      <h3><span>⚖️</span> <span class="lvi">3.2 — Bảng cân đối kế toán</span><span class="len">3.2 — The Balance Sheet</span></h3>
+      <p class="lvi">Chụp <b>"ảnh tĩnh"</b> tình hình tài chính tại một <b>thời điểm</b>: DN có gì (tài sản) và lấy tiền từ đâu (nợ + vốn).</p>
+      <p class="len">A <b>"snapshot"</b> of financial position at a <b>point in time</b>: what the firm owns (assets) and where the money came from (liabilities + equity).</p>
+      <div class="formula"><span class="fname"><span class="lvi">Phương trình kế toán cơ bản · Eq 3.1</span><span class="len">Basic accounting identity · Eq 3.1</span></span>
+        <span class="eq lvi">Tổng Tài sản = Tổng Nợ phải trả + Vốn chủ sở hữu</span><span class="eq len">Total Assets = Total Liabilities + Stockholders' Equity</span></div>
+      <div class="formula"><span class="fname"><span class="lvi">Vốn lưu động ròng · Eq 3.2</span><span class="len">Net Working Capital · Eq 3.2</span></span>
+        <span class="eq lvi">NWC = Tài sản ngắn hạn − Nợ ngắn hạn</span><span class="eq len">NWC = Current Assets − Current Liabilities</span></div>
       <ul class="clean">
-        <li>Tài sản (bên trái) xếp theo <b>tính thanh khoản giảm dần</b>: tiền → phải thu → tồn kho → TSCĐ → tài sản vô hình (goodwill, bằng sáng chế).</li>
-        <li>Nguồn vốn (bên phải) xếp theo <b>thứ tự phải trả</b>: nợ ngắn hạn → nợ dài hạn → vốn cổ phần.</li>
-        <li>Vốn CSH gồm: cổ phiếu thường, vốn góp thêm (paid-in capital), <b>lợi nhuận giữ lại</b> (retained earnings), trừ <b>cổ phiếu quỹ</b> (treasury stock).</li>
+        <li class="lvi">Tài sản (bên trái) xếp theo <b>tính thanh khoản giảm dần</b>: tiền → phải thu → tồn kho → TSCĐ → tài sản vô hình (goodwill, bằng sáng chế).</li>
+        <li class="len">Assets (left) are listed by <b>decreasing liquidity</b>: cash → receivables → inventory → fixed assets → intangibles (goodwill, patents).</li>
+        <li class="lvi">Nguồn vốn (bên phải) xếp theo <b>thứ tự phải trả</b>: nợ ngắn hạn → nợ dài hạn → vốn cổ phần.</li>
+        <li class="len">Funding (right) is listed by <b>order of payment</b>: current liabilities → long-term debt → equity.</li>
+        <li class="lvi">Vốn CSH gồm: cổ phiếu thường, vốn góp thêm (paid-in capital), <b>lợi nhuận giữ lại</b> (retained earnings), trừ <b>cổ phiếu quỹ</b> (treasury stock).</li>
+        <li class="len">Equity includes: common stock, additional paid-in capital, <b>retained earnings</b>, minus <b>treasury stock</b>.</li>
       </ul>
-      <div class="work"><span class="wt">Ví dụ — Diaz Manufacturing 2020 ($ triệu)</span>
-        TS ngắn hạn = 1.039,8 ; Nợ ngắn hạn = 377,8
-        <div class="calc">NWC = 1.039,8 − 377,8 = <span class="res">662,0 triệu $</span></div>
-        → NWC dương lớn: dư sức trả hết nợ ngắn hạn, ngân hàng đánh giá tốt.</div>
-      <div class="note"><span class="lbl">Preferred stock</span>Cổ phiếu ưu đãi = "sở hữu không kiểm soát", có đặc tính giống nợ (cổ tức cố định) — nằm giữa nợ và vốn cổ phần thường.</div>
+      <div class="work"><span class="wt"><span class="lvi">Ví dụ — Diaz Manufacturing 2020 ($ triệu)</span><span class="len">Example — Diaz Manufacturing 2020 ($M)</span></span>
+        <span class="lvi">TS ngắn hạn = 1.039,8 ; Nợ ngắn hạn = 377,8</span><span class="len">Current assets = 1,039.8 ; Current liabilities = 377.8</span>
+        <div class="calc">NWC = 1,039.8 − 377.8 = <span class="res">$662.0M</span></div>
+        <span class="lvi">→ NWC dương lớn: dư sức trả hết nợ ngắn hạn, ngân hàng đánh giá tốt.</span><span class="len">→ Large positive NWC: more than enough to cover current liabilities — banks view this favorably.</span></div>
+      <div class="note"><span class="lbl">Preferred stock</span><span class="lvi">Cổ phiếu ưu đãi = "sở hữu không kiểm soát", có đặc tính giống nợ (cổ tức cố định) — nằm giữa nợ và vốn cổ phần thường.</span><span class="len">Preferred stock = "ownership without control", with debt-like features (fixed dividend) — sitting between debt and common equity.</span></div>
     </div>
 
     <div class="card">
-      <h3><span>📦</span> Hàng tồn kho: FIFO vs LIFO <span class="tag">khi giá tăng</span></h3>
+      <h3><span>📦</span> <span class="lvi">Hàng tồn kho: FIFO vs LIFO</span><span class="len">Inventory: FIFO vs LIFO</span> <span class="tag"><span class="lvi">khi giá tăng</span><span class="len">rising prices</span></span></h3>
       <div class="scroll">
-      <table class="tbl">
+      <table class="tbl lvi">
         <tr><th>Khi giá tăng</th><th>FIFO (nhập trước, xuất trước)</th><th>LIFO (nhập sau, xuất trước)</th></tr>
         <tr><td>Giả định bán…</td><td>Hàng <b>rẻ</b> (cũ) trước</td><td>Hàng <b>đắt</b> (mới) trước</td></tr>
         <tr><td>Giá vốn COGS</td><td>Thấp hơn</td><td>Cao hơn</td></tr>
         <tr><td>Tồn kho cuối kỳ</td><td>Cao hơn</td><td>Thấp hơn</td></tr>
         <tr><td>Lợi nhuận & thuế</td><td>Cao hơn</td><td><b>Thấp hơn</b></td></tr>
       </table>
+      <table class="tbl len">
+        <tr><th>When prices rise</th><th>FIFO (first-in, first-out)</th><th>LIFO (last-in, first-out)</th></tr>
+        <tr><td>Assumes selling…</td><td>The <b>cheap</b> (old) goods first</td><td>The <b>expensive</b> (new) goods first</td></tr>
+        <tr><td>COGS</td><td>Lower</td><td>Higher</td></tr>
+        <tr><td>Ending inventory</td><td>Higher</td><td>Lower</td></tr>
+        <tr><td>Profit & taxes</td><td>Higher</td><td><b>Lower</b></td></tr>
+      </table>
       </div>
-      <div class="note exam"><span class="lbl">Câu hỏi thi kinh điển</span>
-        Đa số DN chọn <b>LIFO</b> khi giá tăng vì COGS cao → thu nhập chịu thuế thấp → <b>nộp thuế ít nhất</b>. Mẹo: "LIFO = Lower tax".</div>
+      <div class="note exam"><span class="lbl"><span class="lvi">Câu hỏi thi kinh điển</span><span class="len">Classic exam question</span></span>
+        <span class="lvi">Đa số DN chọn <b>LIFO</b> khi giá tăng vì COGS cao → thu nhập chịu thuế thấp → <b>nộp thuế ít nhất</b>. Mẹo: "LIFO = Lower tax".</span>
+        <span class="len">Most firms pick <b>LIFO</b> when prices rise because higher COGS → lower taxable income → <b>least tax paid</b>. Tip: "LIFO = Lower tax".</span></div>
     </div>
 
     <details class="acc">
-      <summary>💱 3.3 — Giá trị thị trường vs giá trị sổ sách <span class="badge">khái niệm</span><span class="tw">▾</span></summary>
+      <summary>💱 <span class="lvi">3.3 — Giá trị thị trường vs giá trị sổ sách</span><span class="len">3.3 — Market value vs book value</span> <span class="badge"><span class="lvi">khái niệm</span><span class="len">concept</span></span><span class="tw">▾</span></summary>
       <div class="acc-body">
-        <p>Kế toán ghi tài sản theo <b>giá gốc (book value)</b>, không phải giá trị thật (market value). Quá trình ghi theo giá hiện hành gọi là <b>marking to market</b>.</p>
-        <p>Nợ ngắn hạn: book ≈ market. Nợ dài hạn: book có thể <b>khác xa</b> market. Chênh lệch giá trị thị trường của (tài sản − nợ) cho ước tính <b>tốt hơn</b> về giá trị vốn cổ đông so với book value.</p>
-        <p class="vars">VD: đội bay của Marvel Airline có book value $600 triệu, nhưng do COVID market value chỉ còn $400 triệu → bảng CĐKT theo book value "đánh lừa" nhà đầu tư.</p>
+        <p class="lvi">Kế toán ghi tài sản theo <b>giá gốc (book value)</b>, không phải giá trị thật (market value). Quá trình ghi theo giá hiện hành gọi là <b>marking to market</b>.</p>
+        <p class="len">Accounting records assets at <b>historical cost (book value)</b>, not true value (market value). Recording at current price is called <b>marking to market</b>.</p>
+        <p class="lvi">Nợ ngắn hạn: book ≈ market. Nợ dài hạn: book có thể <b>khác xa</b> market. Chênh lệch giá trị thị trường của (tài sản − nợ) cho ước tính <b>tốt hơn</b> về giá trị vốn cổ đông so với book value.</p>
+        <p class="len">Current liabilities: book ≈ market. Long-term debt: book can differ <b>substantially</b> from market. The market value of (assets − liabilities) gives a <b>better</b> estimate of shareholder value than book value.</p>
+        <p class="vars lvi">VD: đội bay của Marvel Airline có book value $600 triệu, nhưng do COVID market value chỉ còn $400 triệu → bảng CĐKT theo book value "đánh lừa" nhà đầu tư.</p>
+        <p class="vars len">Example: Marvel Airline's fleet has a book value of $600M, but due to COVID its market value is only $400M → a book-value balance sheet "misleads" investors.</p>
       </div>
     </details>
 
     <div class="card">
-      <h3><span>💰</span> 3.4 — Báo cáo kết quả kinh doanh (Income Statement)</h3>
-      <p>Đo <b>khả năng sinh lời</b> trong một <b>khoảng thời gian</b> (quý/năm).</p>
-      <div class="formula"><span class="fname">Eq 3.3</span><span class="eq">Net Income = Doanh thu − Chi phí</span></div>
-      <h4>Đi từ trên xuống "dòng đáy" (bottom line)</h4>
+      <h3><span>💰</span> <span class="lvi">3.4 — Báo cáo kết quả kinh doanh</span><span class="len">3.4 — The Income Statement</span></h3>
+      <p class="lvi">Đo <b>khả năng sinh lời</b> trong một <b>khoảng thời gian</b> (quý/năm).</p>
+      <p class="len">Measures <b>profitability</b> over a <b>period of time</b> (quarter/year).</p>
+      <div class="formula"><span class="fname">Eq 3.3</span><span class="eq lvi">Net Income = Doanh thu − Chi phí</span><span class="eq len">Net Income = Revenues − Expenses</span></div>
+      <h4><span class="lvi">Đi từ trên xuống "dòng đáy" (bottom line)</span><span class="len">From the top down to the bottom line</span></h4>
       <div class="scroll">
-      <table class="tbl">
+      <table class="tbl lvi">
         <tr><th>Bước</th><th>Khoản mục</th><th>Cách tính</th></tr>
         <tr><td>1</td><td>Net Sales (doanh thu thuần)</td><td>—</td></tr>
         <tr><td>2</td><td><b>EBITDA</b></td><td>Doanh thu − COGS − chi phí bán hàng/quản lý</td></tr>
@@ -567,313 +755,384 @@
         <tr><td>4</td><td><b>EBT</b> (LN trước thuế)</td><td>EBIT − Chi phí lãi vay</td></tr>
         <tr><td>5</td><td><b>Net Income</b></td><td>EBT − Thuế</td></tr>
       </table>
+      <table class="tbl len">
+        <tr><th>Step</th><th>Item</th><th>Computation</th></tr>
+        <tr><td>1</td><td>Net Sales</td><td>—</td></tr>
+        <tr><td>2</td><td><b>EBITDA</b></td><td>Sales − COGS − selling/admin expenses</td></tr>
+        <tr><td>3</td><td><b>EBIT</b> (operating profit)</td><td>EBITDA − Depreciation & Amortization (D&A)</td></tr>
+        <tr><td>4</td><td><b>EBT</b> (pre-tax profit)</td><td>EBIT − Interest expense</td></tr>
+        <tr><td>5</td><td><b>Net Income</b></td><td>EBT − Taxes</td></tr>
+      </table>
       </div>
-      <div class="work"><span class="wt">Ví dụ — Diaz 2020 ($ triệu)</span>
-        <div class="calc">Doanh thu 1.563,7 − COGS 1.081,1 − SG&A 231,1 = EBITDA <b>251,5</b></div>
-        <div class="calc">EBITDA 251,5 − D&A 83,1 = EBIT <b>168,4</b></div>
-        <div class="calc">EBIT 168,4 − lãi vay 5,6 = EBT <b>162,8</b></div>
-        <div class="calc">EBT 162,8 − thuế 44,3 = Net Income <span class="res">118,5 triệu $</span></div>
+      <div class="work"><span class="wt"><span class="lvi">Ví dụ — Diaz 2020 ($ triệu)</span><span class="len">Example — Diaz 2020 ($M)</span></span>
+        <div class="calc"><span class="lvi">Doanh thu 1,563.7 − COGS 1,081.1 − SG&A 231.1 = EBITDA <b>251.5</b></span><span class="len">Sales 1,563.7 − COGS 1,081.1 − SG&A 231.1 = EBITDA <b>251.5</b></span></div>
+        <div class="calc">EBITDA 251.5 − D&A 83.1 = EBIT <b>168.4</b></div>
+        <div class="calc"><span class="lvi">EBIT 168.4 − lãi vay 5.6 = EBT <b>162.8</b></span><span class="len">EBIT 168.4 − interest 5.6 = EBT <b>162.8</b></span></div>
+        <div class="calc"><span class="lvi">EBT 162.8 − thuế 44.3 = Net Income <span class="res">$118.5M</span></span><span class="len">EBT 162.8 − taxes 44.3 = Net Income <span class="res">$118.5M</span></span></div>
       </div>
-      <div class="note"><span class="lbl">Chi phí phi tiền mặt</span><b>Khấu hao (depreciation)</b> cho tài sản hữu hình & <b>phân bổ (amortization)</b> cho tài sản vô hình (goodwill, bằng sáng chế) — đều là chi phí <b>không chi tiền thật</b>.</div>
+      <div class="note"><span class="lbl"><span class="lvi">Chi phí phi tiền mặt</span><span class="len">Non-cash expenses</span></span><span class="lvi"><b>Khấu hao (depreciation)</b> cho tài sản hữu hình & <b>phân bổ (amortization)</b> cho tài sản vô hình (goodwill, bằng sáng chế) — đều là chi phí <b>không chi tiền thật</b>.</span><span class="len"><b>Depreciation</b> for tangible assets & <b>amortization</b> for intangibles (goodwill, patents) — both are expenses with <b>no actual cash outflow</b>.</span></div>
     </div>
 
     <div class="card">
-      <h3><span>🌊</span> 3.5 — Báo cáo lưu chuyển tiền tệ (Cash Flows)</h3>
-      <p>Theo dõi <b>tiền vào – tiền ra</b> trong kỳ, chia 3 nhóm:</p>
+      <h3><span>🌊</span> <span class="lvi">3.5 — Báo cáo lưu chuyển tiền tệ</span><span class="len">3.5 — The Statement of Cash Flows</span></h3>
+      <p class="lvi">Theo dõi <b>tiền vào – tiền ra</b> trong kỳ, chia 3 nhóm:</p>
+      <p class="len">Tracks <b>cash in – cash out</b> over a period, in 3 groups:</p>
       <ul class="clean">
-        <li><b>Operating</b> (kinh doanh): tiền từ bán hàng; chi nguyên liệu, lương, thuê…</li>
-        <li><b>Investing</b> (đầu tư): mua/bán TSCĐ; mua/bán chứng khoán DN khác.</li>
-        <li><b>Financing</b> (tài chính): phát hành/​trả nợ & vốn; trả lãi, cổ tức; mua cổ phiếu quỹ.</li>
+        <li class="lvi"><b>Operating</b> (kinh doanh): tiền từ bán hàng; chi nguyên liệu, lương, thuê…</li>
+        <li class="len"><b>Operating</b>: cash from sales; spending on materials, wages, rent…</li>
+        <li class="lvi"><b>Investing</b> (đầu tư): mua/bán TSCĐ; mua/bán chứng khoán DN khác.</li>
+        <li class="len"><b>Investing</b>: buying/selling fixed assets; buying/selling other firms' securities.</li>
+        <li class="lvi"><b>Financing</b> (tài chính): phát hành/​trả nợ & vốn; trả lãi, cổ tức; mua cổ phiếu quỹ.</li>
+        <li class="len"><b>Financing</b>: issuing/repaying debt & equity; paying interest, dividends; buying treasury stock.</li>
       </ul>
       <div class="scroll">
-      <table class="tbl">
+      <table class="tbl lvi">
         <tr><th></th><th>Nguồn tiền (Source) ⬆️ tiền vào</th><th>Sử dụng tiền (Use) ⬇️ tiền ra</th></tr>
         <tr><td><b>Tài sản</b></td><td><b>Giảm</b> tài sản</td><td><b>Tăng</b> tài sản</td></tr>
         <tr><td><b>Nợ & Vốn CSH</b></td><td><b>Tăng</b> nợ / vốn</td><td><b>Giảm</b> nợ / vốn</td></tr>
       </table>
+      <table class="tbl len">
+        <tr><th></th><th>Source ⬆️ cash in</th><th>Use ⬇️ cash out</th></tr>
+        <tr><td><b>Assets</b></td><td><b>Decrease</b> in assets</td><td><b>Increase</b> in assets</td></tr>
+        <tr><td><b>Liabilities & Equity</b></td><td><b>Increase</b> in debt/equity</td><td><b>Decrease</b> in debt/equity</td></tr>
+      </table>
       </div>
-      <div class="note exam"><span class="lbl">Mẹo nhớ nguồn/sử dụng</span>
-        Tài sản tăng = tiêu tiền (use). Nợ tăng = vay thêm tiền (source). Câu thần chú: <b>"Tài sản ↑ tốn tiền, Nợ ↑ có tiền"</b>.</div>
+      <div class="note exam"><span class="lbl"><span class="lvi">Mẹo nhớ nguồn/sử dụng</span><span class="len">Source/Use memory tip</span></span>
+        <span class="lvi">Tài sản tăng = tiêu tiền (use). Nợ tăng = vay thêm tiền (source). Câu thần chú: <b>"Tài sản ↑ tốn tiền, Nợ ↑ có tiền"</b>.</span>
+        <span class="len">Asset up = spending cash (use). Liability up = raising cash (source). Mantra: <b>"Assets ↑ cost cash, Liabilities ↑ bring cash"</b>.</span></div>
     </div>
 
     <div class="card">
-      <h3><span>🔗</span> 3.6 — Liên kết 4 báo cáo</h3>
-      <p>Bảng CĐKT = ảnh tĩnh đầu & cuối kỳ. <b>Báo cáo lưu chuyển tiền tệ NỐI</b> bảng CĐKT đầu kỳ ↔ cuối kỳ thông qua báo cáo kết quả kinh doanh; <b>báo cáo lợi nhuận giữ lại</b> giải thích thay đổi của khoản retained earnings.</p>
-      <div class="work"><span class="wt">Báo cáo LN giữ lại — Diaz 2020 ($ triệu)</span>
-        <div class="calc">Đầu kỳ (31/12/2019): −50,7</div>
-        <div class="calc">+ Net income 2020: 118,5</div>
-        <div class="calc">− Cổ tức: 0</div>
-        <div class="calc">= Cuối kỳ (31/12/2020): <span class="res">67,8 triệu $</span></div>
+      <h3><span>🔗</span> <span class="lvi">3.6 — Liên kết 4 báo cáo</span><span class="len">3.6 — Tying the statements together</span></h3>
+      <p class="lvi">Bảng CĐKT = ảnh tĩnh đầu & cuối kỳ. <b>Báo cáo lưu chuyển tiền tệ NỐI</b> bảng CĐKT đầu kỳ ↔ cuối kỳ thông qua báo cáo kết quả kinh doanh; <b>báo cáo lợi nhuận giữ lại</b> giải thích thay đổi của khoản retained earnings.</p>
+      <p class="len">The balance sheet = snapshots at start & end. The <b>cash flow statement LINKS</b> the opening ↔ closing balance sheets via the income statement; the <b>retained earnings statement</b> explains the change in retained earnings.</p>
+      <div class="work"><span class="wt"><span class="lvi">Báo cáo LN giữ lại — Diaz 2020 ($ triệu)</span><span class="len">Retained earnings — Diaz 2020 ($M)</span></span>
+        <div class="calc"><span class="lvi">Đầu kỳ (31/12/2019): −50.7</span><span class="len">Beginning (Dec 31, 2019): −50.7</span></div>
+        <div class="calc">+ Net income 2020: 118.5</div>
+        <div class="calc"><span class="lvi">− Cổ tức: 0</span><span class="len">− Dividends: 0</span></div>
+        <div class="calc"><span class="lvi">= Cuối kỳ (31/12/2020): <span class="res">$67.8M</span></span><span class="len">= Ending (Dec 31, 2020): <span class="res">$67.8M</span></span></div>
       </div>
     </div>
 
     <div class="card">
-      <h3><span>🧾</span> 3.8 — Thuế thu nhập doanh nghiệp</h3>
+      <h3><span>🧾</span> <span class="lvi">3.8 — Thuế thu nhập doanh nghiệp</span><span class="len">3.8 — Corporate income tax</span></h3>
       <ul class="clean">
-        <li>Từ 2018: C-Corp chịu thuế <b>phẳng 21%</b> (Tax Cuts and Jobs Act 2017), thay cho thuế lũy tiến cũ.</li>
-        <li><b>Thuế suất bình quân</b> = Tổng thuế ÷ Thu nhập chịu thuế.</li>
-        <li><b>Thuế suất biên</b> = thuế trên đồng <b>cuối/​kế tiếp</b> kiếm được (quan trọng cho quyết định).</li>
+        <li class="lvi">Từ 2018: C-Corp chịu thuế <b>phẳng 21%</b> (Tax Cuts and Jobs Act 2017), thay cho thuế lũy tiến cũ.</li>
+        <li class="len">Since 2018: C-Corps pay a <b>flat 21%</b> tax (Tax Cuts and Jobs Act 2017), replacing the old progressive tax.</li>
+        <li class="lvi"><b>Thuế suất bình quân</b> = Tổng thuế ÷ Thu nhập chịu thuế.</li>
+        <li class="len"><b>Average tax rate</b> = Total taxes ÷ Taxable income.</li>
+        <li class="lvi"><b>Thuế suất biên</b> = thuế trên đồng <b>cuối/​kế tiếp</b> kiếm được (quan trọng cho quyết định).</li>
+        <li class="len"><b>Marginal tax rate</b> = tax on the <b>last/next</b> dollar earned (key for decisions).</li>
       </ul>
-      <div class="note key"><span class="lbl">Hệ quả cực quan trọng (hay thi)</span>
-        Lãi vay (interest) <b>được khấu trừ thuế</b> (tax shield), còn cổ tức (dividend) thì <b>không</b> → tài trợ bằng <b>nợ có chi phí thấp hơn</b> tài trợ bằng vốn cổ phần.</div>
+      <div class="note key"><span class="lbl"><span class="lvi">Hệ quả cực quan trọng (hay thi)</span><span class="len">Critical takeaway (often tested)</span></span>
+        <span class="lvi">Lãi vay (interest) <b>được khấu trừ thuế</b> (tax shield), còn cổ tức (dividend) thì <b>không</b> → tài trợ bằng <b>nợ có chi phí thấp hơn</b> tài trợ bằng vốn cổ phần.</span>
+        <span class="len">Interest is <b>tax-deductible</b> (a tax shield), while dividends are <b>not</b> → <b>debt financing is cheaper</b> than equity financing.</span></div>
     </div>
   </section>
 
   <!-- ============ CHƯƠNG 4 ============ -->
   <section id="ch4">
-    <div class="sec-head"><div class="num">4</div><h2>Phân tích Báo cáo Tài chính</h2></div>
+    <div class="sec-head"><div class="num">4</div><h2><span class="lvi">Phân tích Báo cáo Tài chính</span><span class="len">Analyzing Financial Statements</span></h2></div>
     <p class="sec-sub">Analyzing Financial Statements</p>
-    <div class="lead">Biến các con số ở chương 3 thành <b>chỉ số</b> để trả lời: DN khỏe hay yếu, và so với đối thủ thế nào.</div>
+    <div class="lead lvi">Biến các con số ở chương 3 thành <b>chỉ số</b> để trả lời: DN khỏe hay yếu, và so với đối thủ thế nào.</div>
+    <div class="lead len">Turn the numbers from Chapter 3 into <b>ratios</b> to answer: is the firm strong or weak, and how does it compare to rivals.</div>
 
     <div class="card">
-      <h3><span>👁️</span> 4.1 — 4 góc nhìn & hướng dẫn phân tích</h3>
+      <h3><span>👁️</span> <span class="lvi">4.1 — 4 góc nhìn & hướng dẫn phân tích</span><span class="len">4.1 — 4 perspectives & guidelines</span></h3>
       <div class="scroll">
-      <table class="tbl">
+      <table class="tbl lvi">
         <tr><th>Góc nhìn</th><th>Quan tâm điều gì</th></tr>
         <tr><td><b>Cổ đông</b></td><td>Dòng tiền ròng, rủi ro, tỷ suất sinh lời, giá cổ phiếu</td></tr>
         <tr><td><b>Nhà quản lý</b></td><td>Sinh lời, dùng tài sản hiệu quả, kiểm soát chi phí, giữ việc</td></tr>
         <tr><td><b>Chủ nợ</b></td><td>Khả năng trả nợ ngắn hạn & đúng hạn, tính ổn định</td></tr>
         <tr><td><b>Bên liên quan khác</b></td><td>Nhà cung cấp, nhân viên — có quyền lợi trên dòng tiền</td></tr>
       </table>
+      <table class="tbl len">
+        <tr><th>Perspective</th><th>Cares about</th></tr>
+        <tr><td><b>Stockholders</b></td><td>Net cash flow, risk, rate of return, stock price</td></tr>
+        <tr><td><b>Managers</b></td><td>Profitability, efficient asset use, cost control, job security</td></tr>
+        <tr><td><b>Creditors</b></td><td>Ability to pay short-term & scheduled obligations, stability</td></tr>
+        <tr><td><b>Other stakeholders</b></td><td>Suppliers, employees — claims on the firm's cash flow</td></tr>
+      </table>
       </div>
-      <p class="vars">Hướng dẫn: xác định góc nhìn → dùng BCTC <b>đã kiểm toán</b> → dùng <b>3–5 năm</b> cho phân tích xu hướng → <b>benchmark</b> với đối thủ tương đương.</p>
+      <p class="vars lvi">Hướng dẫn: xác định góc nhìn → dùng BCTC <b>đã kiểm toán</b> → dùng <b>3–5 năm</b> cho phân tích xu hướng → <b>benchmark</b> với đối thủ tương đương.</p>
+      <p class="vars len">Guidelines: identify the perspective → use <b>audited</b> statements → use <b>3–5 years</b> for trend analysis → <b>benchmark</b> against comparable rivals.</p>
     </div>
 
     <div class="card">
-      <h3><span>📏</span> 4.2 — Báo cáo theo tỷ lệ (Common-Size)</h3>
-      <p>Chuẩn hóa mỗi khoản mục thành <b>%</b> để so sánh DN lớn–nhỏ và theo thời gian:</p>
+      <h3><span>📏</span> <span class="lvi">4.2 — Báo cáo theo tỷ lệ (Common-Size)</span><span class="len">4.2 — Common-Size statements</span></h3>
+      <p class="lvi">Chuẩn hóa mỗi khoản mục thành <b>%</b> để so sánh DN lớn–nhỏ và theo thời gian:</p>
+      <p class="len">Standardize each item as a <b>%</b> to compare large vs small firms and across time:</p>
       <ul class="clean">
-        <li><b>Bảng CĐKT common-size</b>: mỗi khoản = % của <b>Tổng tài sản</b>.</li>
-        <li><b>BCKQKD common-size</b>: mỗi khoản = % của <b>Doanh thu thuần</b> → đọc là "chi phí để tạo ra $1 doanh thu".</li>
+        <li class="lvi"><b>Bảng CĐKT common-size</b>: mỗi khoản = % của <b>Tổng tài sản</b>.</li>
+        <li class="len"><b>Common-size balance sheet</b>: each item = % of <b>Total assets</b>.</li>
+        <li class="lvi"><b>BCKQKD common-size</b>: mỗi khoản = % của <b>Doanh thu thuần</b> → đọc là "chi phí để tạo ra $1 doanh thu".</li>
+        <li class="len"><b>Common-size income statement</b>: each item = % of <b>Net sales</b> → read as "cost to generate $1 of sales".</li>
       </ul>
-      <p class="vars">VD Diaz 2020: COGS = 69,1% doanh thu, Net income = 7,6% doanh thu.</p>
+      <p class="vars lvi">VD Diaz 2020: COGS = 69,1% doanh thu, Net income = 7,6% doanh thu.</p>
+      <p class="vars len">E.g. Diaz 2020: COGS = 69.1% of sales, Net income = 7.6% of sales.</p>
     </div>
 
     <div class="card">
-      <h3><span>🧮</span> 4.3 — Bộ chỉ số tài chính (5 nhóm)</h3>
-      <p class="vars">Số liệu ví dụ lấy từ Diaz Manufacturing 2020 ($ triệu).</p>
+      <h3><span>🧮</span> <span class="lvi">4.3 — Bộ chỉ số tài chính (5 nhóm)</span><span class="len">4.3 — Financial ratios (5 groups)</span></h3>
+      <p class="vars lvi">Số liệu ví dụ lấy từ Diaz Manufacturing 2020 ($ triệu).</p>
+      <p class="vars len">Example figures from Diaz Manufacturing 2020 ($M).</p>
 
-      <details class="acc"><summary>💧 1. Thanh khoản (Liquidity) <span class="badge">cao = tốt</span><span class="tw">▾</span></summary>
+      <details class="acc"><summary>💧 <span class="lvi">1. Thanh khoản (Liquidity)</span><span class="len">1. Liquidity</span> <span class="badge"><span class="lvi">cao = tốt</span><span class="len">higher = better</span></span><span class="tw">▾</span></summary>
       <div class="acc-body">
-        <p>Đo khả năng trả nợ <b>ngắn hạn</b> bằng tài sản ngắn hạn.</p>
+        <p class="lvi">Đo khả năng trả nợ <b>ngắn hạn</b> bằng tài sản ngắn hạn.</p>
+        <p class="len">Measures the ability to pay <b>short-term</b> debt with current assets.</p>
         <div class="formula"><span class="fname">Current ratio · Eq 4.1</span>
-          <span class="eq"><span class="frac"><span>Tài sản ngắn hạn</span><span>Nợ ngắn hạn</span></span></span></div>
+          <span class="eq"><span class="frac"><span><span class="lvi">Tài sản ngắn hạn</span><span class="len">Current assets</span></span><span><span class="lvi">Nợ ngắn hạn</span><span class="len">Current liabilities</span></span></span></span></div>
         <div class="formula"><span class="fname">Quick ratio (acid-test) · Eq 4.2</span>
-          <span class="eq"><span class="frac"><span>TS ngắn hạn − Tồn kho</span><span>Nợ ngắn hạn</span></span></span></div>
-        <div class="work"><span class="wt">Tính thử</span>
-          <div class="calc">Current = 1.039,8 / 377,8 = <span class="res">2,75</span></div>
-          <div class="calc">Quick = (1.039,8 − 423,8) / 377,8 = <span class="res">1,63</span></div></div>
-        <p class="vars">Quick loại tồn kho (kém thanh khoản nhất) để khắt khe hơn.</p>
+          <span class="eq"><span class="frac"><span><span class="lvi">TS ngắn hạn − Tồn kho</span><span class="len">Current assets − Inventory</span></span><span><span class="lvi">Nợ ngắn hạn</span><span class="len">Current liabilities</span></span></span></span></div>
+        <div class="work"><span class="wt"><span class="lvi">Tính thử</span><span class="len">Try it</span></span>
+          <div class="calc">Current = 1,039.8 / 377.8 = <span class="res">2.75</span></div>
+          <div class="calc">Quick = (1,039.8 − 423.8) / 377.8 = <span class="res">1.63</span></div></div>
+        <p class="vars lvi">Quick loại tồn kho (kém thanh khoản nhất) để khắt khe hơn.</p>
+        <p class="vars len">Quick excludes inventory (the least liquid asset) for a stricter test.</p>
       </div></details>
 
-      <details class="acc"><summary>⚙️ 2. Hiệu quả hoạt động (Efficiency) <span class="badge">cao = tốt*</span><span class="tw">▾</span></summary>
+      <details class="acc"><summary>⚙️ <span class="lvi">2. Hiệu quả hoạt động (Efficiency)</span><span class="len">2. Efficiency</span> <span class="badge"><span class="lvi">cao = tốt*</span><span class="len">higher = better*</span></span><span class="tw">▾</span></summary>
       <div class="acc-body">
-        <div class="formula"><span class="fname">Vòng quay tồn kho · Eq 4.3</span>
-          <span class="eq"><span class="frac"><span>COGS</span><span>Tồn kho</span></span></span></div>
-        <div class="formula"><span class="fname">Số ngày tồn kho · Eq 4.4</span>
-          <span class="eq"><span class="frac"><span>365</span><span>Vòng quay tồn kho</span></span></span></div>
-        <div class="formula"><span class="fname">Vòng quay khoản phải thu · Eq 4.5</span>
-          <span class="eq"><span class="frac"><span>Doanh thu thuần</span><span>Khoản phải thu</span></span></span></div>
-        <div class="formula"><span class="fname">Kỳ thu tiền bình quân (DSO) · Eq 4.6</span>
-          <span class="eq"><span class="frac"><span>365</span><span>Vòng quay khoản phải thu</span></span></span></div>
-        <div class="formula"><span class="fname">Vòng quay tổng / TSCĐ · Eq 4.7–4.8</span>
-          <span class="eq"><span class="frac"><span>Doanh thu thuần</span><span>Tổng tài sản (hoặc TSCĐ ròng)</span></span></span></div>
-        <div class="work"><span class="wt">Tính thử</span>
-          <div class="calc">Vòng quay tồn kho = 1.081,1 / 423,8 = 2,55 → Số ngày tồn kho = 365/2,55 ≈ <span class="res">143 ngày</span></div>
-          <div class="calc">Vòng quay tổng TS = 1.563,7 / 1.889,2 = <span class="res">0,83</span></div></div>
-        <div class="note warn"><span class="lbl">* Ngoại lệ</span>Riêng <b>số ngày tồn kho</b> & <b>kỳ thu tiền</b>: số <b>thấp</b> mới tốt (thu tiền/bán hàng nhanh).</div>
+        <div class="formula"><span class="fname"><span class="lvi">Vòng quay tồn kho · Eq 4.3</span><span class="len">Inventory turnover · Eq 4.3</span></span>
+          <span class="eq"><span class="frac"><span>COGS</span><span><span class="lvi">Tồn kho</span><span class="len">Inventory</span></span></span></span></div>
+        <div class="formula"><span class="fname"><span class="lvi">Số ngày tồn kho · Eq 4.4</span><span class="len">Days' sales in inventory · Eq 4.4</span></span>
+          <span class="eq"><span class="frac"><span>365</span><span><span class="lvi">Vòng quay tồn kho</span><span class="len">Inventory turnover</span></span></span></span></div>
+        <div class="formula"><span class="fname"><span class="lvi">Vòng quay khoản phải thu · Eq 4.5</span><span class="len">Receivables turnover · Eq 4.5</span></span>
+          <span class="eq"><span class="frac"><span><span class="lvi">Doanh thu thuần</span><span class="len">Net sales</span></span><span><span class="lvi">Khoản phải thu</span><span class="len">Accounts receivable</span></span></span></span></div>
+        <div class="formula"><span class="fname"><span class="lvi">Kỳ thu tiền bình quân (DSO) · Eq 4.6</span><span class="len">Days' sales outstanding (DSO) · Eq 4.6</span></span>
+          <span class="eq"><span class="frac"><span>365</span><span><span class="lvi">Vòng quay khoản phải thu</span><span class="len">Receivables turnover</span></span></span></span></div>
+        <div class="formula"><span class="fname"><span class="lvi">Vòng quay tổng / TSCĐ · Eq 4.7–4.8</span><span class="len">Total / fixed asset turnover · Eq 4.7–4.8</span></span>
+          <span class="eq"><span class="frac"><span><span class="lvi">Doanh thu thuần</span><span class="len">Net sales</span></span><span><span class="lvi">Tổng tài sản (hoặc TSCĐ ròng)</span><span class="len">Total assets (or net fixed assets)</span></span></span></span></div>
+        <div class="work"><span class="wt"><span class="lvi">Tính thử</span><span class="len">Try it</span></span>
+          <div class="calc"><span class="lvi">Vòng quay tồn kho = 1,081.1 / 423.8 = 2.55 → Số ngày tồn kho = 365/2.55 ≈ <span class="res">143 ngày</span></span><span class="len">Inventory turnover = 1,081.1 / 423.8 = 2.55 → Days in inventory = 365/2.55 ≈ <span class="res">143 days</span></span></div>
+          <div class="calc"><span class="lvi">Vòng quay tổng TS = 1,563.7 / 1,889.2 = <span class="res">0.83</span></span><span class="len">Total asset turnover = 1,563.7 / 1,889.2 = <span class="res">0.83</span></span></div></div>
+        <div class="note warn"><span class="lbl"><span class="lvi">* Ngoại lệ</span><span class="len">* Exception</span></span><span class="lvi">Riêng <b>số ngày tồn kho</b> & <b>kỳ thu tiền</b>: số <b>thấp</b> mới tốt (thu tiền/bán hàng nhanh).</span><span class="len">For <b>days in inventory</b> & <b>days sales outstanding</b>: <b>lower</b> is better (faster selling/collecting).</span></div>
       </div></details>
 
-      <details class="acc"><summary>🏗️ 3. Đòn bẩy & Chi trả (Leverage & Coverage) <span class="badge">nợ cao = rủi ro ↑</span><span class="tw">▾</span></summary>
+      <details class="acc"><summary>🏗️ <span class="lvi">3. Đòn bẩy & Chi trả (Leverage & Coverage)</span><span class="len">3. Leverage & Coverage</span> <span class="badge"><span class="lvi">nợ cao = rủi ro ↑</span><span class="len">more debt = more risk</span></span><span class="tw">▾</span></summary>
       <div class="acc-body">
         <div class="formula"><span class="fname">Total debt ratio · Eq 4.9</span>
-          <span class="eq"><span class="frac"><span>Tổng nợ</span><span>Tổng tài sản</span></span></span></div>
+          <span class="eq"><span class="frac"><span><span class="lvi">Tổng nợ</span><span class="len">Total debt</span></span><span><span class="lvi">Tổng tài sản</span><span class="len">Total assets</span></span></span></span></div>
         <div class="formula"><span class="fname">Debt-to-equity · Eq 4.10</span>
-          <span class="eq"><span class="frac"><span>Tổng nợ</span><span>Vốn chủ sở hữu</span></span></span></div>
+          <span class="eq"><span class="frac"><span><span class="lvi">Tổng nợ</span><span class="len">Total debt</span></span><span><span class="lvi">Vốn chủ sở hữu</span><span class="len">Equity</span></span></span></span></div>
         <div class="formula"><span class="fname">Equity multiplier · Eq 4.11</span>
-          <span class="eq"><span class="frac"><span>Tổng tài sản</span><span>Vốn chủ sở hữu</span></span></span></div>
+          <span class="eq"><span class="frac"><span><span class="lvi">Tổng tài sản</span><span class="len">Total assets</span></span><span><span class="lvi">Vốn chủ sở hữu</span><span class="len">Equity</span></span></span></span></div>
         <div class="formula"><span class="fname">Times interest earned · Eq 4.12</span>
-          <span class="eq"><span class="frac"><span>EBIT</span><span>Chi phí lãi vay</span></span></span></div>
+          <span class="eq"><span class="frac"><span>EBIT</span><span><span class="lvi">Chi phí lãi vay</span><span class="len">Interest expense</span></span></span></span></div>
         <div class="formula"><span class="fname">Cash coverage · Eq 4.13</span>
-          <span class="eq"><span class="frac"><span>EBIT + Khấu hao</span><span>Chi phí lãi vay</span></span></span></div>
-        <div class="work"><span class="wt">Tính thử</span>
-          <div class="calc">Total debt ratio = 951,8 / 1.889,2 = <span class="res">0,50</span></div>
-          <div class="calc">Equity multiplier = 1.889,2 / 937,4 = <span class="res">2,02</span></div>
-          <div class="calc">TIE = 168,4 / 5,6 = <span class="res">30,07 lần</span></div></div>
+          <span class="eq"><span class="frac"><span><span class="lvi">EBIT + Khấu hao</span><span class="len">EBIT + Depreciation</span></span><span><span class="lvi">Chi phí lãi vay</span><span class="len">Interest expense</span></span></span></span></div>
+        <div class="work"><span class="wt"><span class="lvi">Tính thử</span><span class="len">Try it</span></span>
+          <div class="calc">Total debt ratio = 951.8 / 1,889.2 = <span class="res">0.50</span></div>
+          <div class="calc">Equity multiplier = 1,889.2 / 937.4 = <span class="res">2.02</span></div>
+          <div class="calc"><span class="lvi">TIE = 168.4 / 5.6 = <span class="res">30.07 lần</span></span><span class="len">TIE = 168.4 / 5.6 = <span class="res">30.07×</span></span></div></div>
       </div></details>
 
-      <details class="acc"><summary>📈 4. Sinh lời (Profitability) <span class="badge">cao = tốt</span><span class="tw">▾</span></summary>
+      <details class="acc"><summary>📈 <span class="lvi">4. Sinh lời (Profitability)</span><span class="len">4. Profitability</span> <span class="badge"><span class="lvi">cao = tốt</span><span class="len">higher = better</span></span><span class="tw">▾</span></summary>
       <div class="acc-body">
         <div class="formula"><span class="fname">Gross profit margin · Eq 4.14</span>
-          <span class="eq"><span class="frac"><span>Doanh thu − COGS</span><span>Doanh thu thuần</span></span></span></div>
+          <span class="eq"><span class="frac"><span><span class="lvi">Doanh thu − COGS</span><span class="len">Sales − COGS</span></span><span><span class="lvi">Doanh thu thuần</span><span class="len">Net sales</span></span></span></span></div>
         <div class="formula"><span class="fname">Operating profit margin · Eq 4.15</span>
-          <span class="eq"><span class="frac"><span>EBIT</span><span>Doanh thu thuần</span></span></span></div>
+          <span class="eq"><span class="frac"><span>EBIT</span><span><span class="lvi">Doanh thu thuần</span><span class="len">Net sales</span></span></span></span></div>
         <div class="formula"><span class="fname">Net profit margin · Eq 4.16</span>
-          <span class="eq"><span class="frac"><span>Net income</span><span>Doanh thu thuần</span></span></span></div>
+          <span class="eq"><span class="frac"><span>Net income</span><span><span class="lvi">Doanh thu thuần</span><span class="len">Net sales</span></span></span></span></div>
         <div class="formula"><span class="fname">ROA · Eq 4.18</span>
-          <span class="eq"><span class="frac"><span>Net income</span><span>Tổng tài sản</span></span></span></div>
+          <span class="eq"><span class="frac"><span>Net income</span><span><span class="lvi">Tổng tài sản</span><span class="len">Total assets</span></span></span></span></div>
         <div class="formula"><span class="fname">ROE · Eq 4.19</span>
-          <span class="eq"><span class="frac"><span>Net income</span><span>Vốn chủ sở hữu</span></span></span></div>
-        <div class="work"><span class="wt">Tính thử</span>
-          <div class="calc">Gross margin = (1.563,7 − 1.081,1)/1.563,7 = <span class="res">30,86%</span></div>
-          <div class="calc">Net margin = 118,5/1.563,7 = <span class="res">7,58%</span></div>
-          <div class="calc">ROA = 118,5/1.889,2 = 6,27% &nbsp;·&nbsp; ROE = 118,5/937,4 = <span class="res">12,64%</span></div></div>
+          <span class="eq"><span class="frac"><span>Net income</span><span><span class="lvi">Vốn chủ sở hữu</span><span class="len">Equity</span></span></span></span></div>
+        <div class="work"><span class="wt"><span class="lvi">Tính thử</span><span class="len">Try it</span></span>
+          <div class="calc">Gross margin = (1,563.7 − 1,081.1)/1,563.7 = <span class="res">30.86%</span></div>
+          <div class="calc">Net margin = 118.5/1,563.7 = <span class="res">7.58%</span></div>
+          <div class="calc">ROA = 118.5/1,889.2 = 6.27% &nbsp;·&nbsp; ROE = 118.5/937.4 = <span class="res">12.64%</span></div></div>
       </div></details>
 
-      <details class="acc"><summary>💵 5. Chỉ số thị trường (Market-Value) <span class="badge">cao = giàu cổ đông</span><span class="tw">▾</span></summary>
+      <details class="acc"><summary>💵 <span class="lvi">5. Chỉ số thị trường (Market-Value)</span><span class="len">5. Market-Value</span> <span class="badge"><span class="lvi">cao = giàu cổ đông</span><span class="len">higher = richer holders</span></span><span class="tw">▾</span></summary>
       <div class="acc-body">
         <div class="formula"><span class="fname">EPS · Eq 4.20</span>
-          <span class="eq"><span class="frac"><span>Net income</span><span>Số cổ phần lưu hành</span></span></span></div>
+          <span class="eq"><span class="frac"><span>Net income</span><span><span class="lvi">Số cổ phần lưu hành</span><span class="len">Shares outstanding</span></span></span></span></div>
         <div class="formula"><span class="fname">P/E ratio · Eq 4.21</span>
-          <span class="eq"><span class="frac"><span>Giá mỗi cổ phần</span><span>EPS</span></span></span></div>
+          <span class="eq"><span class="frac"><span><span class="lvi">Giá mỗi cổ phần</span><span class="len">Price per share</span></span><span>EPS</span></span></span></div>
         <div class="formula"><span class="fname">Market-to-Book · Eq 4.22</span>
-          <span class="eq"><span class="frac"><span>Giá thị trường mỗi cổ phần</span><span>Giá trị sổ sách mỗi cổ phần</span></span></span></div>
-        <p class="vars">Diaz 2020: EPS = $2,17; P/E = 22,40; M/B = 2,83. P/E cao = thị trường kỳ vọng tăng trưởng.</p>
+          <span class="eq"><span class="frac"><span><span class="lvi">Giá thị trường mỗi cổ phần</span><span class="len">Market price per share</span></span><span><span class="lvi">Giá trị sổ sách mỗi cổ phần</span><span class="len">Book value per share</span></span></span></span></div>
+        <p class="vars lvi">Diaz 2020: EPS = $2,17; P/E = 22,40; M/B = 2,83. P/E cao = thị trường kỳ vọng tăng trưởng.</p>
+        <p class="vars len">Diaz 2020: EPS = $2.17; P/E = 22.40; M/B = 2.83. A high P/E = market expects growth.</p>
       </div></details>
     </div>
 
     <div class="card">
-      <h3><span>🧬</span> 4.4 — Hệ thống DuPont</h3>
-      <p>"Mổ xẻ" ROE thành các thành phần để biết <b>điểm mạnh/yếu nằm ở đâu</b>.</p>
-      <div class="formula"><span class="fname">ROA · Eq 4.23</span><span class="eq">ROA = Net profit margin × Vòng quay tổng tài sản</span></div>
+      <h3><span>🧬</span> <span class="lvi">4.4 — Hệ thống DuPont</span><span class="len">4.4 — The DuPont system</span></h3>
+      <p class="lvi">"Mổ xẻ" ROE thành các thành phần để biết <b>điểm mạnh/yếu nằm ở đâu</b>.</p>
+      <p class="len">"Dissects" ROE into components to reveal <b>where strengths/weaknesses lie</b>.</p>
+      <div class="formula"><span class="fname">ROA · Eq 4.23</span><span class="eq lvi">ROA = Net profit margin × Vòng quay tổng tài sản</span><span class="eq len">ROA = Net profit margin × Total asset turnover</span></div>
       <div class="formula"><span class="fname">ROE · Eq 4.24</span><span class="eq">ROE = ROA × Equity multiplier</span></div>
-      <div class="formula"><span class="fname">DuPont mở rộng (3 yếu tố) · Eq 4.25–4.26</span>
-        <span class="eq">ROE = Net margin × Vòng quay TTS × Equity multiplier</span></div>
+      <div class="formula"><span class="fname"><span class="lvi">DuPont mở rộng (3 yếu tố) · Eq 4.25–4.26</span><span class="len">Extended DuPont (3 factors) · Eq 4.25–4.26</span></span>
+        <span class="eq lvi">ROE = Net margin × Vòng quay TTS × Equity multiplier</span><span class="eq len">ROE = Net margin × Total asset turnover × Equity multiplier</span></div>
       <div class="work"><span class="wt">Diaz 2020</span>
-        <div class="calc">ROE = 7,58% × 0,83 × 2,02 ≈ <span class="res">12,64%</span></div>
-        <div class="calc">= (sinh lời) × (hiệu quả tài sản) × (đòn bẩy)</div></div>
-      <div class="note warn"><span class="lbl">Hạn chế của ROE (hay hỏi)</span>
-        Tối đa hóa ROE <b>KHÔNG tương đương</b> tối đa giá cổ phiếu, vì ROE: (1) dựa trên earnings <b>không phải cash flow</b>, (2) <b>bỏ qua rủi ro</b>, (3) bỏ qua <b>quy mô</b> vốn đầu tư & quy mô dòng tiền.</div>
-      <div class="note tip"><span class="lbl">2 chiến lược tăng ROA</b></span>Tập trung <b>biên lợi nhuận cao</b> (Tiffany, Burberry) HOẶC <b>vòng quay cao</b> (Walmart, Whole Foods).</div>
+        <div class="calc">ROE = 7.58% × 0.83 × 2.02 ≈ <span class="res">12.64%</span></div>
+        <div class="calc"><span class="lvi">= (sinh lời) × (hiệu quả tài sản) × (đòn bẩy)</span><span class="len">= (profitability) × (asset efficiency) × (leverage)</span></div></div>
+      <div class="note warn"><span class="lbl"><span class="lvi">Hạn chế của ROE (hay hỏi)</span><span class="len">Limitations of ROE (often asked)</span></span>
+        <span class="lvi">Tối đa hóa ROE <b>KHÔNG tương đương</b> tối đa giá cổ phiếu, vì ROE: (1) dựa trên earnings <b>không phải cash flow</b>, (2) <b>bỏ qua rủi ro</b>, (3) bỏ qua <b>quy mô</b> vốn đầu tư & quy mô dòng tiền.</span>
+        <span class="len">Maximizing ROE is <b>NOT equivalent</b> to maximizing stock price, because ROE: (1) is based on earnings, <b>not cash flow</b>, (2) <b>ignores risk</b>, (3) ignores the <b>size</b> of the investment & of future cash flows.</span></div>
+      <div class="note tip"><span class="lbl"><span class="lvi">2 chiến lược tăng ROA</span><span class="len">2 strategies to raise ROA</span></span><span class="lvi">Tập trung <b>biên lợi nhuận cao</b> (Tiffany, Burberry) HOẶC <b>vòng quay cao</b> (Walmart, Whole Foods).</span><span class="len">Focus on <b>high profit margin</b> (Tiffany, Burberry) OR <b>high turnover</b> (Walmart, Whole Foods).</span></div>
     </div>
 
     <div class="card">
-      <h3><span>🎯</span> 4.5–4.6 — Chọn chuẩn so sánh & hạn chế</h3>
-      <p>Một chỉ số chỉ có ý nghĩa khi so với <b>benchmark</b>. 3 cách:</p>
+      <h3><span>🎯</span> <span class="lvi">4.5–4.6 — Chọn chuẩn so sánh & hạn chế</span><span class="len">4.5–4.6 — Choosing a benchmark & limitations</span></h3>
+      <p class="lvi">Một chỉ số chỉ có ý nghĩa khi so với <b>benchmark</b>. 3 cách:</p>
+      <p class="len">A ratio is meaningful only against a <b>benchmark</b>. 3 ways:</p>
       <ul class="clean">
-        <li><b>Trend analysis</b> — so với lịch sử của chính DN (3–5 năm).</li>
-        <li><b>Industry analysis</b> — so với trung bình ngành (mã <b>SIC / NAICS</b>).</li>
-        <li><b>Peer group analysis</b> — so với nhóm DN tương đương.</li>
+        <li class="lvi"><b>Trend analysis</b> — so với lịch sử của chính DN (3–5 năm).</li>
+        <li class="len"><b>Trend analysis</b> — versus the firm's own history (3–5 years).</li>
+        <li class="lvi"><b>Industry analysis</b> — so với trung bình ngành (mã <b>SIC / NAICS</b>).</li>
+        <li class="len"><b>Industry analysis</b> — versus the industry average (<b>SIC / NAICS</b> codes).</li>
+        <li class="lvi"><b>Peer group analysis</b> — so với nhóm DN tương đương.</li>
+        <li class="len"><b>Peer group analysis</b> — versus a set of comparable firms.</li>
       </ul>
-      <div class="note exam"><span class="lbl">Hạn chế của phân tích BCTC</span>
-        Không phải khoa học chính xác; dựa trên <b>số liệu kế toán & giá gốc lịch sử</b>; <b>thiếu chuẩn rõ ràng</b> để nói chỉ số "cao" hay "thấp" là tốt hay xấu.</div>
+      <div class="note exam"><span class="lbl"><span class="lvi">Hạn chế của phân tích BCTC</span><span class="len">Limitations of statement analysis</span></span>
+        <span class="lvi">Không phải khoa học chính xác; dựa trên <b>số liệu kế toán & giá gốc lịch sử</b>; <b>thiếu chuẩn rõ ràng</b> để nói chỉ số "cao" hay "thấp" là tốt hay xấu.</span>
+        <span class="len">Not an exact science; relies on <b>accounting data & historical costs</b>; <b>few clear guidelines</b> for whether a ratio is "high" or "low", good or bad.</span></div>
     </div>
   </section>
 
   <!-- ============ CHƯƠNG 5 ============ -->
   <section id="ch5">
-    <div class="sec-head"><div class="num">5</div><h2>Giá trị thời gian của tiền</h2></div>
+    <div class="sec-head"><div class="num">5</div><h2><span class="lvi">Giá trị thời gian của tiền</span><span class="len">Time Value of Money</span></h2></div>
     <p class="sec-sub">The Time Value of Money (TVM)</p>
-    <div class="lead">Phần "toán" cốt lõi nhất của môn. Nắm chắc 2 công thức FV & PV, bạn giải được phần lớn bài tập.</div>
+    <div class="lead lvi">Phần "toán" cốt lõi nhất của môn. Nắm chắc 2 công thức FV & PV, bạn giải được phần lớn bài tập.</div>
+    <div class="lead len">The most essential "math" of the course. Master the 2 formulas FV & PV and you can solve most problems.</div>
 
-    <div class="note key"><span class="lbl">Nguyên lý vàng</span>
-      <b>$1 hôm nay đáng giá hơn $1 trong tương lai</b>, vì $1 hôm nay đem đầu tư sẽ sinh lãi. Lãi suất chính là "tỷ giá" giữa tiêu hôm nay và tiêu ngày mai.</div>
+    <div class="note key"><span class="lbl"><span class="lvi">Nguyên lý vàng</span><span class="len">The golden principle</span></span>
+      <span class="lvi"><b>$1 hôm nay đáng giá hơn $1 trong tương lai</b>, vì $1 hôm nay đem đầu tư sẽ sinh lãi. Lãi suất chính là "tỷ giá" giữa tiêu hôm nay và tiêu ngày mai.</span>
+      <span class="len"><b>$1 today is worth more than $1 in the future</b>, because $1 today can be invested to earn interest. The interest rate is the "exchange rate" between spending today and spending tomorrow.</span></div>
 
     <div class="card">
-      <h3><span>🧭</span> Trục thời gian (Time line) — vẽ trước khi tính</h3>
-      <p>Luôn vẽ trục thời gian để xác định <b>quy mô & thời điểm</b> dòng tiền: dòng <b>vào</b> là (+), dòng <b>ra</b> là (−). Đây là bước giúp tránh sai sót nhất.</p>
-      <pre style="font-family:monospace;color:var(--muted);font-size:.85rem;overflow-x:auto">  0 ─────1─────2─────3─────4─────5   (năm), i = 5%
+      <h3><span>🧭</span> <span class="lvi">Trục thời gian (Time line) — vẽ trước khi tính</span><span class="len">Time line — draw it before calculating</span></h3>
+      <p class="lvi">Luôn vẽ trục thời gian để xác định <b>quy mô & thời điểm</b> dòng tiền: dòng <b>vào</b> là (+), dòng <b>ra</b> là (−). Đây là bước giúp tránh sai sót nhất.</p>
+      <p class="len">Always draw a time line to pin down the <b>size & timing</b> of cash flows: inflows are (+), outflows are (−). This is the single best step to avoid mistakes.</p>
+      <pre class="lvi" style="font-family:monospace;color:var(--muted);font-size:.85rem;overflow-x:auto">  0 ─────1─────2─────3─────4─────5   (năm), i = 5%
 −10.000                          → FV?</pre>
+      <pre class="len" style="font-family:monospace;color:var(--muted);font-size:.85rem;overflow-x:auto">  0 ─────1─────2─────3─────4─────5   (years), i = 5%
+−10,000                          → FV?</pre>
     </div>
 
     <div class="card">
-      <h3><span>⏩</span> 5.2 — Giá trị tương lai (FV) & Ghép lãi</h3>
-      <p><b>Compounding</b> (ghép lãi) = "lãi mẹ đẻ lãi con": lãi kiếm được lại tiếp tục sinh lãi.</p>
-      <div class="formula"><span class="fname">FV cơ bản · Eq 5.1</span><span class="eq">FV<sub>n</sub> = PV × (1 + i)<sup>n</sup></span></div>
-      <div class="formula"><span class="fname">Ghép lãi m lần/năm · Eq 5.2</span><span class="eq">FV<sub>n</sub> = PV × (1 + i/m)<sup>m×n</sup></span></div>
-      <div class="formula"><span class="fname">Ghép lãi liên tục · Eq 5.3</span><span class="eq">FV<sub>∞</sub> = PV × e<sup>i×n</sup></span> &nbsp;<span class="vars">(e ≈ 2,71828)</span></div>
-      <p class="vars"><b>(1+i)<sup>n</sup></b> = thừa số giá trị tương lai (FV factor); <b>n</b> = số kỳ (năm, quý, tháng…).</p>
+      <h3><span>⏩</span> <span class="lvi">5.2 — Giá trị tương lai (FV) & Ghép lãi</span><span class="len">5.2 — Future Value (FV) & compounding</span></h3>
+      <p class="lvi"><b>Compounding</b> (ghép lãi) = "lãi mẹ đẻ lãi con": lãi kiếm được lại tiếp tục sinh lãi.</p>
+      <p class="len"><b>Compounding</b> = "interest on interest": the interest earned itself goes on to earn interest.</p>
+      <div class="formula"><span class="fname"><span class="lvi">FV cơ bản · Eq 5.1</span><span class="len">Basic FV · Eq 5.1</span></span><span class="eq">FV<sub>n</sub> = PV × (1 + i)<sup>n</sup></span></div>
+      <div class="formula"><span class="fname"><span class="lvi">Ghép lãi m lần/năm · Eq 5.2</span><span class="len">Compounding m times/year · Eq 5.2</span></span><span class="eq">FV<sub>n</sub> = PV × (1 + i/m)<sup>m×n</sup></span></div>
+      <div class="formula"><span class="fname"><span class="lvi">Ghép lãi liên tục · Eq 5.3</span><span class="len">Continuous compounding · Eq 5.3</span></span><span class="eq">FV<sub>∞</sub> = PV × e<sup>i×n</sup></span> &nbsp;<span class="vars">(e ≈ 2.71828)</span></div>
+      <p class="vars lvi"><b>(1+i)<sup>n</sup></b> = thừa số giá trị tương lai (FV factor); <b>n</b> = số kỳ (năm, quý, tháng…).</p>
+      <p class="vars len"><b>(1+i)<sup>n</sup></b> = the future value factor; <b>n</b> = number of periods (year, quarter, month…).</p>
 
-      <div class="work"><span class="wt">Ví dụ 1 — cơ bản</span>
-        Gửi $100, lãi 10%/năm ghép hằng năm, 5 năm. Cuối kỳ bao nhiêu?
-        <div class="calc">FV = 100 × (1,10)<sup>5</sup> = 100 × 1,6105 = <span class="res">$161,05</span></div></div>
-      <div class="work"><span class="wt">Ví dụ 2 — sức mạnh ghép lãi</span>
-        $5.000, lãi 15%/năm, 10 năm.
-        <div class="calc">FV = 5.000 × (1,15)<sup>10</sup> = 5.000 × 4,0456 = <span class="res">$20.227,79</span></div></div>
-      <div class="work"><span class="wt">Ví dụ 3 — ghép nửa năm (semi-annual)</span>
-        $100, lãi danh nghĩa 5%/năm, ghép <b>nửa năm</b>, 2 năm → m=2, n=2.
-        <div class="calc">FV = 100 × (1 + 0,05/2)<sup>2×2</sup> = 100 × (1,025)<sup>4</sup> = <span class="res">$110,38</span></div></div>
-      <div class="work"><span class="wt">Ví dụ 4 — ghép liên tục</span>
-        $10.000, 5%/năm ghép liên tục, 5 năm.
-        <div class="calc">FV = 10.000 × e<sup>0,05×5</sup> = 10.000 × 1,28403 = <span class="res">$12.840,25</span></div></div>
-      <div class="note tip"><span class="lbl">Ghi nhớ</span>Ghép lãi càng <b>nhiều lần/năm</b> → FV càng <b>lớn</b>. Cực đại là ghép liên tục. Phần "interest on interest" tăng dần mỗi kỳ → tăng trưởng <b>hàm mũ</b>, không tuyến tính.</div>
+      <div class="work"><span class="wt"><span class="lvi">Ví dụ 1 — cơ bản</span><span class="len">Example 1 — basic</span></span>
+        <span class="lvi">Gửi $100, lãi 10%/năm ghép hằng năm, 5 năm. Cuối kỳ bao nhiêu?</span><span class="len">Deposit $100 at 10%/year compounded annually for 5 years. Ending balance?</span>
+        <div class="calc">FV = 100 × (1.10)<sup>5</sup> = 100 × 1.6105 = <span class="res">$161.05</span></div></div>
+      <div class="work"><span class="wt"><span class="lvi">Ví dụ 2 — sức mạnh ghép lãi</span><span class="len">Example 2 — power of compounding</span></span>
+        <span class="lvi">$5.000, lãi 15%/năm, 10 năm.</span><span class="len">$5,000 at 15%/year for 10 years.</span>
+        <div class="calc">FV = 5,000 × (1.15)<sup>10</sup> = 5,000 × 4.0456 = <span class="res">$20,227.79</span></div></div>
+      <div class="work"><span class="wt"><span class="lvi">Ví dụ 3 — ghép nửa năm</span><span class="len">Example 3 — semi-annual</span></span>
+        <span class="lvi">$100, lãi danh nghĩa 5%/năm, ghép <b>nửa năm</b>, 2 năm → m=2, n=2.</span><span class="len">$100, nominal 5%/year, compounded <b>semi-annually</b>, 2 years → m=2, n=2.</span>
+        <div class="calc">FV = 100 × (1 + 0.05/2)<sup>2×2</sup> = 100 × (1.025)<sup>4</sup> = <span class="res">$110.38</span></div></div>
+      <div class="work"><span class="wt"><span class="lvi">Ví dụ 4 — ghép liên tục</span><span class="len">Example 4 — continuous</span></span>
+        <span class="lvi">$10.000, 5%/năm ghép liên tục, 5 năm.</span><span class="len">$10,000 at 5%/year compounded continuously, 5 years.</span>
+        <div class="calc">FV = 10,000 × e<sup>0.05×5</sup> = 10,000 × 1.28403 = <span class="res">$12,840.25</span></div></div>
+      <div class="note tip"><span class="lbl"><span class="lvi">Ghi nhớ</span><span class="len">Remember</span></span><span class="lvi">Ghép lãi càng <b>nhiều lần/năm</b> → FV càng <b>lớn</b>. Cực đại là ghép liên tục. Phần "interest on interest" tăng dần mỗi kỳ → tăng trưởng <b>hàm mũ</b>, không tuyến tính.</span><span class="len">The <b>more times/year</b> you compound → the <b>larger</b> the FV. The maximum is continuous compounding. "Interest on interest" grows each period → <b>exponential</b>, not linear, growth.</span></div>
     </div>
 
     <div class="card">
-      <h3><span>⏪</span> 5.3 — Giá trị hiện tại (PV) & Chiết khấu</h3>
-      <p><b>Discounting</b> (chiết khấu) = ngược của ghép lãi: quy dòng tiền tương lai về hôm nay. Lãi suất khi đó gọi là <b>discount rate</b>.</p>
-      <div class="formula"><span class="fname">PV cơ bản · Eq 5.4</span>
+      <h3><span>⏪</span> <span class="lvi">5.3 — Giá trị hiện tại (PV) & Chiết khấu</span><span class="len">5.3 — Present Value (PV) & discounting</span></h3>
+      <p class="lvi"><b>Discounting</b> (chiết khấu) = ngược của ghép lãi: quy dòng tiền tương lai về hôm nay. Lãi suất khi đó gọi là <b>discount rate</b>.</p>
+      <p class="len"><b>Discounting</b> = the reverse of compounding: bringing a future cash flow back to today. The rate is then called the <b>discount rate</b>.</p>
+      <div class="formula"><span class="fname"><span class="lvi">PV cơ bản · Eq 5.4</span><span class="len">Basic PV · Eq 5.4</span></span>
         <span class="eq">PV = <span class="frac"><span>FV<sub>n</sub></span><span>(1 + i)<sup>n</sup></span></span></span></div>
-      <p class="vars">Thừa số PV = <b>nghịch đảo</b> của thừa số FV. FV và PV là <b>cùng một công thức</b>, chỉ sắp xếp khác.</p>
-      <div class="work"><span class="wt">Ví dụ — gửi bao nhiêu hôm nay?</span>
-        Muốn có $40.000 sau 1 năm, lãi 5%.
-        <div class="calc">PV = 40.000 / (1,05)<sup>1</sup> = <span class="res">$38.095,24</span></div>
-        Nếu lãi 15%: PV = 40.000/1,15 = <span class="res">$34.782,61</span> (lãi cao hơn → PV nhỏ hơn).</div>
-      <div class="note"><span class="lbl">2 quy luật PV</span>
-        ⏳ Thời gian càng <b>dài</b> → PV càng <b>nhỏ</b>. &nbsp; 📈 Lãi suất chiết khấu càng <b>cao</b> → PV càng <b>nhỏ</b>.</div>
+      <p class="vars lvi">Thừa số PV = <b>nghịch đảo</b> của thừa số FV. FV và PV là <b>cùng một công thức</b>, chỉ sắp xếp khác.</p>
+      <p class="vars len">The PV factor = the <b>reciprocal</b> of the FV factor. FV and PV are the <b>same formula</b>, just rearranged.</p>
+      <div class="work"><span class="wt"><span class="lvi">Ví dụ — gửi bao nhiêu hôm nay?</span><span class="len">Example — how much to deposit today?</span></span>
+        <span class="lvi">Muốn có $40.000 sau 1 năm, lãi 5%.</span><span class="len">You want $40,000 in 1 year at 5%.</span>
+        <div class="calc">PV = 40,000 / (1.05)<sup>1</sup> = <span class="res">$38,095.24</span></div>
+        <span class="lvi">Nếu lãi 15%: PV = 40,000/1.15 = <span class="res">$34,782.61</span> (lãi cao hơn → PV nhỏ hơn).</span><span class="len">At 15%: PV = 40,000/1.15 = <span class="res">$34,782.61</span> (higher rate → smaller PV).</span></div>
+      <div class="note"><span class="lbl"><span class="lvi">2 quy luật PV</span><span class="len">2 rules of PV</span></span>
+        <span class="lvi">⏳ Thời gian càng <b>dài</b> → PV càng <b>nhỏ</b>. &nbsp; 📈 Lãi suất chiết khấu càng <b>cao</b> → PV càng <b>nhỏ</b>.</span>
+        <span class="len">⏳ The <b>longer</b> the time → the <b>smaller</b> the PV. &nbsp; 📈 The <b>higher</b> the discount rate → the <b>smaller</b> the PV.</span></div>
     </div>
 
     <div class="card">
-      <h3><span>🔑</span> 5.4 — Tìm lãi suất, số kỳ & tăng trưởng</h3>
-      <div class="formula"><span class="fname">Quy tắc 72 — thời gian để gấp đôi · Eq 5.5</span>
+      <h3><span>🔑</span> <span class="lvi">5.4 — Tìm lãi suất, số kỳ & tăng trưởng</span><span class="len">5.4 — Finding rate, periods & growth</span></h3>
+      <div class="formula"><span class="fname"><span class="lvi">Quy tắc 72 — thời gian để gấp đôi · Eq 5.5</span><span class="len">Rule of 72 — time to double · Eq 5.5</span></span>
         <span class="eq">TDM ≈ <span class="frac"><span>72</span><span>i (%)</span></span></span></div>
-      <p class="vars">Khá chính xác với lãi suất 5%–20%.</p>
-      <div class="formula"><span class="fname">Tốc độ tăng trưởng kép · Eq 5.6</span><span class="eq">FV<sub>n</sub> = PV × (1 + g)<sup>n</sup></span></div>
-      <div class="work"><span class="wt">Ví dụ Rule of 72</span>
-        Lãi 8%/năm → gấp đôi sau ≈ 72/8 = <span class="res">9 năm</span>.</div>
-      <div class="work"><span class="wt">Ví dụ tăng trưởng</span>
-        Doanh thu từ $20 triệu lên $35 triệu trong 3 năm. Tốc độ tăng bình quân?
-        <div class="calc">35 = 20 × (1+g)<sup>3</sup> → (1+g)<sup>3</sup> = 1,75 → 1+g = 1,75<sup>1/3</sup> = 1,2051</div>
-        <div class="calc">g = <span class="res">20,5%/năm</span></div></div>
-      <div class="note tip"><span class="lbl">Compounding không chỉ dành cho tiền</span>Công thức (1+g)<sup>n</sup> dùng được cho tăng trưởng doanh thu, dân số, lượng người dùng…</div>
+      <p class="vars lvi">Khá chính xác với lãi suất 5%–20%.</p>
+      <p class="vars len">Fairly accurate for rates of 5%–20%.</p>
+      <div class="formula"><span class="fname"><span class="lvi">Tốc độ tăng trưởng kép · Eq 5.6</span><span class="len">Compound growth rate · Eq 5.6</span></span><span class="eq">FV<sub>n</sub> = PV × (1 + g)<sup>n</sup></span></div>
+      <div class="work"><span class="wt"><span class="lvi">Ví dụ Rule of 72</span><span class="len">Rule of 72 example</span></span>
+        <span class="lvi">Lãi 8%/năm → gấp đôi sau ≈ 72/8 = <span class="res">9 năm</span>.</span><span class="len">At 8%/year → doubles in ≈ 72/8 = <span class="res">9 years</span>.</span></div>
+      <div class="work"><span class="wt"><span class="lvi">Ví dụ tăng trưởng</span><span class="len">Growth example</span></span>
+        <span class="lvi">Doanh thu từ $20 triệu lên $35 triệu trong 3 năm. Tốc độ tăng bình quân?</span><span class="len">Sales rise from $20M to $35M over 3 years. Average growth rate?</span>
+        <div class="calc">35 = 20 × (1+g)<sup>3</sup> → (1+g)<sup>3</sup> = 1.75 → 1+g = 1.75<sup>1/3</sup> = 1.2051</div>
+        <div class="calc"><span class="lvi">g = <span class="res">20,5%/năm</span></span><span class="len">g = <span class="res">20.5%/year</span></span></div></div>
+      <div class="note tip"><span class="lbl"><span class="lvi">Compounding không chỉ dành cho tiền</span><span class="len">Compounding isn't only for money</span></span><span class="lvi">Công thức (1+g)<sup>n</sup> dùng được cho tăng trưởng doanh thu, dân số, lượng người dùng…</span><span class="len">The formula (1+g)<sup>n</sup> works for growth in sales, population, users…</span></div>
     </div>
   </section>
 
   <!-- ============ CHƯƠNG 6 ============ -->
   <section id="ch6">
-    <div class="sec-head"><div class="num">6</div><h2>Dòng tiền chiết khấu & Định giá</h2></div>
+    <div class="sec-head"><div class="num">6</div><h2><span class="lvi">Dòng tiền chiết khấu & Định giá</span><span class="len">Discounted Cash Flows & Valuation</span></h2></div>
     <p class="sec-sub">Discounted Cash Flows and Valuation</p>
-    <div class="lead">Mở rộng chương 5 cho <b>chuỗi nhiều dòng tiền</b>: vay trả góp, niên kim, cổ phiếu — và cách quy đổi lãi suất cho đúng.</div>
+    <div class="lead lvi">Mở rộng chương 5 cho <b>chuỗi nhiều dòng tiền</b>: vay trả góp, niên kim, cổ phiếu — và cách quy đổi lãi suất cho đúng.</div>
+    <div class="lead len">Extends Chapter 5 to <b>streams of multiple cash flows</b>: installment loans, annuities, stocks — and how to convert interest rates correctly.</div>
 
     <div class="card">
-      <h3><span>➕</span> 6.1 — Nhiều dòng tiền (Multiple Cash Flows)</h3>
-      <p>Quy tắc 3 bước (cho cả FV và PV):</p>
+      <h3><span>➕</span> <span class="lvi">6.1 — Nhiều dòng tiền (Multiple Cash Flows)</span><span class="len">6.1 — Multiple cash flows</span></h3>
+      <p class="lvi">Quy tắc 3 bước (cho cả FV và PV):</p>
+      <p class="len">A 3-step rule (for both FV and PV):</p>
       <ol class="step">
-        <li>Vẽ <b>trục thời gian</b> xác định mỗi dòng tiền cách hiện tại bao nhiêu kỳ.</li>
-        <li>Tính FV (hoặc PV) của <b>từng</b> dòng tiền bằng công thức chương 5.</li>
-        <li><b>Cộng</b> tất cả lại.</li>
+        <li class="lvi">Vẽ <b>trục thời gian</b> xác định mỗi dòng tiền cách hiện tại bao nhiêu kỳ.</li>
+        <li class="len">Draw a <b>time line</b> to find how many periods each cash flow is from now.</li>
+        <li class="lvi">Tính FV (hoặc PV) của <b>từng</b> dòng tiền bằng công thức chương 5.</li>
+        <li class="len">Compute the FV (or PV) of <b>each</b> cash flow using the Chapter 5 formula.</li>
+        <li class="lvi"><b>Cộng</b> tất cả lại.</li>
+        <li class="len"><b>Add</b> them all up.</li>
       </ol>
-      <p class="vars">VD: vay 3 năm, mỗi năm trả $1.000 cuối kỳ, lãi 7% → PV khoản vay = $2.624,32 (cộng PV của 3 dòng tiền).</p>
+      <p class="vars lvi">VD: vay 3 năm, mỗi năm trả $1.000 cuối kỳ, lãi 7% → PV khoản vay = $2.624,32 (cộng PV của 3 dòng tiền).</p>
+      <p class="vars len">E.g. a 3-year loan paying $1,000 at year-end at 7% → loan PV = $2,624.32 (sum of the 3 cash flows' PVs).</p>
     </div>
 
     <div class="card">
-      <h3><span>💠</span> 6.2 — Niên kim (Annuity)</h3>
-      <p>Chuỗi dòng tiền <b>đều, cách đều</b> nhau trong số kỳ <b>hữu hạn</b>.</p>
+      <h3><span>💠</span> <span class="lvi">6.2 — Niên kim (Annuity)</span><span class="len">6.2 — Annuities</span></h3>
+      <p class="lvi">Chuỗi dòng tiền <b>đều, cách đều</b> nhau trong số kỳ <b>hữu hạn</b>.</p>
+      <p class="len">A stream of <b>level, equally-spaced</b> cash flows over a <b>finite</b> number of periods.</p>
       <div class="scroll">
-      <table class="tbl">
+      <table class="tbl lvi">
         <tr><th>Loại</th><th>Dòng tiền xảy ra</th><th>Ví dụ thực tế</th></tr>
         <tr><td><b>Ordinary Annuity</b></td><td><b>Cuối kỳ</b></td><td>Trả góp vay, lãi trái phiếu</td></tr>
         <tr><td><b>Annuity Due</b></td><td><b>Đầu kỳ</b></td><td>Tiền thuê nhà, bảo hiểm xe</td></tr>
       </table>
+      <table class="tbl len">
+        <tr><th>Type</th><th>Cash flows occur</th><th>Real example</th></tr>
+        <tr><td><b>Ordinary Annuity</b></td><td><b>End of period</b></td><td>Loan installments, bond coupons</td></tr>
+        <tr><td><b>Annuity Due</b></td><td><b>Beginning of period</b></td><td>Rent, car insurance</td></tr>
+      </table>
       </div>
-      <div class="formula"><span class="fname">PV niên kim thường · Eq 6.1</span>
+      <div class="formula"><span class="fname"><span class="lvi">PV niên kim thường · Eq 6.1</span><span class="len">PV of ordinary annuity · Eq 6.1</span></span>
         <span class="eq">PVA<sub>n</sub> = CF × <span class="frac"><span>1 − 1/(1+i)<sup>n</sup></span><span>i</span></span></span></div>
-      <div class="formula"><span class="fname">FV niên kim thường · Eq 6.2</span>
+      <div class="formula"><span class="fname"><span class="lvi">FV niên kim thường · Eq 6.2</span><span class="len">FV of ordinary annuity · Eq 6.2</span></span>
         <span class="eq">FVA<sub>n</sub> = CF × <span class="frac"><span>(1+i)<sup>n</sup> − 1</span><span>i</span></span></span></div>
-      <div class="formula"><span class="fname">Chuyển đổi niên kim đầu kỳ · Eq 6.4</span>
-        <span class="eq">Giá trị Annuity Due = Giá trị Ordinary Annuity × (1 + i)</span></div>
+      <div class="formula"><span class="fname"><span class="lvi">Chuyển đổi niên kim đầu kỳ · Eq 6.4</span><span class="len">Annuity-due conversion · Eq 6.4</span></span>
+        <span class="eq lvi">Giá trị Annuity Due = Giá trị Ordinary Annuity × (1 + i)</span><span class="eq len">Annuity Due value = Ordinary Annuity value × (1 + i)</span></div>
 
-      <div class="work"><span class="wt">Ví dụ PV — định giá hợp đồng</span>
-        Hợp đồng trả $2.000 cuối mỗi năm trong 3 năm, lãi chiết khấu 8%. Giá hợp lý?
-        <div class="calc">PV factor = [1 − 1/(1,08)<sup>3</sup>] / 0,08 = 2,5771</div>
-        <div class="calc">PVA = 2.000 × 2,5771 = <span class="res">$5.154,19</span></div></div>
-      <div class="work"><span class="wt">Ví dụ FV — tiết kiệm mua xe đạp Colnago</span>
-        Gửi $1.000 cuối mỗi năm, lãi 8%, 4 năm. Đủ mua xe $4.500 không?
-        <div class="calc">FV factor = [(1,08)<sup>4</sup> − 1]/0,08 = 4,5061</div>
-        <div class="calc">FVA = 1.000 × 4,5061 = <span class="res">$4.506,11</span></div>
-        → Vừa đủ mua xe $4.500. ✅</div>
-      <div class="note exam"><span class="lbl">Quy tắc nhớ</span>
-        Niên kim <b>đầu kỳ (due) LUÔN lớn hơn</b> niên kim thường, vì dòng tiền dịch sớm 1 kỳ → chiết khấu ít hơn (PV) / sinh lãi thêm 1 kỳ (FV). VD: PV due $3.577 &gt; PV ordinary $3.312.</div>
+      <div class="work"><span class="wt"><span class="lvi">Ví dụ PV — định giá hợp đồng</span><span class="len">PV example — pricing a contract</span></span>
+        <span class="lvi">Hợp đồng trả $2.000 cuối mỗi năm trong 3 năm, lãi chiết khấu 8%. Giá hợp lý?</span><span class="len">A contract pays $2,000 at each year-end for 3 years, discount rate 8%. Fair price?</span>
+        <div class="calc">PV factor = [1 − 1/(1.08)<sup>3</sup>] / 0.08 = 2.5771</div>
+        <div class="calc">PVA = 2,000 × 2.5771 = <span class="res">$5,154.19</span></div></div>
+      <div class="work"><span class="wt"><span class="lvi">Ví dụ FV — tiết kiệm mua xe đạp Colnago</span><span class="len">FV example — saving for a Colnago bike</span></span>
+        <span class="lvi">Gửi $1.000 cuối mỗi năm, lãi 8%, 4 năm. Đủ mua xe $4.500 không?</span><span class="len">Save $1,000 at each year-end at 8% for 4 years. Enough for a $4,500 bike?</span>
+        <div class="calc">FV factor = [(1.08)<sup>4</sup> − 1]/0.08 = 4.5061</div>
+        <div class="calc">FVA = 1,000 × 4.5061 = <span class="res">$4,506.11</span></div>
+        <span class="lvi">→ Vừa đủ mua xe $4.500. ✅</span><span class="len">→ Just enough for the $4,500 bike. ✅</span></div>
+      <div class="note exam"><span class="lbl"><span class="lvi">Quy tắc nhớ</span><span class="len">Rule to remember</span></span>
+        <span class="lvi">Niên kim <b>đầu kỳ (due) LUÔN lớn hơn</b> niên kim thường, vì dòng tiền dịch sớm 1 kỳ → chiết khấu ít hơn (PV) / sinh lãi thêm 1 kỳ (FV). VD: PV due $3.577 &gt; PV ordinary $3.312.</span>
+        <span class="len">An <b>annuity due is ALWAYS larger</b> than an ordinary annuity, because cash flows shift one period earlier → discounted less (PV) / earn one more period (FV). E.g. PV due $3,577 &gt; PV ordinary $3,312.</span></div>
     </div>
 
     <div class="card">
@@ -906,7 +1165,7 @@
         Dòng tiền năm rồi $450.000, tăng 5%/năm mãi mãi, chiết khấu 18%.
         <div class="calc">CF kỳ tới = 450.000 × 1,05 = 472.500</div>
         <div class="calc">PV = 472.500 / (0,18 − 0,05) = <span class="res">$3.634.615</span></div></div>
-      <div class="note warn"><span class="lbl">Điều kiện bắt buộc</span>Công thức tăng trưởng chỉ đúng khi <b>g &lt; i</b> (nếu không mẫu âm/bằng 0, vô nghĩa). Ứng dụng: cổ phiếu ưu đãi = perpetuity; cổ phiếu thường tăng cổ tức = growing perpetuity.</div>
+      <div class="note warn"><span class="lbl"><span class="lvi">Điều kiện bắt buộc</span><span class="len">Required condition</span></span><span class="lvi">Công thức tăng trưởng chỉ đúng khi <b>g &lt; i</b> (nếu không mẫu âm/bằng 0, vô nghĩa). Ứng dụng: cổ phiếu ưu đãi = perpetuity; cổ phiếu thường tăng cổ tức = growing perpetuity.</span><span class="len">The growing-perpetuity formula only holds when <b>g &lt; i</b> (otherwise the denominator is zero/negative and meaningless). Applications: preferred stock = perpetuity; common stock with rising dividends = growing perpetuity.</span></div>
     </div>
 
     <div class="card">
@@ -926,180 +1185,195 @@
         <div class="calc">B: 10,90% ghép năm → EAR = 10,90%</div>
         <div class="calc">C: 10,50% ghép quý → EAR = 10,92%</div>
         → Rẻ nhất là <span class="res">Ngân hàng B</span> (EAR thấp nhất), dù APR không phải thấp nhất!</div>
-      <div class="note key"><span class="lbl">Quy tắc vàng khi tính PV/FV</span>
-        Luôn dùng <b>lãi suất theo kỳ (APR/m)</b> HOẶC <b>EAR</b> làm lãi suất — cả hai đều phản ánh đúng tác động ghép lãi. Ghép càng dày → EAR càng vượt APR.</div>
+      <div class="note key"><span class="lbl"><span class="lvi">Quy tắc vàng khi tính PV/FV</span><span class="len">Golden rule for PV/FV</span></span>
+        <span class="lvi">Luôn dùng <b>lãi suất theo kỳ (APR/m)</b> HOẶC <b>EAR</b> làm lãi suất — cả hai đều phản ánh đúng tác động ghép lãi. Ghép càng dày → EAR càng vượt APR.</span><span class="len">Always use the <b>per-period rate (APR/m)</b> OR the <b>EAR</b> as your rate — both correctly capture the compounding effect. The more frequent the compounding → the more EAR exceeds APR.</span></div>
     </div>
   </section>
 
   <!-- ============ BỘ CÔNG THỨC ============ -->
   <section id="congthuc">
-    <div class="sec-head"><div class="num">📐</div><h2>Bộ công thức tra cứu nhanh</h2></div>
-    <p class="sec-sub">In ra hoặc lưu lại để ôn cấp tốc trước khi thi.</p>
+    <div class="sec-head"><div class="num">📐</div><h2><span class="lvi">Bộ công thức tra cứu nhanh</span><span class="len">Quick formula reference</span></h2></div>
+    <p class="sec-sub lvi">In ra hoặc lưu lại để ôn cấp tốc trước khi thi.</p>
+    <p class="sec-sub len">Print or save it for last-minute revision before the exam.</p>
     <div class="grid two">
       <div class="card"><h3>⏱️ TVM (C5)</h3>
         <table class="tbl">
-          <tr><th>Khái niệm</th><th>Công thức</th></tr>
-          <tr><td>FV cơ bản</td><td>PV(1+i)<sup>n</sup></td></tr>
-          <tr><td>FV ghép m lần</td><td>PV(1+i/m)<sup>mn</sup></td></tr>
-          <tr><td>FV liên tục</td><td>PV·e<sup>in</sup></td></tr>
+          <tr><th><span class="lvi">Khái niệm</span><span class="len">Concept</span></th><th><span class="lvi">Công thức</span><span class="len">Formula</span></th></tr>
+          <tr><td><span class="lvi">FV cơ bản</span><span class="len">Basic FV</span></td><td>PV(1+i)<sup>n</sup></td></tr>
+          <tr><td><span class="lvi">FV ghép m lần</span><span class="len">FV, m compoundings</span></td><td>PV(1+i/m)<sup>mn</sup></td></tr>
+          <tr><td><span class="lvi">FV liên tục</span><span class="len">Continuous FV</span></td><td>PV·e<sup>in</sup></td></tr>
           <tr><td>PV</td><td>FV/(1+i)<sup>n</sup></td></tr>
-          <tr><td>Quy tắc 72</td><td>72/i(%)</td></tr>
-          <tr><td>Tăng trưởng</td><td>FV=PV(1+g)<sup>n</sup></td></tr>
+          <tr><td><span class="lvi">Quy tắc 72</span><span class="len">Rule of 72</span></td><td>72/i(%)</td></tr>
+          <tr><td><span class="lvi">Tăng trưởng</span><span class="len">Growth</span></td><td>FV=PV(1+g)<sup>n</sup></td></tr>
         </table></div>
-      <div class="card"><h3>💠 Niên kim & Định giá (C6)</h3>
+      <div class="card"><h3>💠 <span class="lvi">Niên kim & Định giá (C6)</span><span class="len">Annuities & Valuation (C6)</span></h3>
         <table class="tbl">
-          <tr><th>Khái niệm</th><th>Công thức</th></tr>
+          <tr><th><span class="lvi">Khái niệm</span><span class="len">Concept</span></th><th><span class="lvi">Công thức</span><span class="len">Formula</span></th></tr>
           <tr><td>PV annuity</td><td>CF·[1−(1+i)<sup>−n</sup>]/i</td></tr>
           <tr><td>FV annuity</td><td>CF·[(1+i)<sup>n</sup>−1]/i</td></tr>
           <tr><td>Annuity due</td><td>Ordinary×(1+i)</td></tr>
           <tr><td>Perpetuity</td><td>CF/i</td></tr>
           <tr><td>Growing perp.</td><td>CF/(i−g), g&lt;i</td></tr>
-          <tr><td>APR</td><td>lãi suất kỳ × m</td></tr>
+          <tr><td>APR</td><td><span class="lvi">lãi suất kỳ × m</span><span class="len">periodic rate × m</span></td></tr>
           <tr><td>EAR</td><td>(1+APR/m)<sup>m</sup>−1</td></tr>
         </table></div>
-      <div class="card"><h3>🧮 Chỉ số tài chính (C4)</h3>
+      <div class="card"><h3>🧮 <span class="lvi">Chỉ số tài chính (C4)</span><span class="len">Financial ratios (C4)</span></h3>
         <table class="tbl">
-          <tr><th>Chỉ số</th><th>Công thức</th></tr>
-          <tr><td>Current ratio</td><td>TSNH/Nợ NH</td></tr>
-          <tr><td>Quick ratio</td><td>(TSNH−Tồn kho)/Nợ NH</td></tr>
-          <tr><td>Vòng quay tồn kho</td><td>COGS/Tồn kho</td></tr>
-          <tr><td>Vòng quay TTS</td><td>Doanh thu/Tổng TS</td></tr>
-          <tr><td>Total debt ratio</td><td>Tổng nợ/Tổng TS</td></tr>
-          <tr><td>Equity multiplier</td><td>Tổng TS/Vốn CSH</td></tr>
-          <tr><td>TIE</td><td>EBIT/Lãi vay</td></tr>
-          <tr><td>Net margin</td><td>NI/Doanh thu</td></tr>
-          <tr><td>ROA</td><td>NI/Tổng TS</td></tr>
-          <tr><td>ROE</td><td>NI/Vốn CSH</td></tr>
-          <tr><td>EPS</td><td>NI/Số cổ phần</td></tr>
-          <tr><td>P/E</td><td>Giá CP/EPS</td></tr>
+          <tr><th><span class="lvi">Chỉ số</span><span class="len">Ratio</span></th><th><span class="lvi">Công thức</span><span class="len">Formula</span></th></tr>
+          <tr><td>Current ratio</td><td><span class="lvi">TSNH/Nợ NH</span><span class="len">CA/CL</span></td></tr>
+          <tr><td>Quick ratio</td><td><span class="lvi">(TSNH−Tồn kho)/Nợ NH</span><span class="len">(CA−Inventory)/CL</span></td></tr>
+          <tr><td><span class="lvi">Vòng quay tồn kho</span><span class="len">Inventory turnover</span></td><td><span class="lvi">COGS/Tồn kho</span><span class="len">COGS/Inventory</span></td></tr>
+          <tr><td><span class="lvi">Vòng quay TTS</span><span class="len">Total-asset turnover</span></td><td><span class="lvi">Doanh thu/Tổng TS</span><span class="len">Sales/Total assets</span></td></tr>
+          <tr><td>Total debt ratio</td><td><span class="lvi">Tổng nợ/Tổng TS</span><span class="len">Total debt/Total assets</span></td></tr>
+          <tr><td>Equity multiplier</td><td><span class="lvi">Tổng TS/Vốn CSH</span><span class="len">Total assets/Equity</span></td></tr>
+          <tr><td>TIE</td><td><span class="lvi">EBIT/Lãi vay</span><span class="len">EBIT/Interest</span></td></tr>
+          <tr><td>Net margin</td><td><span class="lvi">NI/Doanh thu</span><span class="len">NI/Sales</span></td></tr>
+          <tr><td>ROA</td><td><span class="lvi">NI/Tổng TS</span><span class="len">NI/Total assets</span></td></tr>
+          <tr><td>ROE</td><td><span class="lvi">NI/Vốn CSH</span><span class="len">NI/Equity</span></td></tr>
+          <tr><td>EPS</td><td><span class="lvi">NI/Số cổ phần</span><span class="len">NI/Shares</span></td></tr>
+          <tr><td>P/E</td><td><span class="lvi">Giá CP/EPS</span><span class="len">Share price/EPS</span></td></tr>
         </table></div>
-      <div class="card"><h3>🧬 DuPont · BCTC · Lãi suất</h3>
+      <div class="card"><h3>🧬 <span class="lvi">DuPont · BCTC · Lãi suất</span><span class="len">DuPont · Statements · Rates</span></h3>
         <table class="tbl">
-          <tr><th>Khái niệm</th><th>Công thức</th></tr>
-          <tr><td>ROA DuPont</td><td>Net margin × Vòng quay TTS</td></tr>
+          <tr><th><span class="lvi">Khái niệm</span><span class="len">Concept</span></th><th><span class="lvi">Công thức</span><span class="len">Formula</span></th></tr>
+          <tr><td>ROA DuPont</td><td><span class="lvi">Net margin × Vòng quay TTS</span><span class="len">Net margin × Asset turnover</span></td></tr>
           <tr><td>ROE DuPont</td><td>ROA × Equity multiplier</td></tr>
-          <tr><td>ROE 3 yếu tố</td><td>Margin×Turnover×EM</td></tr>
-          <tr><td>PT kế toán</td><td>TS = Nợ + Vốn CSH</td></tr>
-          <tr><td>NWC</td><td>TSNH − Nợ NH</td></tr>
-          <tr><td>Net income</td><td>Doanh thu − Chi phí</td></tr>
-          <tr><td>Thuế bình quân</td><td>Tổng thuế/TN chịu thuế</td></tr>
-          <tr><td>Fisher đầy đủ</td><td>i = r+ΔP<sup>e</sup>+r·ΔP<sup>e</sup></td></tr>
-          <tr><td>Fisher gần đúng</td><td>i ≈ r+ΔP<sup>e</sup></td></tr>
+          <tr><td><span class="lvi">ROE 3 yếu tố</span><span class="len">ROE, 3 factors</span></td><td>Margin×Turnover×EM</td></tr>
+          <tr><td><span class="lvi">PT kế toán</span><span class="len">Accounting eq.</span></td><td><span class="lvi">TS = Nợ + Vốn CSH</span><span class="len">Assets = Liab. + Equity</span></td></tr>
+          <tr><td>NWC</td><td><span class="lvi">TSNH − Nợ NH</span><span class="len">CA − CL</span></td></tr>
+          <tr><td>Net income</td><td><span class="lvi">Doanh thu − Chi phí</span><span class="len">Revenue − Expenses</span></td></tr>
+          <tr><td><span class="lvi">Thuế bình quân</span><span class="len">Average tax rate</span></td><td><span class="lvi">Tổng thuế/TN chịu thuế</span><span class="len">Total tax/Taxable income</span></td></tr>
+          <tr><td><span class="lvi">Fisher đầy đủ</span><span class="len">Fisher (full)</span></td><td>i = r+ΔP<sup>e</sup>+r·ΔP<sup>e</sup></td></tr>
+          <tr><td><span class="lvi">Fisher gần đúng</span><span class="len">Fisher (approx.)</span></td><td>i ≈ r+ΔP<sup>e</sup></td></tr>
         </table></div>
     </div>
   </section>
 
   <!-- ============ MÁY TÍNH ============ -->
   <section id="maytinh">
-    <div class="sec-head"><div class="num">🧮</div><h2>Máy tính tài chính tích hợp</h2></div>
-    <p class="sec-sub">Nhập số để tự kiểm tra bài tập. Tính ngay trên trình duyệt, không cần mạng.</p>
+    <div class="sec-head"><div class="num">🧮</div><h2><span class="lvi">Máy tính tài chính tích hợp</span><span class="len">Built-in financial calculator</span></h2></div>
+    <p class="sec-sub lvi">Nhập số để tự kiểm tra bài tập. Tính ngay trên trình duyệt, không cần mạng.</p>
+    <p class="sec-sub len">Enter numbers to check your work. Computes right in the browser, no internet needed.</p>
 
     <div class="grid two">
       <div class="card">
-        <h3>⏩ FV / PV (lãi kép)</h3>
+        <h3>⏩ <span class="lvi">FV / PV (lãi kép)</span><span class="len">FV / PV (compound interest)</span></h3>
         <div class="calcbox">
-          <div class="row"><label>Giá trị hiện tại PV ($)</label><input id="c_pv" type="number" value="10000"></div>
-          <div class="row"><label>Lãi suất/năm i (%)</label><input id="c_i" type="number" value="8"></div>
-          <div class="row"><label>Số năm n</label><input id="c_n" type="number" value="5"></div>
-          <div class="row"><label>Ghép lãi m lần/năm</label><input id="c_m" type="number" value="1"></div>
-          <div class="row"><button class="btn" onclick="calcFV()">Tính FV</button><span class="out" id="c_fvOut">—</span></div>
-          <div class="row"><button class="btn ghost" onclick="calcPV()">Ngược: coi ô PV là FV → tính PV</button><span class="out" id="c_pvOut">—</span></div>
+          <div class="row"><label><span class="lvi">Giá trị hiện tại PV ($)</span><span class="len">Present value PV ($)</span></label><input id="c_pv" type="number" value="10000"></div>
+          <div class="row"><label><span class="lvi">Lãi suất/năm i (%)</span><span class="len">Rate/year i (%)</span></label><input id="c_i" type="number" value="8"></div>
+          <div class="row"><label><span class="lvi">Số năm n</span><span class="len">Years n</span></label><input id="c_n" type="number" value="5"></div>
+          <div class="row"><label><span class="lvi">Ghép lãi m lần/năm</span><span class="len">Compounding m times/year</span></label><input id="c_m" type="number" value="1"></div>
+          <div class="row"><button class="btn" onclick="calcFV()"><span class="lvi">Tính FV</span><span class="len">Compute FV</span></button><span class="out" id="c_fvOut">—</span></div>
+          <div class="row"><button class="btn ghost" onclick="calcPV()"><span class="lvi">Ngược: coi ô PV là FV → tính PV</span><span class="len">Reverse: treat PV box as FV → get PV</span></button><span class="out" id="c_pvOut">—</span></div>
         </div>
-        <p class="vars">FV = PV(1+i/m)<sup>mn</sup>. Đặt m=1 cho ghép năm.</p>
+        <p class="vars lvi">FV = PV(1+i/m)<sup>mn</sup>. Đặt m=1 cho ghép năm.</p>
+        <p class="vars len">FV = PV(1+i/m)<sup>mn</sup>. Set m=1 for annual compounding.</p>
       </div>
 
       <div class="card">
-        <h3>💠 Niên kim (Annuity) & EAR</h3>
+        <h3>💠 <span class="lvi">Niên kim (Annuity) & EAR</span><span class="len">Annuity & EAR</span></h3>
         <div class="calcbox">
-          <div class="row"><label>Dòng tiền đều CF ($)</label><input id="a_cf" type="number" value="1000"></div>
-          <div class="row"><label>Lãi suất/kỳ i (%)</label><input id="a_i" type="number" value="8"></div>
-          <div class="row"><label>Số kỳ n</label><input id="a_n" type="number" value="4"></div>
-          <div class="row"><button class="btn" onclick="calcAnn()">Tính PV & FV niên kim</button></div>
+          <div class="row"><label><span class="lvi">Dòng tiền đều CF ($)</span><span class="len">Level cash flow CF ($)</span></label><input id="a_cf" type="number" value="1000"></div>
+          <div class="row"><label><span class="lvi">Lãi suất/kỳ i (%)</span><span class="len">Rate/period i (%)</span></label><input id="a_i" type="number" value="8"></div>
+          <div class="row"><label><span class="lvi">Số kỳ n</span><span class="len">Periods n</span></label><input id="a_n" type="number" value="4"></div>
+          <div class="row"><button class="btn" onclick="calcAnn()"><span class="lvi">Tính PV & FV niên kim</span><span class="len">Compute annuity PV & FV</span></button></div>
           <div class="row"><span class="out" id="a_pvOut">PV: —</span></div>
           <div class="row"><span class="out" id="a_fvOut">FV: —</span></div>
           <hr style="border-color:var(--line);width:100%">
-          <div class="row"><label>APR (%) & m lần ghép</label><input id="e_apr" type="number" value="12"><input id="e_m" type="number" value="12"></div>
-          <div class="row"><button class="btn ghost" onclick="calcEAR()">Tính EAR</button><span class="out" id="e_out">—</span></div>
+          <div class="row"><label><span class="lvi">APR (%) & m lần ghép</span><span class="len">APR (%) & m compoundings</span></label><input id="e_apr" type="number" value="12"><input id="e_m" type="number" value="12"></div>
+          <div class="row"><button class="btn ghost" onclick="calcEAR()"><span class="lvi">Tính EAR</span><span class="len">Compute EAR</span></button><span class="out" id="e_out">—</span></div>
         </div>
       </div>
     </div>
-    <div class="note warn"><span class="lbl">Lưu ý</span>Máy tính dùng lãi suất <b>theo kỳ</b> cho niên kim (vd 8%/năm với CF hằng năm). Kết quả làm tròn 2 chữ số thập phân.</div>
+    <div class="note warn"><span class="lbl"><span class="lvi">Lưu ý</span><span class="len">Note</span></span><span class="lvi">Máy tính dùng lãi suất <b>theo kỳ</b> cho niên kim (vd 8%/năm với CF hằng năm). Kết quả làm tròn 2 chữ số thập phân.</span><span class="len">The calculator uses a <b>per-period</b> rate for annuities (e.g. 8%/year with annual CF). Results are rounded to 2 decimals.</span></div>
   </section>
 
   <!-- ============ THUẬT NGỮ ============ -->
   <section id="thuatngu">
-    <div class="sec-head"><div class="num">📖</div><h2>Từ điển thuật ngữ Anh – Việt</h2></div>
-    <p class="sec-sub">Tra nhanh các thuật ngữ hay gặp trong đề thi.</p>
+    <div class="sec-head"><div class="num">📖</div><h2><span class="lvi">Từ điển thuật ngữ Anh – Việt</span><span class="len">English – Vietnamese glossary</span></h2></div>
+    <p class="sec-sub lvi">Tra nhanh các thuật ngữ hay gặp trong đề thi.</p>
+    <p class="sec-sub len">A quick lookup for terms that frequently appear on exams.</p>
     <div class="card">
       <dl class="glossary">
-        <dt>Residual cash flow</dt><dd>Dòng tiền thặng dư còn lại sau khi DN trả mọi chi phí.</dd>
-        <dt>Capital budgeting</dt><dd>Hoạch định vốn — quyết định đầu tư tài sản dài hạn.</dd>
-        <dt>Working capital</dt><dd>Vốn lưu động — quản trị tài sản & nợ ngắn hạn.</dd>
-        <dt>Agency cost</dt><dd>Chi phí phát sinh từ xung đột lợi ích chủ – người quản lý.</dd>
-        <dt>Double taxation</dt><dd>Đánh thuế hai lần (đặc trưng của C-Corporation).</dd>
-        <dt>Flow-through</dt><dd>Thu nhập "chảy thẳng" về chủ, chỉ chịu thuế một lần.</dd>
-        <dt>Lender-saver / Borrower-spender</dt><dd>Người tiết kiệm cho vay / Người vay chi tiêu.</dd>
-        <dt>Underwriting</dt><dd>Bảo lãnh phát hành chứng khoán.</dd>
-        <dt>Marketability</dt><dd>Mức độ dễ bán một chứng khoán.</dd>
-        <dt>Liquidity</dt><dd>Đổi ra tiền nhanh mà không mất giá.</dd>
-        <dt>Broker / Dealer</dt><dd>Môi giới (ăn hoa hồng) / Nhà tạo lập (mua bán từ kho, chịu rủi ro).</dd>
-        <dt>Intrinsic value</dt><dd>Giá trị nội tại (giá trị thật) của chứng khoán.</dd>
-        <dt>Nominal / Real rate</dt><dd>Lãi suất danh nghĩa (quan sát) / lãi suất thực (loại lạm phát).</dd>
-        <dt>GAAP / IFRS</dt><dd>Chuẩn mực kế toán Mỹ / chuẩn mực kế toán quốc tế.</dd>
-        <dt>Going concern</dt><dd>Giả định DN hoạt động liên tục.</dd>
-        <dt>NWC (Net Working Capital)</dt><dd>Vốn lưu động ròng = TSNH − Nợ NH.</dd>
-        <dt>FIFO / LIFO</dt><dd>Nhập trước xuất trước / Nhập sau xuất trước (phương pháp tính tồn kho).</dd>
-        <dt>EBITDA / EBIT / EBT</dt><dd>LN trước lãi-thuế-khấu hao / trước lãi-thuế / trước thuế.</dd>
-        <dt>Depreciation / Amortization</dt><dd>Khấu hao TS hữu hình / phân bổ TS vô hình (chi phí phi tiền mặt).</dd>
-        <dt>Common-size statement</dt><dd>Báo cáo theo tỷ lệ phần trăm.</dd>
-        <dt>DuPont system</dt><dd>Hệ thống phân tách ROE thành các thành phần.</dd>
-        <dt>Equity multiplier</dt><dd>Hệ số nhân vốn CSH = Tổng TS / Vốn CSH (đo đòn bẩy).</dd>
-        <dt>Benchmark</dt><dd>Chuẩn so sánh (trend, industry, peer group).</dd>
-        <dt>Compounding / Discounting</dt><dd>Ghép lãi (về tương lai) / Chiết khấu (về hiện tại).</dd>
-        <dt>Annuity / Perpetuity</dt><dd>Niên kim (hữu hạn) / niên kim vĩnh viễn.</dd>
-        <dt>Ordinary annuity / Annuity due</dt><dd>Niên kim cuối kỳ / đầu kỳ.</dd>
-        <dt>Amortization (loan)</dt><dd>Lịch trả góp gốc + lãi của khoản vay.</dd>
-        <dt>APR / EAR</dt><dd>Lãi suất danh nghĩa năm / lãi suất hiệu quả năm (có ghép lãi).</dd>
+        <dt>Residual cash flow</dt><dd class="lvi">Dòng tiền thặng dư còn lại sau khi DN trả mọi chi phí.</dd><dd class="len">The leftover cash flow after the firm pays all its costs.</dd>
+        <dt>Capital budgeting</dt><dd class="lvi">Hoạch định vốn — quyết định đầu tư tài sản dài hạn.</dd><dd class="len">Deciding which long-term assets to invest in.</dd>
+        <dt>Working capital</dt><dd class="lvi">Vốn lưu động — quản trị tài sản & nợ ngắn hạn.</dd><dd class="len">Managing short-term assets & liabilities.</dd>
+        <dt>Agency cost</dt><dd class="lvi">Chi phí phát sinh từ xung đột lợi ích chủ – người quản lý.</dd><dd class="len">Costs arising from the owner–manager conflict of interest.</dd>
+        <dt>Double taxation</dt><dd class="lvi">Đánh thuế hai lần (đặc trưng của C-Corporation).</dd><dd class="len">Being taxed twice (a hallmark of the C-Corporation).</dd>
+        <dt>Flow-through</dt><dd class="lvi">Thu nhập "chảy thẳng" về chủ, chỉ chịu thuế một lần.</dd><dd class="len">Income passes straight to owners, taxed only once.</dd>
+        <dt>Lender-saver / Borrower-spender</dt><dd class="lvi">Người tiết kiệm cho vay / Người vay chi tiêu.</dd><dd class="len">The saver who lends / the borrower who spends.</dd>
+        <dt>Underwriting</dt><dd class="lvi">Bảo lãnh phát hành chứng khoán.</dd><dd class="len">Guaranteeing the issuance of securities.</dd>
+        <dt>Marketability</dt><dd class="lvi">Mức độ dễ bán một chứng khoán.</dd><dd class="len">How easily a security can be sold.</dd>
+        <dt>Liquidity</dt><dd class="lvi">Đổi ra tiền nhanh mà không mất giá.</dd><dd class="len">Converting to cash quickly without loss of value.</dd>
+        <dt>Broker / Dealer</dt><dd class="lvi">Môi giới (ăn hoa hồng) / Nhà tạo lập (mua bán từ kho, chịu rủi ro).</dd><dd class="len">Broker (earns commission) / Dealer (trades from own inventory, bears risk).</dd>
+        <dt>Intrinsic value</dt><dd class="lvi">Giá trị nội tại (giá trị thật) của chứng khoán.</dd><dd class="len">The intrinsic (true) value of a security.</dd>
+        <dt>Nominal / Real rate</dt><dd class="lvi">Lãi suất danh nghĩa (quan sát) / lãi suất thực (loại lạm phát).</dd><dd class="len">Nominal rate (observed) / real rate (stripped of inflation).</dd>
+        <dt>GAAP / IFRS</dt><dd class="lvi">Chuẩn mực kế toán Mỹ / chuẩn mực kế toán quốc tế.</dd><dd class="len">US accounting standards / international accounting standards.</dd>
+        <dt>Going concern</dt><dd class="lvi">Giả định DN hoạt động liên tục.</dd><dd class="len">The assumption that the firm keeps operating.</dd>
+        <dt>NWC (Net Working Capital)</dt><dd class="lvi">Vốn lưu động ròng = TSNH − Nợ NH.</dd><dd class="len">Net working capital = current assets − current liabilities.</dd>
+        <dt>FIFO / LIFO</dt><dd class="lvi">Nhập trước xuất trước / Nhập sau xuất trước (phương pháp tính tồn kho).</dd><dd class="len">First-in-first-out / last-in-first-out (inventory costing methods).</dd>
+        <dt>EBITDA / EBIT / EBT</dt><dd class="lvi">LN trước lãi-thuế-khấu hao / trước lãi-thuế / trước thuế.</dd><dd class="len">Earnings before interest-tax-depreciation / before interest-tax / before tax.</dd>
+        <dt>Depreciation / Amortization</dt><dd class="lvi">Khấu hao TS hữu hình / phân bổ TS vô hình (chi phí phi tiền mặt).</dd><dd class="len">Depreciation of tangible / amortization of intangible assets (non-cash expenses).</dd>
+        <dt>Common-size statement</dt><dd class="lvi">Báo cáo theo tỷ lệ phần trăm.</dd><dd class="len">A statement expressed in percentages.</dd>
+        <dt>DuPont system</dt><dd class="lvi">Hệ thống phân tách ROE thành các thành phần.</dd><dd class="len">A system that breaks ROE into its components.</dd>
+        <dt>Equity multiplier</dt><dd class="lvi">Hệ số nhân vốn CSH = Tổng TS / Vốn CSH (đo đòn bẩy).</dd><dd class="len">Equity multiplier = total assets / equity (a leverage measure).</dd>
+        <dt>Benchmark</dt><dd class="lvi">Chuẩn so sánh (trend, industry, peer group).</dd><dd class="len">A comparison standard (trend, industry, peer group).</dd>
+        <dt>Compounding / Discounting</dt><dd class="lvi">Ghép lãi (về tương lai) / Chiết khấu (về hiện tại).</dd><dd class="len">Compounding (to the future) / discounting (to the present).</dd>
+        <dt>Annuity / Perpetuity</dt><dd class="lvi">Niên kim (hữu hạn) / niên kim vĩnh viễn.</dd><dd class="len">Annuity (finite) / perpetuity (forever).</dd>
+        <dt>Ordinary annuity / Annuity due</dt><dd class="lvi">Niên kim cuối kỳ / đầu kỳ.</dd><dd class="len">End-of-period annuity / beginning-of-period annuity.</dd>
+        <dt>Amortization (loan)</dt><dd class="lvi">Lịch trả góp gốc + lãi của khoản vay.</dd><dd class="len">A loan's schedule of principal + interest repayments.</dd>
+        <dt>APR / EAR</dt><dd class="lvi">Lãi suất danh nghĩa năm / lãi suất hiệu quả năm (có ghép lãi).</dd><dd class="len">Annual nominal rate / effective annual rate (with compounding).</dd>
       </dl>
     </div>
   </section>
 
   <!-- ============ QUIZ ============ -->
   <section id="quiz">
-    <div class="sec-head"><div class="num">📝</div><h2>Quiz tự kiểm tra — 50 câu</h2></div>
-    <p class="sec-sub">Lọc theo chương, bấm chọn đáp án, xem giải thích ngay. Có chấm điểm tự động.</p>
+    <div class="sec-head"><div class="num">📝</div><h2><span class="lvi">Quiz tự kiểm tra — 50 câu</span><span class="len">Self-test quiz — 50 questions</span></h2></div>
+    <p class="sec-sub lvi">Lọc theo chương, bấm chọn đáp án, xem giải thích ngay. Có chấm điểm tự động.</p>
+    <p class="sec-sub len">Filter by chapter, pick an answer, see the explanation instantly. Auto-scored.</p>
     <div class="card">
       <div class="quiz-top"><div class="selctrl" id="filterBtns"></div></div>
       <div class="quiz-top">
-        <button class="btn ghost" id="shuffleBtn">🔀 Xáo trộn</button>
-        <button class="btn ghost" id="resetBtn">↺ Làm lại</button>
-        <span class="pill" id="counter">0 câu</span>
+        <button class="btn ghost" id="shuffleBtn">🔀 <span class="lvi">Xáo trộn</span><span class="len">Shuffle</span></button>
+        <button class="btn ghost" id="resetBtn">↺ <span class="lvi">Làm lại</span><span class="len">Reset</span></button>
+        <span class="pill" id="counter">0</span>
       </div>
     </div>
     <div id="quizArea"></div>
     <div class="scorebox"><div class="scoreline">
       <span class="scoreval" id="scoreVal">0 / 0</span>
       <div class="track"><i id="scoreBar"></i></div>
-      <span class="pill" id="scoreMsg">Bắt đầu làm bài nhé!</span>
+      <span class="pill" id="scoreMsg"></span>
     </div></div>
   </section>
 
 </div>
 
 <footer>
-  <p><b>Sổ tay ôn tập Tài chính Doanh nghiệp</b> — nội dung tổng hợp từ giáo trình <i>Fundamentals of Corporate Finance</i>, 5th Ed. (Parrino, Kidwell, Bates, Gillan).</p>
-  <p>Thiết kế &amp; phát triển web bởi <span class="sig">duntk</span> · Chạy hoàn toàn offline · © 2026</p>
-  <p style="opacity:.7">Mẹo: bấm ☰ để mở mục lục · bấm thẻ <span class="kbd">▾</span> để mở rộng công thức.</p>
+  <p class="lvi"><b>Sổ tay ôn tập Tài chính Doanh nghiệp</b> — nội dung tổng hợp từ giáo trình <i>Fundamentals of Corporate Finance</i>, 5th Ed. (Parrino, Kidwell, Bates, Gillan).</p>
+  <p class="len"><b>Corporate Finance Study Guide</b> — content compiled from the textbook <i>Fundamentals of Corporate Finance</i>, 5th Ed. (Parrino, Kidwell, Bates, Gillan).</p>
+  <p class="lvi">Thiết kế &amp; phát triển web bởi <span class="sig">duntk</span> · Chạy hoàn toàn offline · © 2026</p>
+  <p class="len">Designed &amp; built by <span class="sig">duntk</span> · Runs fully offline · © 2026</p>
+  <p class="lvi" style="opacity:.7">Mẹo: bấm ☰ để mở mục lục · bấm thẻ <span class="kbd">▾</span> để mở rộng công thức.</p>
+  <p class="len" style="opacity:.7">Tip: tap ☰ for the contents · tap a <span class="kbd">▾</span> card to expand formulas.</p>
 </footer>
 
 <button class="totop" id="totop" title="Lên đầu trang">↑</button>
 
 <script>
-/* ===== Theme ===== */
+/* ===== Theme (pink → dark → light) ===== */
 const themeBtn=document.getElementById('themeBtn');
-function setTheme(t){document.body.dataset.theme=t;themeBtn.textContent=t==='dark'?'🌙':'☀️';try{localStorage.setItem('cf-theme',t)}catch(e){}}
-themeBtn.onclick=()=>setTheme(document.body.dataset.theme==='dark'?'light':'dark');
-try{const s=localStorage.getItem('cf-theme');if(s)setTheme(s)}catch(e){}
+const THEMES=['pink','dark','light'],THEME_ICON={pink:'🌸',dark:'🌙',light:'☀️'};
+function setTheme(t){document.body.dataset.theme=t;themeBtn.textContent=THEME_ICON[t]||'🌸';try{localStorage.setItem('cf-theme',t)}catch(e){}}
+themeBtn.onclick=()=>{const i=THEMES.indexOf(document.body.dataset.theme);setTheme(THEMES[(i+1)%THEMES.length]);};
+try{const s=localStorage.getItem('cf-theme');if(s)setTheme(s);}catch(e){}
+
+/* ===== Language (vi <-> en) ===== */
+const langBtn=document.getElementById('langBtn');
+function setLang(l){document.body.dataset.lang=l;langBtn.textContent=l==='vi'?'🌐 EN':'🌐 VI';try{localStorage.setItem('cf-lang',l)}catch(e){}if(window.renderQuiz)window.renderQuiz();if(window.syncCalcLang)window.syncCalcLang();}
+langBtn.onclick=()=>setLang(document.body.dataset.lang==='en'?'vi':'en');
+try{const sl=localStorage.getItem('cf-lang');if(sl)setLang(sl);}catch(e){}
 
 /* ===== Drawer ===== */
 const drawer=document.getElementById('drawer'),overlay=document.getElementById('overlay');
@@ -1126,8 +1400,9 @@ function onScroll(){
 document.addEventListener('scroll',onScroll,{passive:true});onScroll();
 totop.onclick=()=>scrollTo({top:0,behavior:'smooth'});
 
-/* ===== Calculators ===== */
-const f2=x=>x.toLocaleString('vi-VN',{minimumFractionDigits:2,maximumFractionDigits:2});
+/* ===== Calculators (bilingual outputs) ===== */
+const f2=x=>x.toLocaleString(document.body.dataset.lang==='en'?'en-US':'vi-VN',{minimumFractionDigits:2,maximumFractionDigits:2});
+let _ann=null;
 function calcFV(){
   const pv=+c_pv.value,i=+c_i.value/100,n=+c_n.value,m=Math.max(1,+c_m.value);
   const fv=pv*Math.pow(1+i/m,m*n);
@@ -1143,99 +1418,110 @@ function calcAnn(){
   let pv,fv;
   if(i===0){pv=cf*n;fv=cf*n;}
   else{pv=cf*(1-Math.pow(1+i,-n))/i;fv=cf*(Math.pow(1+i,n)-1)/i;}
-  a_pvOut.textContent='PV niên kim: $'+f2(pv);
-  a_fvOut.textContent='FV niên kim: $'+f2(fv);
+  _ann={pv,fv};renderAnn();
+}
+function renderAnn(){
+  if(!_ann)return;const en=document.body.dataset.lang==='en';
+  a_pvOut.textContent=(en?'PV annuity: $':'PV niên kim: $')+f2(_ann.pv);
+  a_fvOut.textContent=(en?'FV annuity: $':'FV niên kim: $')+f2(_ann.fv);
 }
 function calcEAR(){
   const apr=+e_apr.value/100,m=Math.max(1,+e_m.value);
   const ear=Math.pow(1+apr/m,m)-1;
   e_out.textContent='EAR = '+(ear*100).toFixed(2)+'%';
 }
+/* re-render the dynamic annuity output when the language changes */
+window.syncCalcLang=renderAnn;
 
 /* ===== QUIZ DATA (50) ===== */
 const QUESTIONS=[
- {ch:'C1',q:'Mục tiêu phù hợp nhất của quản lý tài chính là?',o:['Tối đa hóa lợi nhuận kế toán','Tối đa hóa thị phần','Tối đa hóa giá trị cổ phiếu','Tối thiểu hóa chi phí'],a:2,e:'Giá cổ phiếu phản ánh quy mô, thời điểm và rủi ro của dòng tiền tương lai.'},
- {ch:'C1',q:'Ba quyết định tài chính cốt lõi KHÔNG gồm:',o:['Capital Budgeting','Financing','Working Capital','Stock Pricing'],a:3,e:'Ba quyết định: Capital Budgeting, Financing, Working Capital. Định giá cổ phiếu là kết quả.'},
- {ch:'C1',q:'Loại hình nào bị đánh thuế hai lần?',o:['Sole proprietorship','C-Corporation','S-Corporation','LLC'],a:1,e:'C-Corp nộp thuế TNDN rồi cổ đông nộp thuế cổ tức. Còn lại dùng flow-through.'},
- {ch:'C1',q:'Xung đột đại diện phát sinh chủ yếu do:',o:['Lạm phát','Tách rời sở hữu và kiểm soát','Thiếu vốn lưu động','Thuế biên cao'],a:1,e:'Cổ đông (principal) sở hữu nhưng quản lý (agent) kiểm soát tài sản.'},
- {ch:'C1',q:'Sarbanes-Oxley (2002) yêu cầu:',o:['Giảm thuế còn 21%','CEO & CFO ký xác nhận BCTC','Bỏ ủy ban kiểm toán','Cấm trả cổ tức'],a:1,e:'SOX buộc CEO/CFO ký xác nhận BCTC, tăng độc lập HĐQT, kiểm soát nội bộ.'},
- {ch:'C1',q:'LLC/LLP kết hợp ưu điểm nào?',o:['Trách nhiệm vô hạn + thuế kép','Trách nhiệm hữu hạn + thuế flow-through','Thuế kép + huy động vốn kém','Vòng đời hữu hạn + vô hạn'],a:1,e:'LLC/LLP: trách nhiệm hữu hạn (như corp) + thuế flow-through (như partnership).'},
- {ch:'C1',q:'Chức danh nào KHÔNG báo cáo trực tiếp cho CFO?',o:['Treasurer','Controller','CEO','Risk Manager'],a:2,e:'CFO báo cáo CHO CEO. Treasurer, Controller, Risk Manager, Internal Auditor báo cáo cho CFO.'},
- {ch:'C1',q:'Vì sao KHÔNG nên tối đa hóa thị phần?',o:['Thị phần không đo được','Tặng hàng miễn phí tăng thị phần nhưng không trả nổi hóa đơn','Thị phần luôn giảm','Khách hàng không thích'],a:1,e:'Cho hàng free chiếm thị phần tạm thời nhưng DN sẽ phá sản vì không có tiền.'},
+ {ch:'C1',q:'Mục tiêu phù hợp nhất của quản lý tài chính là?',o:['Tối đa hóa lợi nhuận kế toán','Tối đa hóa thị phần','Tối đa hóa giá trị cổ phiếu','Tối thiểu hóa chi phí'],a:2,e:'Giá cổ phiếu phản ánh quy mô, thời điểm và rủi ro của dòng tiền tương lai.',qe:'The most appropriate goal of financial management is?',oe:['Maximize accounting profit','Maximize market share','Maximize stock value','Minimize costs'],ee:'Stock price reflects the size, timing and risk of future cash flows.'},
+ {ch:'C1',q:'Ba quyết định tài chính cốt lõi KHÔNG gồm:',o:['Capital Budgeting','Financing','Working Capital','Stock Pricing'],a:3,e:'Ba quyết định: Capital Budgeting, Financing, Working Capital. Định giá cổ phiếu là kết quả.',qe:'The three core financial decisions do NOT include:',oe:['Capital Budgeting','Financing','Working Capital','Stock Pricing'],ee:'The three decisions: Capital Budgeting, Financing, Working Capital. Stock pricing is an outcome.'},
+ {ch:'C1',q:'Loại hình nào bị đánh thuế hai lần?',o:['Sole proprietorship','C-Corporation','S-Corporation','LLC'],a:1,e:'C-Corp nộp thuế TNDN rồi cổ đông nộp thuế cổ tức. Còn lại dùng flow-through.',qe:'Which form is subject to double taxation?',oe:['Sole proprietorship','C-Corporation','S-Corporation','LLC'],ee:'A C-Corp pays corporate tax, then shareholders pay tax on dividends. The others use flow-through.'},
+ {ch:'C1',q:'Xung đột đại diện phát sinh chủ yếu do:',o:['Lạm phát','Tách rời sở hữu và kiểm soát','Thiếu vốn lưu động','Thuế biên cao'],a:1,e:'Cổ đông (principal) sở hữu nhưng quản lý (agent) kiểm soát tài sản.',qe:'The agency conflict arises mainly from:',oe:['Inflation','Separation of ownership and control','Lack of working capital','High marginal taxes'],ee:'Shareholders (principals) own, but managers (agents) control the assets.'},
+ {ch:'C1',q:'Sarbanes-Oxley (2002) yêu cầu:',o:['Giảm thuế còn 21%','CEO & CFO ký xác nhận BCTC','Bỏ ủy ban kiểm toán','Cấm trả cổ tức'],a:1,e:'SOX buộc CEO/CFO ký xác nhận BCTC, tăng độc lập HĐQT, kiểm soát nội bộ.',qe:'Sarbanes-Oxley (2002) requires:',oe:['Cutting taxes to 21%','CEO & CFO to certify the financial statements','Abolishing the audit committee','Banning dividends'],ee:'SOX requires CEO/CFO to certify statements, greater board independence, internal controls.'},
+ {ch:'C1',q:'LLC/LLP kết hợp ưu điểm nào?',o:['Trách nhiệm vô hạn + thuế kép','Trách nhiệm hữu hạn + thuế flow-through','Thuế kép + huy động vốn kém','Vòng đời hữu hạn + vô hạn'],a:1,e:'LLC/LLP: trách nhiệm hữu hạn (như corp) + thuế flow-through (như partnership).',qe:'What advantages do LLC/LLP combine?',oe:['Unlimited liability + double tax','Limited liability + flow-through tax','Double tax + poor capital access','Finite + infinite life'],ee:'LLC/LLP: limited liability (like a corp) + flow-through tax (like a partnership).'},
+ {ch:'C1',q:'Chức danh nào KHÔNG báo cáo trực tiếp cho CFO?',o:['Treasurer','Controller','CEO','Risk Manager'],a:2,e:'CFO báo cáo CHO CEO. Treasurer, Controller, Risk Manager, Internal Auditor báo cáo cho CFO.',qe:'Which position does NOT report directly to the CFO?',oe:['Treasurer','Controller','CEO','Risk Manager'],ee:'The CFO reports TO the CEO. Treasurer, Controller, Risk Manager, Internal Auditor report to the CFO.'},
+ {ch:'C1',q:'Vì sao KHÔNG nên tối đa hóa thị phần?',o:['Thị phần không đo được','Tặng hàng miễn phí tăng thị phần nhưng không trả nổi hóa đơn','Thị phần luôn giảm','Khách hàng không thích'],a:1,e:'Cho hàng free chiếm thị phần tạm thời nhưng DN sẽ phá sản vì không có tiền.',qe:'Why should you NOT maximize market share?',oe:['Market share can’t be measured','Giving goods away free raises share but can’t pay the bills','Market share always falls','Customers dislike it'],ee:'Giving goods away grabs share temporarily, but the firm goes bankrupt for lack of cash.'},
 
- {ch:'C2',q:'Hệ thống tài chính chuyển vốn từ ai sang ai?',o:['Borrower → Lender','Lender-savers → Borrower-spenders','Chính phủ → Ngân hàng','Cổ đông → Chủ nợ'],a:1,e:'Từ người tiết kiệm (thừa tiền) sang người vay chi tiêu (thiếu tiền).'},
- {ch:'C2',q:'Thị trường tiền tệ (money market) có kỳ hạn:',o:['Dưới 1 năm','Trên 1 năm','Trên 5 năm','Vĩnh viễn'],a:0,e:'Money market < 1 năm (T-bill, CP). Capital market > 1 năm.'},
- {ch:'C2',q:'Liquidity khác marketability ở chỗ:',o:['Không khác','Liquidity = đổi ra tiền nhanh KHÔNG mất giá','Marketability chỉ cho trái phiếu','Liquidity chỉ cho BĐS'],a:1,e:'Liquidity nhấn mạnh nhanh + không mất giá; marketability nhấn mạnh dễ bán.'},
- {ch:'C2',q:'Thị trường hiệu quả dạng semistrong, giá phản ánh:',o:['Chỉ thông tin lịch sử','Mọi thông tin công khai','Cả thông tin nội bộ','Không gì cả'],a:1,e:'Semistrong: mọi thông tin công khai, KHÔNG gồm nội bộ.'},
- {ch:'C2',q:'Fisher giản lược: r=3%, lạm phát kỳ vọng=7% → i ≈',o:['4%','10%','21%','7%'],a:1,e:'i ≈ r + ΔPe = 3% + 7% = 10%.'},
- {ch:'C2',q:'Chuỗi dịch vụ của ngân hàng đầu tư:',o:['Origination → Underwriting → Distribution','Audit → Tax → Report','Buy → Hold → Sell','Lend → Save → Spend'],a:0,e:'Chuẩn bị → bảo lãnh phát hành → phân phối.'},
- {ch:'C2',q:'Dealer khác broker ở chỗ:',o:['Dealer chỉ ăn hoa hồng','Dealer mua bán từ kho của mình và chịu rủi ro','Dealer không giao dịch','Broker tạo lập thị trường'],a:1,e:'Dealer tạo lập thị trường, giao dịch từ kho riêng, chịu rủi ro. Broker chỉ môi giới ăn hoa hồng.'},
- {ch:'C2',q:'Lãi suất có xu hướng thế nào theo chu kỳ kinh tế?',o:['Tăng khi suy thoái','Tăng khi kinh tế mở rộng','Luôn cố định','Ngược chiều lạm phát'],a:1,e:'Lãi suất tăng khi kinh tế mở rộng, giảm khi suy thoái, đồng biến lạm phát.'},
- {ch:'C2',q:'Tài trợ gián tiếp (indirect) đặc trưng bởi:',o:['Người vay bán trái phiếu thẳng cho người cho vay','Có trung gian tài chính đứng giữa','Không có ngân hàng','Chỉ dùng cổ phiếu'],a:1,e:'Indirect = có trung gian (ngân hàng) đứng giữa người tiết kiệm và người vay.'},
+ {ch:'C2',q:'Hệ thống tài chính chuyển vốn từ ai sang ai?',o:['Borrower → Lender','Lender-savers → Borrower-spenders','Chính phủ → Ngân hàng','Cổ đông → Chủ nợ'],a:1,e:'Từ người tiết kiệm (thừa tiền) sang người vay chi tiêu (thiếu tiền).',qe:'The financial system moves funds from whom to whom?',oe:['Borrower → Lender','Lender-savers → Borrower-spenders','Government → Banks','Shareholders → Creditors'],ee:'From savers (surplus funds) to borrower-spenders (deficit funds).'},
+ {ch:'C2',q:'Thị trường tiền tệ (money market) có kỳ hạn:',o:['Dưới 1 năm','Trên 1 năm','Trên 5 năm','Vĩnh viễn'],a:0,e:'Money market < 1 năm (T-bill, CP). Capital market > 1 năm.',qe:'The money market has maturities of:',oe:['Under 1 year','Over 1 year','Over 5 years','Perpetual'],ee:'Money market < 1 year (T-bills, CP). Capital market > 1 year.'},
+ {ch:'C2',q:'Liquidity khác marketability ở chỗ:',o:['Không khác','Liquidity = đổi ra tiền nhanh KHÔNG mất giá','Marketability chỉ cho trái phiếu','Liquidity chỉ cho BĐS'],a:1,e:'Liquidity nhấn mạnh nhanh + không mất giá; marketability nhấn mạnh dễ bán.',qe:'Liquidity differs from marketability in that:',oe:['No difference','Liquidity = converting to cash fast WITHOUT loss of value','Marketability is only for bonds','Liquidity is only for real estate'],ee:'Liquidity stresses speed + no loss of value; marketability stresses ease of selling.'},
+ {ch:'C2',q:'Thị trường hiệu quả dạng semistrong, giá phản ánh:',o:['Chỉ thông tin lịch sử','Mọi thông tin công khai','Cả thông tin nội bộ','Không gì cả'],a:1,e:'Semistrong: mọi thông tin công khai, KHÔNG gồm nội bộ.',qe:'In a semistrong-efficient market, prices reflect:',oe:['Only historical information','All public information','Even inside information','Nothing'],ee:'Semistrong: all public information, NOT including inside information.'},
+ {ch:'C2',q:'Fisher giản lược: r=3%, lạm phát kỳ vọng=7% → i ≈',o:['4%','10%','21%','7%'],a:1,e:'i ≈ r + ΔPe = 3% + 7% = 10%.',qe:'Simplified Fisher: r=3%, expected inflation=7% → i ≈',oe:['4%','10%','21%','7%'],ee:'i ≈ r + ΔPe = 3% + 7% = 10%.'},
+ {ch:'C2',q:'Chuỗi dịch vụ của ngân hàng đầu tư:',o:['Origination → Underwriting → Distribution','Audit → Tax → Report','Buy → Hold → Sell','Lend → Save → Spend'],a:0,e:'Chuẩn bị → bảo lãnh phát hành → phân phối.',qe:'The service chain of an investment bank:',oe:['Origination → Underwriting → Distribution','Audit → Tax → Report','Buy → Hold → Sell','Lend → Save → Spend'],ee:'Origination → underwriting → distribution.'},
+ {ch:'C2',q:'Dealer khác broker ở chỗ:',o:['Dealer chỉ ăn hoa hồng','Dealer mua bán từ kho của mình và chịu rủi ro','Dealer không giao dịch','Broker tạo lập thị trường'],a:1,e:'Dealer tạo lập thị trường, giao dịch từ kho riêng, chịu rủi ro. Broker chỉ môi giới ăn hoa hồng.',qe:'A dealer differs from a broker in that:',oe:['A dealer only earns commission','A dealer trades from its own inventory and bears risk','A dealer does not trade','A broker makes the market'],ee:'A dealer makes the market, trades from its own inventory, bears risk. A broker only brokers for a commission.'},
+ {ch:'C2',q:'Lãi suất có xu hướng thế nào theo chu kỳ kinh tế?',o:['Tăng khi suy thoái','Tăng khi kinh tế mở rộng','Luôn cố định','Ngược chiều lạm phát'],a:1,e:'Lãi suất tăng khi kinh tế mở rộng, giảm khi suy thoái, đồng biến lạm phát.',qe:'How do interest rates tend to move over the business cycle?',oe:['Rise in recessions','Rise in expansions','Always fixed','Opposite to inflation'],ee:'Rates rise in expansions, fall in recessions, and move with inflation.'},
+ {ch:'C2',q:'Tài trợ gián tiếp (indirect) đặc trưng bởi:',o:['Người vay bán trái phiếu thẳng cho người cho vay','Có trung gian tài chính đứng giữa','Không có ngân hàng','Chỉ dùng cổ phiếu'],a:1,e:'Indirect = có trung gian (ngân hàng) đứng giữa người tiết kiệm và người vay.',qe:'Indirect financing is characterized by:',oe:['Borrowers selling bonds straight to lenders','A financial intermediary standing in the middle','No banks','Only using stocks'],ee:'Indirect = an intermediary (bank) stands between savers and borrowers.'},
 
- {ch:'C3',q:'Phương trình kế toán cơ bản:',o:['TS = Doanh thu − Chi phí','TS = Nợ + Vốn CSH','Vốn CSH = TS + Nợ','TS = Nợ − Vốn CSH'],a:1,e:'Eq 3.1: Tổng TS = Tổng nợ + Vốn CSH.'},
- {ch:'C3',q:'NWC được tính bằng:',o:['Tổng TS − Tổng nợ','TSNH − Nợ NH','Doanh thu − Giá vốn','EBIT − Thuế'],a:1,e:'NWC = Tài sản ngắn hạn − Nợ ngắn hạn.'},
- {ch:'C3',q:'Khi giá tăng, LIFO dẫn tới:',o:['Thuế cao hơn','COGS thấp hơn','Thu nhập chịu thuế thấp hơn → thuế ít hơn','Tồn kho cao hơn'],a:2,e:'LIFO bán hàng đắt trước → COGS cao → thuế thấp. Vì vậy đa số chọn LIFO khi giá tăng.'},
- {ch:'C3',q:'Thứ tự đúng tới dòng đáy:',o:['EBIT→EBITDA→EBT→NI','EBITDA→EBIT→EBT→NI','EBT→EBIT→EBITDA→NI','NI→EBT→EBIT→EBITDA'],a:1,e:'EBITDA −(D&A)→ EBIT −(lãi)→ EBT −(thuế)→ Net income.'},
- {ch:'C3',q:'Khoản nào là chi phí PHI tiền mặt?',o:['Lương','Khấu hao','Thuế đã nộp','Mua nguyên liệu'],a:1,e:'Khấu hao & phân bổ là chi phí phi tiền mặt.'},
- {ch:'C3',q:'Vì sao nợ rẻ hơn vốn cổ phần?',o:['Cổ tức được khấu trừ thuế','Lãi vay được khấu trừ thuế, cổ tức thì không','Nợ không phải trả','Lãi suất = 0'],a:1,e:'Lãi vay tạo tax shield (giảm thuế); cổ tức thì không.'},
- {ch:'C3',q:'Trong báo cáo lưu chuyển tiền tệ, đâu là NGUỒN tiền?',o:['Tăng tài sản','Giảm nợ','Tăng nợ phải trả','Mua cổ phiếu quỹ'],a:2,e:'Nguồn: giảm TS hoặc tăng nợ/vốn. "Nợ ↑ có tiền".'},
- {ch:'C3',q:'GAAP do tổ chức nào ban hành?',o:['IASB','FASB (SEC ủy quyền)','IMF','WTO'],a:1,e:'GAAP do FASB ban hành, SEC ủy quyền. IFRS do IASB.'},
- {ch:'C3',q:'Nguyên tắc Matching nghĩa là:',o:['Ghi TS theo giá gốc','Khớp doanh thu với chi phí tạo ra nó','DN hoạt động liên tục','Giao dịch độc lập'],a:1,e:'Matching: doanh thu được khớp với chi phí đã chi để tạo ra doanh thu đó.'},
- {ch:'C3',q:'Thuế suất biên (marginal) là:',o:['Tổng thuế/TN chịu thuế','Thuế trên đồng cuối/kế tiếp kiếm được','Thuế cố định 21%','Thuế trên cổ tức'],a:1,e:'Marginal = thuế trên đồng kế tiếp; average = tổng thuế/thu nhập chịu thuế.'},
+ {ch:'C3',q:'Phương trình kế toán cơ bản:',o:['TS = Doanh thu − Chi phí','TS = Nợ + Vốn CSH','Vốn CSH = TS + Nợ','TS = Nợ − Vốn CSH'],a:1,e:'Eq 3.1: Tổng TS = Tổng nợ + Vốn CSH.',qe:'The basic accounting equation:',oe:['Assets = Revenue − Expenses','Assets = Liabilities + Equity','Equity = Assets + Liabilities','Assets = Liabilities − Equity'],ee:'Eq 3.1: Total assets = Total liabilities + Equity.'},
+ {ch:'C3',q:'NWC được tính bằng:',o:['Tổng TS − Tổng nợ','TSNH − Nợ NH','Doanh thu − Giá vốn','EBIT − Thuế'],a:1,e:'NWC = Tài sản ngắn hạn − Nợ ngắn hạn.',qe:'NWC is computed as:',oe:['Total assets − Total liabilities','Current assets − Current liabilities','Sales − COGS','EBIT − Taxes'],ee:'NWC = Current assets − Current liabilities.'},
+ {ch:'C3',q:'Khi giá tăng, LIFO dẫn tới:',o:['Thuế cao hơn','COGS thấp hơn','Thu nhập chịu thuế thấp hơn → thuế ít hơn','Tồn kho cao hơn'],a:2,e:'LIFO bán hàng đắt trước → COGS cao → thuế thấp. Vì vậy đa số chọn LIFO khi giá tăng.',qe:'When prices rise, LIFO leads to:',oe:['Higher taxes','Lower COGS','Lower taxable income → less tax','Higher inventory'],ee:'LIFO expenses the costliest goods first → higher COGS → lower tax. So most pick LIFO when prices rise.'},
+ {ch:'C3',q:'Thứ tự đúng tới dòng đáy:',o:['EBIT→EBITDA→EBT→NI','EBITDA→EBIT→EBT→NI','EBT→EBIT→EBITDA→NI','NI→EBT→EBIT→EBITDA'],a:1,e:'EBITDA −(D&A)→ EBIT −(lãi)→ EBT −(thuế)→ Net income.',qe:'The correct order down to the bottom line:',oe:['EBIT→EBITDA→EBT→NI','EBITDA→EBIT→EBT→NI','EBT→EBIT→EBITDA→NI','NI→EBT→EBIT→EBITDA'],ee:'EBITDA −(D&A)→ EBIT −(interest)→ EBT −(tax)→ Net income.'},
+ {ch:'C3',q:'Khoản nào là chi phí PHI tiền mặt?',o:['Lương','Khấu hao','Thuế đã nộp','Mua nguyên liệu'],a:1,e:'Khấu hao & phân bổ là chi phí phi tiền mặt.',qe:'Which item is a NON-cash expense?',oe:['Wages','Depreciation','Taxes paid','Buying raw materials'],ee:'Depreciation & amortization are non-cash expenses.'},
+ {ch:'C3',q:'Vì sao nợ rẻ hơn vốn cổ phần?',o:['Cổ tức được khấu trừ thuế','Lãi vay được khấu trừ thuế, cổ tức thì không','Nợ không phải trả','Lãi suất = 0'],a:1,e:'Lãi vay tạo tax shield (giảm thuế); cổ tức thì không.',qe:'Why is debt cheaper than equity?',oe:['Dividends are tax-deductible','Interest is tax-deductible, dividends are not','Debt need not be repaid','The rate = 0'],ee:'Interest creates a tax shield (cuts tax); dividends do not.'},
+ {ch:'C3',q:'Trong báo cáo lưu chuyển tiền tệ, đâu là NGUỒN tiền?',o:['Tăng tài sản','Giảm nợ','Tăng nợ phải trả','Mua cổ phiếu quỹ'],a:2,e:'Nguồn: giảm TS hoặc tăng nợ/vốn. "Nợ ↑ có tiền".',qe:'In the cash-flow statement, which is a SOURCE of cash?',oe:['Increasing assets','Reducing debt','Increasing liabilities','Buying treasury stock'],ee:'Sources: decreasing assets or increasing liabilities/equity. "Liabilities ↑ brings cash".'},
+ {ch:'C3',q:'GAAP do tổ chức nào ban hành?',o:['IASB','FASB (SEC ủy quyền)','IMF','WTO'],a:1,e:'GAAP do FASB ban hành, SEC ủy quyền. IFRS do IASB.',qe:'Which body issues GAAP?',oe:['IASB','FASB (delegated by the SEC)','IMF','WTO'],ee:'GAAP is issued by the FASB under SEC delegation. IFRS is issued by the IASB.'},
+ {ch:'C3',q:'Nguyên tắc Matching nghĩa là:',o:['Ghi TS theo giá gốc','Khớp doanh thu với chi phí tạo ra nó','DN hoạt động liên tục','Giao dịch độc lập'],a:1,e:'Matching: doanh thu được khớp với chi phí đã chi để tạo ra doanh thu đó.',qe:'The Matching principle means:',oe:['Recording assets at cost','Matching revenue with the costs that generated it','The firm is a going concern','Arm’s-length transactions'],ee:'Matching: revenue is matched with the costs incurred to generate it.'},
+ {ch:'C3',q:'Thuế suất biên (marginal) là:',o:['Tổng thuế/TN chịu thuế','Thuế trên đồng cuối/kế tiếp kiếm được','Thuế cố định 21%','Thuế trên cổ tức'],a:1,e:'Marginal = thuế trên đồng kế tiếp; average = tổng thuế/thu nhập chịu thuế.',qe:'The marginal tax rate is:',oe:['Total tax/Taxable income','Tax on the last/next dollar earned','A flat 21% tax','Tax on dividends'],ee:'Marginal = tax on the next dollar; average = total tax/taxable income.'},
 
- {ch:'C4',q:'Quick ratio bằng:',o:['TSNH/Nợ NH','(TSNH − Tồn kho)/Nợ NH','Tồn kho/Nợ NH','Tiền/Tổng nợ'],a:1,e:'Quick loại bỏ tồn kho khỏi tử số.'},
- {ch:'C4',q:'Common-size bảng CĐKT dùng tham chiếu:',o:['Doanh thu thuần','Tổng tài sản','Vốn CSH','Net income'],a:1,e:'CĐKT: % tổng tài sản. BCKQKD: % doanh thu thuần.'},
- {ch:'C4',q:'DuPont mở rộng ROE gồm 3 yếu tố:',o:['Net margin × Vòng quay TTS × Equity multiplier','Current × Quick × ROA','Giá × EPS × P/E','DT × CP × Thuế'],a:0,e:'ROE = sinh lời × hiệu quả tài sản × đòn bẩy.'},
- {ch:'C4',q:'Equity multiplier =',o:['Tổng nợ/Vốn CSH','Tổng TS/Vốn CSH','Vốn CSH/Tổng TS','EBIT/Lãi vay'],a:1,e:'Equity multiplier = Tổng tài sản / Vốn CSH (đo đòn bẩy).'},
- {ch:'C4',q:'Hạn chế lớn của tối đa hóa ROE:',o:['Khó tính','Không xét dòng tiền, rủi ro, quy mô đầu tư','Luôn âm','Chỉ dùng cho ngân hàng'],a:1,e:'ROE dựa trên earnings, bỏ qua cash flow, rủi ro và quy mô.'},
- {ch:'C4',q:'Times interest earned =',o:['EBIT/Lãi vay','Lãi vay/EBIT','NI/Lãi vay','Tổng nợ/EBIT'],a:0,e:'TIE = EBIT/Chi phí lãi vay; cao = ít rủi ro phá sản.'},
- {ch:'C4',q:'Chỉ số nào THẤP mới là tốt?',o:['Current ratio','Số ngày tồn kho','ROE','Gross margin'],a:1,e:'Số ngày tồn kho & kỳ thu tiền thấp = bán hàng/thu tiền nhanh = tốt.'},
- {ch:'C4',q:'Diaz: NI=118,5; Tổng TS=1.889,2 → ROA ≈',o:['6,27%','12,64%','2,75%','30,86%'],a:0,e:'ROA = 118,5/1.889,2 = 6,27%.'},
- {ch:'C4',q:'2 chiến lược tăng ROA:',o:['Tăng nợ và giảm vốn','Biên LN cao HOẶC vòng quay cao','Giảm doanh thu','Tăng tồn kho'],a:1,e:'Hoặc biên LN cao (Tiffany) hoặc vòng quay cao (Walmart).'},
- {ch:'C4',q:'Mã ngành để phân tích industry là:',o:['ISBN','SIC / NAICS','VIN','IBAN'],a:1,e:'Standard Industrial Classification / North American Industry Classification System.'},
+ {ch:'C4',q:'Quick ratio bằng:',o:['TSNH/Nợ NH','(TSNH − Tồn kho)/Nợ NH','Tồn kho/Nợ NH','Tiền/Tổng nợ'],a:1,e:'Quick loại bỏ tồn kho khỏi tử số.',qe:'The quick ratio equals:',oe:['CA/CL','(CA − Inventory)/CL','Inventory/CL','Cash/Total debt'],ee:'The quick ratio removes inventory from the numerator.'},
+ {ch:'C4',q:'Common-size bảng CĐKT dùng tham chiếu:',o:['Doanh thu thuần','Tổng tài sản','Vốn CSH','Net income'],a:1,e:'CĐKT: % tổng tài sản. BCKQKD: % doanh thu thuần.',qe:'A common-size balance sheet uses as its base:',oe:['Net sales','Total assets','Equity','Net income'],ee:'Balance sheet: % of total assets. Income statement: % of net sales.'},
+ {ch:'C4',q:'DuPont mở rộng ROE gồm 3 yếu tố:',o:['Net margin × Vòng quay TTS × Equity multiplier','Current × Quick × ROA','Giá × EPS × P/E','DT × CP × Thuế'],a:0,e:'ROE = sinh lời × hiệu quả tài sản × đòn bẩy.',qe:'Extended DuPont breaks ROE into 3 factors:',oe:['Net margin × Asset turnover × Equity multiplier','Current × Quick × ROA','Price × EPS × P/E','Sales × Cost × Tax'],ee:'ROE = profitability × asset efficiency × leverage.'},
+ {ch:'C4',q:'Equity multiplier =',o:['Tổng nợ/Vốn CSH','Tổng TS/Vốn CSH','Vốn CSH/Tổng TS','EBIT/Lãi vay'],a:1,e:'Equity multiplier = Tổng tài sản / Vốn CSH (đo đòn bẩy).',qe:'Equity multiplier =',oe:['Total debt/Equity','Total assets/Equity','Equity/Total assets','EBIT/Interest'],ee:'Equity multiplier = Total assets / Equity (a leverage measure).'},
+ {ch:'C4',q:'Hạn chế lớn của tối đa hóa ROE:',o:['Khó tính','Không xét dòng tiền, rủi ro, quy mô đầu tư','Luôn âm','Chỉ dùng cho ngân hàng'],a:1,e:'ROE dựa trên earnings, bỏ qua cash flow, rủi ro và quy mô.',qe:'A major limitation of maximizing ROE:',oe:['Hard to compute','Ignores cash flow, risk, and investment scale','Always negative','Only for banks'],ee:'ROE is earnings-based, ignoring cash flow, risk, and scale.'},
+ {ch:'C4',q:'Times interest earned =',o:['EBIT/Lãi vay','Lãi vay/EBIT','NI/Lãi vay','Tổng nợ/EBIT'],a:0,e:'TIE = EBIT/Chi phí lãi vay; cao = ít rủi ro phá sản.',qe:'Times interest earned =',oe:['EBIT/Interest','Interest/EBIT','NI/Interest','Total debt/EBIT'],ee:'TIE = EBIT/Interest expense; higher = lower bankruptcy risk.'},
+ {ch:'C4',q:'Chỉ số nào THẤP mới là tốt?',o:['Current ratio','Số ngày tồn kho','ROE','Gross margin'],a:1,e:'Số ngày tồn kho & kỳ thu tiền thấp = bán hàng/thu tiền nhanh = tốt.',qe:'Which ratio is good when LOW?',oe:['Current ratio','Days in inventory','ROE','Gross margin'],ee:'Low days in inventory & collection period = selling/collecting fast = good.'},
+ {ch:'C4',q:'Diaz: NI=118,5; Tổng TS=1.889,2 → ROA ≈',o:['6,27%','12,64%','2,75%','30,86%'],a:0,e:'ROA = 118,5/1.889,2 = 6,27%.',qe:'Diaz: NI=118.5; Total assets=1,889.2 → ROA ≈',oe:['6.27%','12.64%','2.75%','30.86%'],ee:'ROA = 118.5/1,889.2 = 6.27%.'},
+ {ch:'C4',q:'2 chiến lược tăng ROA:',o:['Tăng nợ và giảm vốn','Biên LN cao HOẶC vòng quay cao','Giảm doanh thu','Tăng tồn kho'],a:1,e:'Hoặc biên LN cao (Tiffany) hoặc vòng quay cao (Walmart).',qe:'Two strategies to raise ROA:',oe:['Raise debt and cut equity','High profit margin OR high turnover','Cut sales','Raise inventory'],ee:'Either a high margin (Tiffany) or high turnover (Walmart).'},
+ {ch:'C4',q:'Mã ngành để phân tích industry là:',o:['ISBN','SIC / NAICS','VIN','IBAN'],a:1,e:'Standard Industrial Classification / North American Industry Classification System.',qe:'The industry codes for industry analysis are:',oe:['ISBN','SIC / NAICS','VIN','IBAN'],ee:'Standard Industrial Classification / North American Industry Classification System.'},
 
- {ch:'C5',q:'Vì sao $1 hôm nay > $1 tương lai?',o:['Lạm phát=0','$ hôm nay đem đầu tư sinh lãi','Tiền giấy hỏng','Ngân hàng thu phí'],a:1,e:'Bản chất giá trị thời gian của tiền.'},
- {ch:'C5',q:'Công thức FV cơ bản:',o:['PV/(1+i)^n','PV×(1+i)^n','PV×i×n','PV+i^n'],a:1,e:'Eq 5.1: FV = PV(1+i)^n.'},
- {ch:'C5',q:'Tăng số lần ghép lãi m thì FV:',o:['Giảm','Không đổi','Tăng','Bằng 0'],a:2,e:'Ghép càng dày FV càng lớn; cực đại là ghép liên tục PV·e^(in).'},
- {ch:'C5',q:'Rule of 72 với i=9% → gấp đôi sau:',o:['6 năm','8 năm','9 năm','12 năm'],a:1,e:'72/9 = 8 năm.'},
- {ch:'C5',q:'Yếu tố nào làm PV GIẢM?',o:['Thời gian ngắn lại','Lãi suất chiết khấu tăng','Dòng tiền tăng','Lạm phát giảm'],a:1,e:'Lãi chiết khấu cao hơn (hoặc thời gian dài hơn) → PV nhỏ hơn.'},
- {ch:'C5',q:'$5.000 lãi 15% trong 10 năm → FV ≈',o:['$10.000','$20.227','$7.500','$50.000'],a:1,e:'5.000×(1,15)^10 = 5.000×4,0456 = $20.227,79.'},
- {ch:'C5',q:'Thừa số PV là gì của thừa số FV?',o:['Bình phương','Nghịch đảo','Gấp đôi','Bằng nhau'],a:1,e:'PV factor = 1/(1+i)^n = nghịch đảo của FV factor.'},
- {ch:'C5',q:'Ghép liên tục dùng hằng số:',o:['π ≈ 3,14','e ≈ 2,71828','φ ≈ 1,618','√2'],a:1,e:'FV = PV·e^(in), e ≈ 2,71828 (số Euler).'},
+ {ch:'C5',q:'Vì sao $1 hôm nay > $1 tương lai?',o:['Lạm phát=0','$ hôm nay đem đầu tư sinh lãi','Tiền giấy hỏng','Ngân hàng thu phí'],a:1,e:'Bản chất giá trị thời gian của tiền.',qe:'Why is $1 today worth more than $1 in the future?',oe:['Inflation = 0','A dollar today can be invested to earn interest','Paper money decays','Banks charge fees'],ee:'This is the essence of the time value of money.'},
+ {ch:'C5',q:'Công thức FV cơ bản:',o:['PV/(1+i)^n','PV×(1+i)^n','PV×i×n','PV+i^n'],a:1,e:'Eq 5.1: FV = PV(1+i)^n.',qe:'The basic FV formula:',oe:['PV/(1+i)^n','PV×(1+i)^n','PV×i×n','PV+i^n'],ee:'Eq 5.1: FV = PV(1+i)^n.'},
+ {ch:'C5',q:'Tăng số lần ghép lãi m thì FV:',o:['Giảm','Không đổi','Tăng','Bằng 0'],a:2,e:'Ghép càng dày FV càng lớn; cực đại là ghép liên tục PV·e^(in).',qe:'Raising the compounding frequency m makes FV:',oe:['Decrease','Unchanged','Increase','Zero'],ee:'More frequent compounding → larger FV; the max is continuous compounding PV·e^(in).'},
+ {ch:'C5',q:'Rule of 72 với i=9% → gấp đôi sau:',o:['6 năm','8 năm','9 năm','12 năm'],a:1,e:'72/9 = 8 năm.',qe:'Rule of 72 with i=9% → doubles after:',oe:['6 years','8 years','9 years','12 years'],ee:'72/9 = 8 years.'},
+ {ch:'C5',q:'Yếu tố nào làm PV GIẢM?',o:['Thời gian ngắn lại','Lãi suất chiết khấu tăng','Dòng tiền tăng','Lạm phát giảm'],a:1,e:'Lãi chiết khấu cao hơn (hoặc thời gian dài hơn) → PV nhỏ hơn.',qe:'Which factor REDUCES PV?',oe:['Shorter time','Higher discount rate','Larger cash flow','Lower inflation'],ee:'A higher discount rate (or longer time) → smaller PV.'},
+ {ch:'C5',q:'$5.000 lãi 15% trong 10 năm → FV ≈',o:['$10.000','$20.227','$7.500','$50.000'],a:1,e:'5.000×(1,15)^10 = 5.000×4,0456 = $20.227,79.',qe:'$5,000 at 15% for 10 years → FV ≈',oe:['$10,000','$20,227','$7,500','$50,000'],ee:'5,000×(1.15)^10 = 5,000×4.0456 = $20,227.79.'},
+ {ch:'C5',q:'Thừa số PV là gì của thừa số FV?',o:['Bình phương','Nghịch đảo','Gấp đôi','Bằng nhau'],a:1,e:'PV factor = 1/(1+i)^n = nghịch đảo của FV factor.',qe:'The PV factor is what of the FV factor?',oe:['Its square','Its reciprocal','Its double','Equal to it'],ee:'PV factor = 1/(1+i)^n = the reciprocal of the FV factor.'},
+ {ch:'C5',q:'Ghép liên tục dùng hằng số:',o:['π ≈ 3,14','e ≈ 2,71828','φ ≈ 1,618','√2'],a:1,e:'FV = PV·e^(in), e ≈ 2,71828 (số Euler).',qe:'Continuous compounding uses the constant:',oe:['π ≈ 3.14','e ≈ 2.71828','φ ≈ 1.618','√2'],ee:'FV = PV·e^(in), e ≈ 2.71828 (Euler’s number).'},
 
- {ch:'C6',q:'Annuity due so với ordinary annuity:',o:['Luôn nhỏ hơn','Bằng nhau','Luôn lớn hơn','Không so được'],a:2,e:'Due dịch sớm 1 kỳ → chiết khấu ít/sinh lãi thêm → lớn hơn. Due = Ordinary×(1+i).'},
- {ch:'C6',q:'PV của perpetuity (CF đều vĩnh viễn):',o:['CF×i','CF/i','CF×(1+i)','CF/(1+i)^n'],a:1,e:'Eq 6.3: PV = CF/i. VD: cổ phiếu ưu đãi.'},
- {ch:'C6',q:'Công thức growing perpetuity CF/(i−g) đúng khi:',o:['g>i','g=i','g<i','g=0'],a:2,e:'Bắt buộc g<i, nếu không mẫu âm/0, vô nghĩa.'},
- {ch:'C6',q:'Khác biệt cốt lõi APR vs EAR:',o:['APR có ghép lãi, EAR không','EAR có ghép lãi, APR không','Giống nhau','APR luôn > EAR'],a:1,e:'EAR tính ghép lãi (chính xác); APR dùng lãi đơn.'},
- {ch:'C6',q:'Trong lịch trả góp, theo thời gian:',o:['Lãi tăng, gốc giảm','Lãi giảm, gốc tăng','Lãi=gốc cố định','Chỉ trả lãi'],a:1,e:'Số dư gốc giảm → lãi giảm dần, phần gốc trả tăng dần.'},
- {ch:'C6',q:'APR 12%/năm ghép tháng → EAR ≈',o:['12,00%','12,68%','11,40%','24,00%'],a:1,e:'(1+0,12/12)^12 − 1 = (1,01)^12 − 1 ≈ 12,68%.'},
- {ch:'C6',q:'3 ngân hàng cùng APR ~10,5%, chọn rẻ nhất dựa vào:',o:['APR thấp nhất','EAR thấp nhất','Ghép dày nhất','Kỳ hạn dài nhất'],a:1,e:'So bằng EAR; EAR thấp nhất = chi phí thật rẻ nhất.'},
- {ch:'C6',q:'Học bổng $100.000/năm mãi mãi, quỹ sinh lời 8% → cần:',o:['$800.000','$1.250.000','$8.000.000','$100.000'],a:1,e:'PV = 100.000/0,08 = $1.250.000.'},
- {ch:'C6',q:'Để định giá nhiều dòng tiền, bước đầu tiên nên:',o:['Cộng hết lại ngay','Vẽ trục thời gian','Chia cho i','Nhân với n'],a:1,e:'Vẽ trục thời gian để xác định thời điểm từng dòng tiền trước khi tính.'},
+ {ch:'C6',q:'Annuity due so với ordinary annuity:',o:['Luôn nhỏ hơn','Bằng nhau','Luôn lớn hơn','Không so được'],a:2,e:'Due dịch sớm 1 kỳ → chiết khấu ít/sinh lãi thêm → lớn hơn. Due = Ordinary×(1+i).',qe:'An annuity due versus an ordinary annuity:',oe:['Always smaller','Equal','Always larger','Not comparable'],ee:'A due shifts one period earlier → less discounting/extra interest → larger. Due = Ordinary×(1+i).'},
+ {ch:'C6',q:'PV của perpetuity (CF đều vĩnh viễn):',o:['CF×i','CF/i','CF×(1+i)','CF/(1+i)^n'],a:1,e:'Eq 6.3: PV = CF/i. VD: cổ phiếu ưu đãi.',qe:'The PV of a perpetuity (level CF forever):',oe:['CF×i','CF/i','CF×(1+i)','CF/(1+i)^n'],ee:'Eq 6.3: PV = CF/i. E.g. preferred stock.'},
+ {ch:'C6',q:'Công thức growing perpetuity CF/(i−g) đúng khi:',o:['g>i','g=i','g<i','g=0'],a:2,e:'Bắt buộc g<i, nếu không mẫu âm/0, vô nghĩa.',qe:'The growing-perpetuity formula CF/(i−g) holds when:',oe:['g>i','g=i','g<i','g=0'],ee:'Requires g<i, otherwise the denominator is zero/negative and meaningless.'},
+ {ch:'C6',q:'Khác biệt cốt lõi APR vs EAR:',o:['APR có ghép lãi, EAR không','EAR có ghép lãi, APR không','Giống nhau','APR luôn > EAR'],a:1,e:'EAR tính ghép lãi (chính xác); APR dùng lãi đơn.',qe:'The core difference between APR and EAR:',oe:['APR compounds, EAR does not','EAR accounts for compounding, APR does not','They are the same','APR is always > EAR'],ee:'EAR accounts for compounding (exact); APR uses simple interest.'},
+ {ch:'C6',q:'Trong lịch trả góp, theo thời gian:',o:['Lãi tăng, gốc giảm','Lãi giảm, gốc tăng','Lãi=gốc cố định','Chỉ trả lãi'],a:1,e:'Số dư gốc giảm → lãi giảm dần, phần gốc trả tăng dần.',qe:'In an amortization schedule, over time:',oe:['Interest rises, principal falls','Interest falls, principal rises','Interest=principal fixed','Interest only'],ee:'The principal balance falls → interest declines, the principal portion rises.'},
+ {ch:'C6',q:'APR 12%/năm ghép tháng → EAR ≈',o:['12,00%','12,68%','11,40%','24,00%'],a:1,e:'(1+0,12/12)^12 − 1 = (1,01)^12 − 1 ≈ 12,68%.',qe:'APR 12%/year compounded monthly → EAR ≈',oe:['12.00%','12.68%','11.40%','24.00%'],ee:'(1+0.12/12)^12 − 1 = (1.01)^12 − 1 ≈ 12.68%.'},
+ {ch:'C6',q:'3 ngân hàng cùng APR ~10,5%, chọn rẻ nhất dựa vào:',o:['APR thấp nhất','EAR thấp nhất','Ghép dày nhất','Kỳ hạn dài nhất'],a:1,e:'So bằng EAR; EAR thấp nhất = chi phí thật rẻ nhất.',qe:'Three banks with APR ~10.5%; pick the cheapest based on:',oe:['Lowest APR','Lowest EAR','Most frequent compounding','Longest maturity'],ee:'Compare via EAR; the lowest EAR = the truly cheapest cost.'},
+ {ch:'C6',q:'Học bổng $100.000/năm mãi mãi, quỹ sinh lời 8% → cần:',o:['$800.000','$1.250.000','$8.000.000','$100.000'],a:1,e:'PV = 100.000/0,08 = $1.250.000.',qe:'A $100,000/year scholarship forever, fund earns 8% → you need:',oe:['$800,000','$1,250,000','$8,000,000','$100,000'],ee:'PV = 100,000/0.08 = $1,250,000.'},
+ {ch:'C6',q:'Để định giá nhiều dòng tiền, bước đầu tiên nên:',o:['Cộng hết lại ngay','Vẽ trục thời gian','Chia cho i','Nhân với n'],a:1,e:'Vẽ trục thời gian để xác định thời điểm từng dòng tiền trước khi tính.',qe:'To value multiple cash flows, the first step should be:',oe:['Add them all up immediately','Draw a time line','Divide by i','Multiply by n'],ee:'Draw a time line to place each cash flow before computing.'},
 ];
 
-/* ===== Quiz engine ===== */
+/* ===== Quiz engine (bilingual) ===== */
+const isEN=()=>document.body.dataset.lang==='en';
 const area=document.getElementById('quizArea'),counter=document.getElementById('counter');
 const scoreVal=document.getElementById('scoreVal'),scoreBar=document.getElementById('scoreBar'),scoreMsg=document.getElementById('scoreMsg');
 const filterBtns=document.getElementById('filterBtns');
 let filter='ALL',order=[...QUESTIONS.keys()],answered={},correctCount=0,totalAnswered=0;
 const chList=['ALL','C1','C2','C3','C4','C5','C6'];
-const chLabel={ALL:'Tất cả',C1:'C1',C2:'C2',C3:'C3',C4:'C4',C5:'C5',C6:'C6'};
-chList.forEach(c=>{const b=document.createElement('button');b.className='chip'+(c==='ALL'?' active':'');
-  b.textContent=chLabel[c];b.onclick=()=>{filter=c;[...filterBtns.children].forEach(x=>x.classList.remove('active'));b.classList.add('active');render();};
+const chLabel=()=>({ALL:isEN()?'All':'Tất cả',C1:'C1',C2:'C2',C3:'C3',C4:'C4',C5:'C5',C6:'C6'});
+chList.forEach(c=>{const b=document.createElement('button');b.className='chip'+(c==='ALL'?' active':'');b.dataset.ch=c;
+  b.textContent=chLabel()[c];b.onclick=()=>{filter=c;[...filterBtns.children].forEach(x=>x.classList.remove('active'));b.classList.add('active');render();};
   filterBtns.appendChild(b);});
 function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
 function render(){
+  const en=isEN();
+  // refresh chapter-chip labels (ALL changes with language)
+  [...filterBtns.children].forEach(b=>b.textContent=chLabel()[b.dataset.ch]);
   area.innerHTML='';
   const idxs=order.filter(i=>filter==='ALL'||QUESTIONS[i].ch===filter);
-  counter.textContent=idxs.length+' câu';
+  counter.textContent=idxs.length+(en?' questions':' câu');
   idxs.forEach((qi,pos)=>{
-    const Q=QUESTIONS[qi];const card=document.createElement('div');card.className='q';
+    const Q=QUESTIONS[qi];const opts=en?Q.oe:Q.o;
+    const card=document.createElement('div');card.className='q';
     const head=document.createElement('div');head.className='qhead';
-    head.innerHTML=`<div class="qno">${pos+1}</div><div style="flex:1">${Q.q}</div><span class="qtag">${Q.ch}</span>`;
+    head.innerHTML=`<div class="qno">${pos+1}</div><div style="flex:1">${en?Q.qe:Q.q}</div><span class="qtag">${Q.ch}</span>`;
     card.appendChild(head);
-    Q.o.forEach((opt,oi)=>{
+    opts.forEach((opt,oi)=>{
       const btn=document.createElement('button');btn.className='opt';btn.innerHTML=opt;
       if(answered[qi]!==undefined){btn.disabled=true;
         if(oi===Q.a){btn.classList.add('correct');btn.innerHTML=opt+'<span class="mk">✓</span>';}
@@ -1243,24 +1529,33 @@ function render(){
       btn.onclick=()=>pick(qi,oi);card.appendChild(btn);
     });
     const ex=document.createElement('div');ex.className='expl'+(answered[qi]!==undefined?' show':'');
-    ex.innerHTML='<b>Giải thích:</b> '+Q.e;card.appendChild(ex);area.appendChild(card);
+    ex.innerHTML=`<b>${en?'Explanation:':'Giải thích:'}</b> `+(en?Q.ee:Q.e);card.appendChild(ex);area.appendChild(card);
   });
   updateScore();
 }
 function pick(qi,oi){if(answered[qi]!==undefined)return;answered[qi]=oi;totalAnswered++;if(oi===QUESTIONS[qi].a)correctCount++;render();}
 function updateScore(){
+  const en=isEN();
   scoreVal.textContent=correctCount+' / '+totalAnswered;
   scoreBar.style.width=(totalAnswered?correctCount/totalAnswered*100:0)+'%';
   let msg;
-  if(totalAnswered===0)msg='Bắt đầu làm bài nhé!';
+  if(totalAnswered===0)msg=en?'Start the quiz!':'Bắt đầu làm bài nhé!';
   else{const r=correctCount/totalAnswered;
-    if(r===1)msg='🏆 Tuyệt đối!';else if(r>=.8)msg='🔥 Rất tốt';
-    else if(r>=.6)msg='👍 Khá ổn';else if(r>=.4)msg='📖 Ôn thêm';else msg='💪 Xem lại lý thuyết';}
-  scoreMsg.textContent=msg+(totalAnswered?` · ${totalAnswered}/${QUESTIONS.length} câu`:'');
+    if(r===1)msg=en?'🏆 Perfect!':'🏆 Tuyệt đối!';else if(r>=.8)msg=en?'🔥 Great':'🔥 Rất tốt';
+    else if(r>=.6)msg=en?'👍 Pretty good':'👍 Khá ổn';else if(r>=.4)msg=en?'📖 Review more':'📖 Ôn thêm';else msg=en?'💪 Revisit the theory':'💪 Xem lại lý thuyết';}
+  scoreMsg.textContent=msg+(totalAnswered?` · ${totalAnswered}/${QUESTIONS.length}`+(en?' questions':' câu'):'');
 }
 document.getElementById('shuffleBtn').onclick=()=>{order=shuffle([...QUESTIONS.keys()]);render();};
 document.getElementById('resetBtn').onclick=()=>{answered={};correctCount=0;totalAnswered=0;order=[...QUESTIONS.keys()];render();};
+window.renderQuiz=render;
 render();
+
+/* ===== Hide the flower loader once everything is ready ===== */
+function hideLoader(){const l=document.getElementById('loader');if(!l)return;l.classList.add('hide');document.body.classList.remove('loading');setTimeout(()=>{l.style.display='none'},750);}
+if(document.readyState==='complete')setTimeout(hideLoader,700);
+else window.addEventListener('load',()=>setTimeout(hideLoader,700));
+/* safety net: never let the loader trap the page */
+setTimeout(hideLoader,4000);
 </script>
 </body>
 </html>
